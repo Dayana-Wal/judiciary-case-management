@@ -1,0 +1,43 @@
+judiciary-case-management
+
+Common
+1. login
+2. sign up
+3. forgot password
+4. logout
+5. case Tracking
+6. view all advocates with less than 3 active cases
+7. Global search to find the case
+8. roles(advocate, judicial officer, judge, admin) based access
+
+Victims
+1. Raise a case along with proper details(including files)
+2. Withdraw case
+3. Hire an advocate
+4. Request judicial officials for an advocate
+5. should see his/her case details only. need otp validation to view data
+
+Accused
+1. Uploading his/her side of details(including files)
+2. apply for bail
+3. Hire an advocate
+4. Request judicial officials for an advocate
+5. should see his/her case details only. need otp validation to view data
+
+
+Advocate
+1. Allowed to handle 3 Active cases at a time
+2. Request for prepone or postpone the hearing time with proper details
+3. view all active assigned cases
+
+
+Judicial officials
+1. assign an advocate for requested people
+2. Verify the cases details(Accept/reject)
+3. updating the case progress
+4. Scheduling and management of court hearings.
+5. Verify the prepone or postpone request(Accept/reject)
+
+Judge
+1. Make judgement & close case
+
