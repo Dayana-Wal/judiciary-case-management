@@ -1,0 +1,6 @@
+@CaseManagement.API_HostAddress = http://localhost:5230
+
+GET {{CaseManagement.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
