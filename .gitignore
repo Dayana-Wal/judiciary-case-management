@@ -1,0 +1,28 @@
+# Ignore Visual Studio temporary files, directories, and files
+.vs/
+.vscode/
+.idea/
+*.user
+*.userosscache
+*.suo
+*.userprefs
+
+# Ignore build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Dd]ist/
+[Dd]ist/
+[Dd]ebug/
+[Dd]ebugFile/
+bin/
+obj/
+
+# Ignore other IDEs' folders and files
+.vscode/
+
+# Node.js modules
+node_modules/
+
+# Package directories
+.npm/
+.nuget/

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CaseManagement.Web")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+09090313f18028f5ca75e0e61ba8d439e1f1de4c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3a203745eb6261716b14e125ea22c21dd26c5edf")]
 [assembly: System.Reflection.AssemblyProductAttribute("CaseManagement.Web")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CaseManagement.Web")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
