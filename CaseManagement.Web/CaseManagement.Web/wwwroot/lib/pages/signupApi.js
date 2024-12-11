@@ -8,7 +8,7 @@
         console.log("formData-", formData);
 
         $.ajax({
-            url: apiBaseUrl + "/test/index",
+            url: apiBaseUrl + "/SignUp/signup",
             type: "POST",
             contentType: "application/x-www-form-urlencoded",
             data: formData,
@@ -17,11 +17,25 @@
                 console.log(response);
             },
             error: function (xhr, status, error) {
-                console.log("Error occurred:");
-                console.log("XHR:", xhr);
-                console.log("Status:", status);
-                console.log("Error:", error, xhr?.responseText);
-                alert("Error Occurred\n" + xhr?.responseText);
+                console.log("AJAX Request Failed");
+
+                // Check if responseJSON exists
+                if (xhr.responseJSON && xhr.responseJSON.errors) {
+                    const errors = xhr.responseJSON.errors;
+                    let alertMessage = "";
+
+                    for (const [field, messages] of Object.entries(errors)) {
+                        alertMessage += ` ${field}:`;
+                        messages.forEach((message) => {
+                            alertMessage += `- ${message}\n`;
+                        });
+                    }
+
+                    // Display the alert message
+                    if (alertMessage) {
+                        alert(alertMessage);
+                    }
+                }
             }
         });
     });
