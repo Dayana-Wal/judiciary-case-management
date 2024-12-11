@@ -1,4 +1,5 @@
 ﻿using CaseManagement.Business.Models;
+using CaseManagement.Business.Validations;
 using FluentValidation;
 using FluentValidation.Results;
 using System;
@@ -13,19 +14,20 @@ namespace CaseManagement.Business.Services
 
     public class SignupService
     {
-        private readonly IValidator<SignupModel> _validator;
-
-        public SignupService(IValidator<SignupModel> validator)
-        {
-            _validator = validator;
-        }
+        private readonly IValidator<SignupModel> _validator = new SignupValidator();
 
 
-        public List<string> ValidateSignUpDetails(SignupModel userDataModel)
+        //public SignupService(IValidator<SignupModel> validator)
+        //{
+        //    _validator = validator;
+        //}
+
+
+        public List<string> ValidateSignupDetails(SignupModel userDataModel)
         {            
             List<string> validationErrors = new List<string>();
 
-            ValidationResult validation = _validator.Validate(userDataModel);
+            var validation = _validator.Validate(userDataModel);
 
             if (!(validation.IsValid))
             {
