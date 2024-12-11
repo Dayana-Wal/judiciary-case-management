@@ -1,4 +1,9 @@
+using CaseManagement.Business.Services;
+
 var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container
+builder.Services.AddSingleton<SmsServiceprovider>();
 
 // Add services to the container.
 
@@ -15,6 +20,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+var smsSender = app.Services.GetRequiredService<SmsServiceprovider>();
 
 app.UseHttpsRedirection();
 
