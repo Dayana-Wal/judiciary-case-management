@@ -1,5 +1,5 @@
 # Ignore Visual Studio temporary files, directories, and files
-.vs/
+.vs
 .vscode/
 .idea/
 *.user
@@ -17,6 +17,10 @@
 bin/
 obj/
 
+CaseManagement.API/CaseManagement\obj
+
+
+
 # Ignore other IDEs' folders and files
 .vscode/
 
@@ -26,3 +30,7 @@ node_modules/
 # Package directories
 .npm/
 .nuget/
+/CaseManagement.API/CaseManagement.API/obj
+/CaseManagement.Web/CaseManagement.Web/obj
+/CaseManagement.DataAccess/obj
+/CaseManagement.Business/obj
