@@ -5802,19 +5802,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Dayana\\.nuget\\packages\\": {}
+    "C:\\Users\\peddy\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Dayana\\source\\repos\\judiciary-case-management\\CaseManagement.API\\CaseManagement.API\\CaseManagement.API.csproj",
+      "projectUniqueName": "D:\\BronxDA\\Internal Task\\Case Management\\judiciary-case-management\\CaseManagement.API\\CaseManagement.API\\CaseManagement.API.csproj",
       "projectName": "CaseManagement.API",
-      "projectPath": "C:\\Users\\Dayana\\source\\repos\\judiciary-case-management\\CaseManagement.API\\CaseManagement.API\\CaseManagement.API.csproj",
-      "packagesPath": "C:\\Users\\Dayana\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Dayana\\source\\repos\\judiciary-case-management\\CaseManagement.API\\CaseManagement.API\\obj\\",
+      "projectPath": "D:\\BronxDA\\Internal Task\\Case Management\\judiciary-case-management\\CaseManagement.API\\CaseManagement.API\\CaseManagement.API.csproj",
+      "packagesPath": "C:\\Users\\peddy\\.nuget\\packages\\",
+      "outputPath": "D:\\BronxDA\\Internal Task\\Case Management\\judiciary-case-management\\CaseManagement.API\\CaseManagement.API\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\Dayana\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\peddy\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -5902,7 +5907,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.403/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
