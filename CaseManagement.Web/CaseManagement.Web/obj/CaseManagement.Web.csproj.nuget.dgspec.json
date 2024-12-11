@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Dayana\\source\\repos\\judiciary-case-management\\CaseManagement.Web\\CaseManagement.Web\\CaseManagement.Web.csproj": {}
+    "D:\\judiciary-case-management\\CaseManagement.Web\\CaseManagement.Web\\CaseManagement.Web.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Dayana\\source\\repos\\judiciary-case-management\\CaseManagement.Web\\CaseManagement.Web\\CaseManagement.Web.csproj": {
+    "D:\\judiciary-case-management\\CaseManagement.Web\\CaseManagement.Web\\CaseManagement.Web.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Dayana\\source\\repos\\judiciary-case-management\\CaseManagement.Web\\CaseManagement.Web\\CaseManagement.Web.csproj",
+        "projectUniqueName": "D:\\judiciary-case-management\\CaseManagement.Web\\CaseManagement.Web\\CaseManagement.Web.csproj",
         "projectName": "CaseManagement.Web",
-        "projectPath": "C:\\Users\\Dayana\\source\\repos\\judiciary-case-management\\CaseManagement.Web\\CaseManagement.Web\\CaseManagement.Web.csproj",
-        "packagesPath": "C:\\Users\\Dayana\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Dayana\\source\\repos\\judiciary-case-management\\CaseManagement.Web\\CaseManagement.Web\\obj\\",
+        "projectPath": "D:\\judiciary-case-management\\CaseManagement.Web\\CaseManagement.Web\\CaseManagement.Web.csproj",
+        "packagesPath": "C:\\Users\\Veerendra\\.nuget\\packages\\",
+        "outputPath": "D:\\judiciary-case-management\\CaseManagement.Web\\CaseManagement.Web\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Dayana\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Veerendra\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
