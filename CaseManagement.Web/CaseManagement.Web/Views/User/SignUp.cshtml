@@ -1,0 +1,85 @@
+﻿@using CaseManagement.Web.Models
+@model UserModel
+@{
+    var apiBaseUrl = ViewBag.ApiBaseUrl;
+}
+<div class="container w-50 p-3 border rounded shadow">
+    <h3 class="text-center mb-4">Signup </h3>
+    <form id="signUpForm">
+        <div class="row">
+            <div class="col-6">
+                <div class="container w-100">
+                    <div class="mb-3">
+                        <label asp-for="Name" class="form-label">Name</label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label">Email</label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Contact" class="form-label">Contact number</label>
+                        <input asp-for="Contact" type="tel" class="form-control" />
+                        <span asp-validation-for="Contact" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="DOB" class="form-label">Date of birth</label>
+                        <input asp-for="DOB" type="date" class="form-control" />
+                        <span asp-validation-for="DOB" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="container w-100">
+                    <div class="mb-3">
+                        <label asp-for="UserName" class="form-label">UserName</label>
+                        <input asp-for="UserName" class="form-control" />
+                        <span asp-validation-for="UserName" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Password" class="form-label">Password</label>
+                        <input asp-for="Password" type="password" class="form-control" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="ConfirmPassword" class="form-label">Confirm password</label>
+                        <input asp-for="ConfirmPassword" type="password" class="form-control" />
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3 row">
+                        <label class="form-label">Gender</label>
+                        <div class="col-4">
+                            <div class="form-check">
+                                <input asp-for="Gender" type="radio" class="form-check-input" value="Male" id="GenderMale" />
+                                <label class="form-check-label" for="GenderMale">Male</label>
+                            </div>
+                        </div>
+                        <div class="col-4">
+
+                            <div class="form-check">
+                                <input asp-for="Gender" type="radio" class="form-check-input" value="Female" id="GenderFemale" />
+                                <label class="form-check-label" for="GenderFemale">Female</label>
+                            </div>
+                        </div>
+
+                        <span asp-validation-for="Gender" class="text-danger"></span>
+                    </div>
+
+                </div>
+            </div>
+            <div class="d-flex justify-content-center mt-3">
+                <button type="submit" class="btn btn-outline-primary">Signup</button>
+            </div>
+        </div>
+    </form>
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    // Set the API base URL in a global JavaScript variable
+    var apiBaseUrl = "@apiBaseUrl"; // This will be replaced by the value from ViewData
+</script>
+<script src="~/lib/pages/signupApi.js"></script>
