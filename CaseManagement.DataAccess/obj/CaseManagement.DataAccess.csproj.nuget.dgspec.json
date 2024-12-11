@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Dayana\\source\\repos\\judiciary-case-management\\CaseManagement.DataAccess\\CaseManagement.DataAccess.csproj": {}
+    "D:\\judiciary-case-management\\CaseManagement.DataAccess\\CaseManagement.DataAccess.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Dayana\\source\\repos\\judiciary-case-management\\CaseManagement.DataAccess\\CaseManagement.DataAccess.csproj": {
+    "D:\\judiciary-case-management\\CaseManagement.DataAccess\\CaseManagement.DataAccess.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Dayana\\source\\repos\\judiciary-case-management\\CaseManagement.DataAccess\\CaseManagement.DataAccess.csproj",
+        "projectUniqueName": "D:\\judiciary-case-management\\CaseManagement.DataAccess\\CaseManagement.DataAccess.csproj",
         "projectName": "CaseManagement.DataAccess",
-        "projectPath": "C:\\Users\\Dayana\\source\\repos\\judiciary-case-management\\CaseManagement.DataAccess\\CaseManagement.DataAccess.csproj",
-        "packagesPath": "C:\\Users\\Dayana\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Dayana\\source\\repos\\judiciary-case-management\\CaseManagement.DataAccess\\obj\\",
+        "projectPath": "D:\\judiciary-case-management\\CaseManagement.DataAccess\\CaseManagement.DataAccess.csproj",
+        "packagesPath": "C:\\Users\\Veerendra\\.nuget\\packages\\",
+        "outputPath": "D:\\judiciary-case-management\\CaseManagement.DataAccess\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Dayana\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Veerendra\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -57,6 +57,16 @@
             "FluentMigrator.Runner.SqlServer": {
               "target": "Package",
               "version": "[6.2.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[9.0.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[9.0.0, )"
             }
           },
           "imports": [

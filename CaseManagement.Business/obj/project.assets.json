@@ -8,19 +8,19 @@
     "net8.0": []
   },
   "packageFolders": {
-    "C:\\Users\\Dayana\\.nuget\\packages\\": {}
+    "C:\\Users\\Veerendra\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Dayana\\source\\repos\\judiciary-case-management\\CaseManagement.Business\\CaseManagement.Business.csproj",
+      "projectUniqueName": "D:\\judiciary-case-management\\CaseManagement.Business\\CaseManagement.Business.csproj",
       "projectName": "CaseManagement.Business",
-      "projectPath": "C:\\Users\\Dayana\\source\\repos\\judiciary-case-management\\CaseManagement.Business\\CaseManagement.Business.csproj",
-      "packagesPath": "C:\\Users\\Dayana\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Dayana\\source\\repos\\judiciary-case-management\\CaseManagement.Business\\obj\\",
+      "projectPath": "D:\\judiciary-case-management\\CaseManagement.Business\\CaseManagement.Business.csproj",
+      "packagesPath": "C:\\Users\\Veerendra\\.nuget\\packages\\",
+      "outputPath": "D:\\judiciary-case-management\\CaseManagement.Business\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Dayana\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Veerendra\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
