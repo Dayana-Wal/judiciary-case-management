@@ -1,9 +1,12 @@
+using CaseManagement.Business.Common;
 using CaseManagement.Business.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.Configure<TwilioSettings>(builder.Configuration.GetSection("Twilio"));
+
 // Add services to the container
-builder.Services.AddScoped<SmsServiceprovider>();
+builder.Services.AddSingleton<SmsServiceprovider>();
 
 // Add services to the container.
 
