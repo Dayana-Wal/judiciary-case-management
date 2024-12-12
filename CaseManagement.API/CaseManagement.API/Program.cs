@@ -1,4 +1,4 @@
-using FluentMigrator.Runner;
+using CaseManagement.Business.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,12 +8,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-builder.Services.AddFluentMigratorCore()
-    .ConfigureRunner(rb => rb
-        .AddSqlServer()
-        .WithGlobalConnectionString(builder.Configuration.GetConnectionString("DBConnectionString"))
-        .ScanIn(typeof(CaseManagement.DataAccess.Migrations.CreateInitialSchemaAndSeedLookupConstants).Assembly).For.Migrations());
+builder.Services.AddScoped<SignupService>();
 
 var app = builder.Build();
 
@@ -29,12 +24,5 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
-
-// Run migrations on startup
-using (var scope = app.Services.CreateScope())
-{
-    var runner = scope.ServiceProvider.GetRequiredService<IMigrationRunner>();
-    runner.MigrateUp();
-}
 
 app.Run();
