@@ -1,12 +1,9 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Twilio.Types;
 using Twilio;
 using Twilio.Rest.Api.V2010.Account;
+using CaseManagement.Business.Common;
 
 namespace CaseManagement.Business.Services
 {
@@ -26,21 +23,49 @@ namespace CaseManagement.Business.Services
             TwilioClient.Init(_accountSid, _authToken);
         }
 
-        public void SendSms(string toPhoneNumber, string messageBody)
+        public OperationResult SendSms(string toPhoneNumber, string messageBody)
         {
             if (string.IsNullOrWhiteSpace(toPhoneNumber))
-                throw new ArgumentException("Recipient phone number cannot be null or empty.");
+            {
+                return new OperationResult
+                {
+                    Status = "ERROR",
+                    Msg = "Recipient phone number cannot be null or empty."
+                };
+            }
 
             if (string.IsNullOrWhiteSpace(messageBody))
-                throw new ArgumentException("Message body cannot be null or empty.");
+            {
+                return new OperationResult
+                {
+                    Status = "ERROR",
+                    Msg = "Message body cannot be null or empty."
+                };
+            }
 
-            // Send SMS using Twilio
-            var message = MessageResource.Create(
-                body: messageBody,
-                from: new PhoneNumber(_twilioPhoneNumber),
-                to: new PhoneNumber(toPhoneNumber)
-            );
+            try
+            {
+                var message = MessageResource.Create(
+                    body: messageBody,
+                    from: new PhoneNumber(_twilioPhoneNumber),
+                    to: new PhoneNumber(toPhoneNumber)
+                );
 
+                // Return success response
+                return new OperationResult
+                {
+                    Status = "SUCCESS",
+                    Msg = "SMS sent successfully."
+                };
+            }
+            catch (Exception ex)
+            {
+                return new OperationResult
+                {
+                    Status = "ERROR",
+                    Msg = $"Failed to send SMS: {ex.Message}"
+                };
+            }
         }
     }
 }
