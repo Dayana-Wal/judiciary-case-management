@@ -10,14 +10,13 @@ namespace CaseManagement.Business.Common
         {
             public T Data { get; set; }
             public string Status { get; set; }
-            public string Msg { get; set; }
+            public string Message { get; set; }
         }
 
         public class OperationResult
         {
             public string Status { get; set; }
-            public string Msg { get; set; }
+            public string Message { get; set; }
         }
 
-    }
 }

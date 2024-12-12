@@ -1,53 +1,40 @@
-﻿using Microsoft.Extensions.Configuration;
-using System;
+﻿using Microsoft.Extensions.Options;
 using Twilio.Types;
 using Twilio;
 using Twilio.Rest.Api.V2010.Account;
 using CaseManagement.Business.Common;
+using System;
+using System.Threading.Tasks;
 
 namespace CaseManagement.Business.Services
 {
     public class SmsServiceprovider
     {
-        private readonly string _accountSid;
-        private readonly string _authToken;
-        private readonly string _twilioPhoneNumber;
-
-        public SmsServiceprovider(IConfiguration configuration)
+        private readonly TwilioSettings _twilioSettings;
+        public SmsServiceprovider(IOptions<TwilioSettings> twilioSettings)
         {
-            _accountSid = configuration["Twilio:AccountSid"];
-            _authToken = configuration["Twilio:AuthToken"];
-            _twilioPhoneNumber = configuration["Twilio:PhoneNumber"];
+            _twilioSettings = twilioSettings.Value;
 
             // Initialize Twilio client
-            TwilioClient.Init(_accountSid, _authToken);
+            TwilioClient.Init(_twilioSettings.AccountSid, _twilioSettings.AuthToken);
         }
 
-        public OperationResult SendSms(string toPhoneNumber, string messageBody)
+        public async Task<OperationResult> SendSms(string toPhoneNumber, string messageBody)
         {
-            if (string.IsNullOrWhiteSpace(toPhoneNumber))
-            {
-                return new OperationResult
-                {
-                    Status = "ERROR",
-                    Msg = "Recipient phone number cannot be null or empty."
-                };
-            }
-
-            if (string.IsNullOrWhiteSpace(messageBody))
-            {
-                return new OperationResult
-                {
-                    Status = "ERROR",
-                    Msg = "Message body cannot be null or empty."
-                };
-            }
-
             try
             {
-                var message = MessageResource.Create(
+                if (string.IsNullOrWhiteSpace(toPhoneNumber) || string.IsNullOrWhiteSpace(messageBody))
+                {
+                    return new OperationResult
+                    {
+                        Status = "ERROR",
+                        Message = "Recipient phone number and message body cannot be null or empty."
+                    };
+                }
+                // Send SMS via Twilio
+                var message = await MessageResource.CreateAsync(
                     body: messageBody,
-                    from: new PhoneNumber(_twilioPhoneNumber),
+                    from: new PhoneNumber(_twilioSettings.PhoneNumber),
                     to: new PhoneNumber(toPhoneNumber)
                 );
 
@@ -55,7 +42,7 @@ namespace CaseManagement.Business.Services
                 return new OperationResult
                 {
                     Status = "SUCCESS",
-                    Msg = "SMS sent successfully."
+                    Message = "SMS sent successfully."
                 };
             }
             catch (Exception ex)
@@ -63,7 +50,7 @@ namespace CaseManagement.Business.Services
                 return new OperationResult
                 {
                     Status = "ERROR",
-                    Msg = $"Failed to send SMS: {ex.Message}"
+                    Message = $"Failed to send SMS: {ex.Message}"
                 };
             }
         }
