@@ -22,7 +22,7 @@ namespace CaseManagement.Web.Models
 
         [Required(ErrorMessage = "Enter your {0} here")]
         [DisplayName("Date of birth")]
-        public DateTime DOB { get; set; }
+        public DateTime DateOfBirth { get; set; }
 
         [Required(ErrorMessage = "Select your {0} here")]
         [DisplayName("Gender")]
