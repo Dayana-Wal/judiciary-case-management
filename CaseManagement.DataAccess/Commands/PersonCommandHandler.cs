@@ -29,7 +29,7 @@ namespace CaseManagement.DataAccess.Commands
 
             await _context.People.AddAsync(person);
 
-            //await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
             return true;
         }
