@@ -1,9 +1,17 @@
+using CaseManagement.Business.Common;
 using CaseManagement.Business.Services;
+
+using FluentMigrator.Runner;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.Configure<TwilioSettings>(builder.Configuration.GetSection("Twilio"));
+
+// Add services to the container
+builder.Services.AddSingleton<SmsServiceprovider>();
 
 // Add services to the container.
 
