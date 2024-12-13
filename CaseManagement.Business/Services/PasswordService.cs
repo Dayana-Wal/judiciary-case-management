@@ -42,7 +42,7 @@ namespace CaseManagement.Business.Services
             using (SHA256 sha256 = SHA256.Create())
             {
                 byte[] hashBytes = sha256.ComputeHash(passwordBytes);
-                return BitConverter.ToString(hashBytes);
+                return Convert.ToBase64String(hashBytes);
             }
         }
 

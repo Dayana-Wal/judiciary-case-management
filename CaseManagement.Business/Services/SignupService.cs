@@ -1,4 +1,5 @@
-﻿using CaseManagement.Business.Models;
+﻿using CaseManagement.Business.Common;
+using CaseManagement.Business.Models;
 using CaseManagement.Business.Validations;
 using CaseManagement.DataAccess.Commands;
 using CaseManagement.DataAccess.Entities;
@@ -16,7 +17,7 @@ namespace CaseManagement.Business.Services
 {
 
 
-    public class SignupService
+    public class SignupService:BaseManager
     {
         private readonly IValidator<SignupModel> _validator = new SignupValidator();
 
@@ -28,7 +29,7 @@ namespace CaseManagement.Business.Services
         //}
 
 
-        public List<string> ValidateSignupDetails(SignupModel userDataModel)
+        public async Task<OperationResult<List<string>>> ValidateSignupDetails(SignupModel userDataModel)
         {            
             List<string> validationErrors = new List<string>();
 
@@ -42,11 +43,26 @@ namespace CaseManagement.Business.Services
                 }
                 
             }
-            return validationErrors;
+
+            OperationResult<List<string>> validationResult = new OperationResult<List<string>>
+            {
+                Data = validationErrors
+            };
+            if (validationResult.Data.Any())
+            {
+                validationResult.Status = "Failed";
+                validationResult.Message = "Fluent Validation executed, but failed";
+            }
+            else
+            {
+                validationResult.Status = "Success";
+                validationResult.Message = "Fluent Validation executed and passed the rules";
+            }
+            return validationResult;
 
         }
 
-        public async Task<bool> RegisterUser(SignupModel model)
+        public async Task<OperationResult> RegisterUser(SignupModel model)
         {
             PasswordService passwordService = new PasswordService();
 
@@ -67,7 +83,7 @@ namespace CaseManagement.Business.Services
 
             var user = new User
             {
-                Id = Ulid.NewUlid().ToString(),
+                Id = NewUlid(),
                 UserName = model.UserName,
                 PasswordHash = storedResult.HashedPassword,
                 PasswordSalt = storedResult.Salt,
@@ -75,6 +91,7 @@ namespace CaseManagement.Business.Services
                 PersonId = personId
 
             };
+
            
             var addPersonResult =  await _dataHandler.CreatePersonAsync(person);
             if (addPersonResult)
@@ -82,10 +99,18 @@ namespace CaseManagement.Business.Services
                 var addUserResult = await _dataHandler.CreateUserAsync(user);
                 if (addUserResult)
                 {
-                    return true;
+                    OperationResult result = new OperationResult
+                    {
+                        Status = "Success",
+                        Message = "Person and user are successfully added"
+                    };
+
+                    return result;
+
                 }
+                else { }
             }
-            return false;
+            return new OperationResult { Status = "Failed" , Message = "Failed to add person and user"};
         }
 
 

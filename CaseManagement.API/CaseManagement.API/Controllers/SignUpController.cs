@@ -1,15 +1,16 @@
 ﻿//using CaseManagement.API.Models;
 using CaseManagement.Business.Models;
 using CaseManagement.Business.Services;
+using Microsoft.AspNetCore.Authentication.BearerToken;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CaseManagement.API.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class SignUpController : Controller
+    //[ApiController]
+    //[Route("api/[controller]")]
+    public class SignUpController : BaseController
     {
         
 
@@ -23,7 +24,7 @@ namespace CaseManagement.API.Controllers
 
 
 
-        [HttpPost("signup")]
+        [HttpPost("person")]
         public async Task<IActionResult> SignUp([FromForm] SignupModel signupDataModel)
         {
             if (signupDataModel == null)
@@ -31,10 +32,10 @@ namespace CaseManagement.API.Controllers
                 return BadRequest("Invalid user data.");
             }
 
-            var validationErrors = _signupService.ValidateSignupDetails(signupDataModel);
-            if (validationErrors.Any())
+            var validationResult = await _signupService.ValidateSignupDetails(signupDataModel);
+            if (validationResult.Data.Any())
             {
-                return BadRequest(new { errors = validationErrors });
+                return BadRequest(new { errors = validationResult });
             }
 
 
@@ -42,12 +43,7 @@ namespace CaseManagement.API.Controllers
             //var result = _passwordService.UserRegistration(signupDataModel.Password);
 
             var dataStoreResult = await _signupService.RegisterUser(signupDataModel);
-            if ((dataStoreResult))
-            {
-
-                return Ok("Validation successful, data stored");
-            }
-            return BadRequest("Validation successful, data not stored");
+            return ToResponse(dataStoreResult);
 
 
         }
