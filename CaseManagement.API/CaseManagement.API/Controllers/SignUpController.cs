@@ -1,4 +1,4 @@
-﻿using CaseManagement.API.Models;
+﻿//using CaseManagement.API.Models;
 using CaseManagement.Business.Models;
 using CaseManagement.Business.Services;
 using Microsoft.AspNetCore.Http;
@@ -11,51 +11,45 @@ namespace CaseManagement.API.Controllers
     [Route("api/[controller]")]
     public class SignUpController : Controller
     {
-        private readonly SignupService _signupService;
+        
+
+        private readonly SignupService _signupService = new SignupService();
+        private readonly PasswordService _passwordService;
 
         public SignUpController()
         {
-            _signupService = new SignupService();
+            _passwordService = new PasswordService();
         }
 
-        //[HttpGet("id")]
-        //public IActionResult SignUp()
-        //{
-        //    return Ok("success");
-        //}
 
-        //[HttpPost("signup")]
-        //public async Task<IActionResult> SignUp([FromForm] SignupModel signupModel)
-        //{
-        //    if (signupModel == null)
-        //    {
-        //        return BadRequest("Invalid user data.");
-        //    }
-
-        //    var validationErrors = _signupService.ValidateSignupDetails(signupModel);
-        //    if (validationErrors.Any())
-        //    {
-        //        return  BadRequest(new { errors = validationErrors });
-        //    }
-
-        //    return Ok("validation sucessful");
-        //}
 
         [HttpPost("signup")]
-        public IActionResult SignUp([FromForm] SignupModel signupModel)
+        public async Task<IActionResult> SignUp([FromForm] SignupModel signupDataModel)
         {
-            if (signupModel == null)
+            if (signupDataModel == null)
             {
                 return BadRequest("Invalid user data.");
             }
 
-            var validationErrors = _signupService.ValidateSignupDetails(signupModel);
+            var validationErrors = _signupService.ValidateSignupDetails(signupDataModel);
             if (validationErrors.Any())
             {
                 return BadRequest(new { errors = validationErrors });
             }
 
-            return Ok("Validation successful");
+
+            //password hashed value and salt value are stored in result
+            //var result = _passwordService.UserRegistration(signupDataModel.Password);
+
+            var dataStoreResult = await _signupService.RegisterUser(signupDataModel);
+            if ((dataStoreResult))
+            {
+
+                return Ok("Validation successful, data stored");
+            }
+            return BadRequest("Validation successful, data not stored");
+
+
         }
 
     }
