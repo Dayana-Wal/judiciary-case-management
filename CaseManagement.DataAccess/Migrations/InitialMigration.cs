@@ -34,10 +34,11 @@ namespace CaseManagement.DataAccess.Migrations
 
             // Seed data into LookupConstant table
             Insert.IntoTable("LookupConstant")
-                .Row(new { Code = "ADM", Text = "Admin", Type = "Role" })
-                .Row(new { Code = "JUG", Text = "Judge", Type = "Role" })
-                .Row(new { Code = "ADV", Text = "Advocate", Type = "Role" })
-                .Row(new { Code = "JDO", Text = "Judicial Officer", Type = "Role" })
+                .Row(new { Code = "GEN", Text = "General", Type = "User Role" })
+                .Row(new { Code = "ADM", Text = "Admin", Type = "User Role" })
+                .Row(new { Code = "JUG", Text = "Judge", Type = "User Role" })
+                .Row(new { Code = "ADV", Text = "Advocate", Type = "User Role" })
+                .Row(new { Code = "JDO", Text = "Judicial Officer", Type = "User Role" })
                 .Row(new { Code = "OPN", Text = "Open", Type = "Case Status" })
                 .Row(new { Code = "IPR", Text = "In Progress", Type = "Case Status" })
                 .Row(new { Code = "IPE", Text = "In Pending", Type = "Case Status" })
@@ -54,7 +55,14 @@ namespace CaseManagement.DataAccess.Migrations
                 .Row(new { Code = "CSD", Text = "Case Document", Type = "File Type" })
                 .Row(new { Code = "ACP", Text = "Accepted", Type = "Request Status" })
                 .Row(new { Code = "RSR", Text = "Rejected", Type = "Request Status" })
-                .Row(new { Code = "HLD", Text = "Hold", Type = "Request Status" });
+                .Row(new { Code = "HLD", Text = "Hold", Type = "Request Status" })
+                .Row(new { Code = "OSU", Text = "Signup", Type = "OTP Used For" })
+                .Row(new { Code = "OLN", Text = "Login", Type = "OTP Used For" })
+                .Row(new { Code = "OEV", Text = "Email Verification", Type = "OTP Used For" })
+                .Row(new { Code = "ORP", Text = "Reset Password", Type = "OTP Used For" })
+                .Row(new { Code = "ODV", Text = "Document View Verification", Type = "OTP Used For" })
+                .Row(new { Code = "OTH", Text = "Other", Type="OTP Used For"});
+
         }
 
         public override void Down()
