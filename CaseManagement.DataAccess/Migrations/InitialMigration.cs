@@ -60,7 +60,8 @@ namespace CaseManagement.DataAccess.Migrations
                 .Row(new { Code = "OLN", Text = "Login", Type = "OTP Used For" })
                 .Row(new { Code = "OEV", Text = "Email Verification", Type = "OTP Used For" })
                 .Row(new { Code = "ORP", Text = "Reset Password", Type = "OTP Used For" })
-                .Row(new { Code = "ODV", Text = "Document View Verification", Type = "OTP Used For" });
+                .Row(new { Code = "ODV", Text = "Document View Verification", Type = "OTP Used For" })
+                .Row(new { Code = "OTH", Text = "Other", Type="OTP Used For"});
 
         }
 
