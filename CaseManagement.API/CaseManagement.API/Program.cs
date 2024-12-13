@@ -20,20 +20,23 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<SignupService>();
-builder.Services.Configure<>(builder.Configuration.GetSection("Jwt"));
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
 builder.Services.AddScoped<LoginService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
+    // Access JwtSettings values
+    var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JwtSettings>();
+
     options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuer = true,
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        ValidIssuer = "Issuer", //From config
-        ValidAudience = "Audience", //From config
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(""))
+        ValidIssuer = jwtSettings?.Issuer, 
+        ValidAudience = jwtSettings?.Audience, 
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings?.SecretKey))
     };
 });
 

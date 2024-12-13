@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using CaseManagement.Business.Common;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -11,7 +13,12 @@ using System.Threading.Tasks;
 namespace CaseManagement.Business.Services
 {
     public class LoginService
-    {     
+    {
+        private readonly JwtSettings _jwtSettings;
+        public LoginService(IOptions<JwtSettings> jwtSettings)
+        {
+            _jwtSettings = jwtSettings.Value;
+        }
         public string UserLogin(string username, string password)
         {
             string token = GenerateJwtToken(username, "Admin");
@@ -39,12 +46,12 @@ namespace CaseManagement.Business.Services
                 new Claim(ClaimTypes.Role,role )
             };
             //TODO --> Get the values from configuration file
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("SuperStrongSecretKey123!SuperStrongSecretKey123!"));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.SecretKey));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             
             var token = new JwtSecurityToken(
-                issuer:"Issuer",
-                audience:"Audience",
+                issuer:_jwtSettings.Issuer,
+                audience:_jwtSettings.Audience,
                 claims: claims,
                 expires: DateTime.Now.AddHours(1),
                 signingCredentials: creds
