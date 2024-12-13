@@ -13,6 +13,7 @@ namespace CaseManagement.DataAccess.Migrations
                 .WithColumn("IsVerified").AsBoolean().NotNullable()
                 .WithColumn("RequestedBy").AsString(26).NotNullable().ForeignKey("Person", "Id")
                 .WithColumn("GeneratedAt").AsDateTime().NotNullable()
+                .WithColumn("UsedForId").AsInt32().NotNullable().ForeignKey("LookupConstant", "Id")
                 .WithColumn("ExpiresAt").AsDateTime().Nullable();
         }
 
