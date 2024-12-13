@@ -12,8 +12,11 @@ namespace CaseManagement.Business.Services
 {
     public class LoginService
     {     
-        public void UserLogin(string username, string password)
+        public string UserLogin(string username, string password)
         {
+            string token = GenerateJwtToken(username, "Admin");
+            Console.WriteLine(token);
+            return token;
             //Fetch user details(PasswordHash,PasswordSalt,RoleId) based on username --> data access
             //Generate HashedPassword using password and salt --> can use the function in signup
             //Compare HashedPassword and PasswordHash
@@ -36,7 +39,7 @@ namespace CaseManagement.Business.Services
                 new Claim(ClaimTypes.Role,role )
             };
             //TODO --> Get the values from configuration file
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("SecretKey"));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("SuperStrongSecretKey123!SuperStrongSecretKey123!"));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             
             var token = new JwtSecurityToken(
