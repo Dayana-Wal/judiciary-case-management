@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CaseManagement.Web.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class UserController : Controller
     {
         private readonly IConfiguration _configuration;
