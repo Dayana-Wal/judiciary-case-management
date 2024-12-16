@@ -8,7 +8,7 @@
         console.log("formData-", formData);
 
         $.ajax({
-            url: apiBaseUrl + "/SignUp/signup",
+            url: apiBaseUrl + "/SignUp/person",
             type: "POST",
             contentType: "application/x-www-form-urlencoded",
             data: formData,
@@ -18,18 +18,11 @@
             },
             error: function (xhr, status, error) {
                 console.log("AJAX Request Failed");
-
+                console.log(xhr)
                 // Check if responseJSON exists
-                if (xhr.responseJSON && xhr.responseJSON.errors) {
-                    const errors = xhr.responseJSON.errors;
-                    let alertMessage = "";
-
-                    for (const [field, messages] of Object.entries(errors)) {
-                        alertMessage += ` ${field}:`;
-                        messages.forEach((message) => {
-                            alertMessage += `- ${message}\n`;
-                        });
-                    }
+                if (xhr.responseJSON && xhr.responseJSON.errors && xhr.responseJSON.errors.data) {
+                    const errors = xhr.responseJSON.errors.data;
+                    let alertMessage = errors.join("\n")
 
                     // Display the alert message
                     if (alertMessage) {
