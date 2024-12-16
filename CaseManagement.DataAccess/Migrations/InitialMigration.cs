@@ -29,8 +29,8 @@ namespace CaseManagement.DataAccess.Migrations
                 .WithColumn("UserName").AsString(255).NotNullable().Unique()
                 .WithColumn("PasswordHash").AsString(255).NotNullable()
                 .WithColumn("PasswordSalt").AsString(255).NotNullable()
-                .WithColumn("RoleId").AsInt32().NotNullable().ForeignKey("LookupConstant", "Id")
-                .WithColumn("PersonId").AsString(26).NotNullable().ForeignKey("Person", "Id"); // ForeignKey as ULID
+                .WithColumn("RoleId").AsInt32().NotNullable().ForeignKey("LookupConstant", "Id") //general default
+                .WithColumn("PersonId").AsString(26).NotNullable().ForeignKey("Person", "Id"); // ForeignKey as ULID of person table
 
             // Seed data into LookupConstant table
             Insert.IntoTable("LookupConstant")
