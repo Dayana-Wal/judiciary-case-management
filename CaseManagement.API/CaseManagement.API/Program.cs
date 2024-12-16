@@ -42,6 +42,17 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     };
 });
 
+// Add CORS policy to allow any origin
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAnyOrigin", policy =>
+    {
+        policy.AllowAnyOrigin()  // Accept requests from any origin
+              .AllowAnyMethod()  // Accept any HTTP method (GET, POST, PUT, etc.)
+              .AllowAnyHeader(); // Accept any headers
+    });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -55,6 +66,9 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+// Enable CORS globally
+app.UseCors("AllowAnyOrigin");
 
 app.MapControllers();
 using (var scope = app.Services.CreateScope())

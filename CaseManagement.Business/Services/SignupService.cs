@@ -23,6 +23,7 @@ namespace CaseManagement.Business.Services
 
         private readonly IPersonCommandHandler _dataHandler = new PersonCommandHandler();
 
+
         //public SignupService(IValidator<SignupModel> validator)
         //{
         //    _validator = validator;
@@ -51,7 +52,7 @@ namespace CaseManagement.Business.Services
             if (validationResult.Data.Any())
             {
                 validationResult.Status = "Failed";
-                validationResult.Message = "Fluent Validation executed, but failed";
+                validationResult.Message = "Fluent Validation executed, Invalid data - please check the entered details ";
             }
             else
             {
@@ -92,25 +93,34 @@ namespace CaseManagement.Business.Services
 
             };
 
-           
-            var addPersonResult =  await _dataHandler.CreatePersonAsync(person);
-            if (addPersonResult)
+
+            //var addPersonResult =  await _dataHandler.CreatePersonAsync(person);
+            //if (addPersonResult)
+            //{
+            //    var addUserResult = await _dataHandler.CreateUserAsync(user);
+            //    if (addUserResult)
+            //    {
+            //        OperationResult result = new OperationResult
+            //        {
+            //            Status = "Success",
+            //            Message = "Person and user are successfully added"
+            //        };
+
+            //        return result;
+
+            //    }
+            //    else { }
+            //}
+
+            var addPersonAndUserResult = await _dataHandler.CreatePersonAndUserAsync(person, user);
+            if (addPersonAndUserResult)
             {
-                var addUserResult = await _dataHandler.CreateUserAsync(user);
-                if (addUserResult)
-                {
-                    OperationResult result = new OperationResult
-                    {
-                        Status = "Success",
-                        Message = "Person and user are successfully added"
-                    };
-
-                    return result;
-
-                }
-                else { }
+                return new OperationResult { Status = "Success", Message = "Person and User details stored successfully!" };
             }
-            return new OperationResult { Status = "Failed" , Message = "Failed to add person and user"};
+            
+            //return addPersonAndUserResult;
+            
+            return new OperationResult { Status = "Failed" , Message = "Failed to store person and user details"};
         }
 
 
