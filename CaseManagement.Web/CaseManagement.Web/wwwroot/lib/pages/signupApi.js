@@ -13,21 +13,26 @@
             contentType: "application/x-www-form-urlencoded",
             data: formData,
             success: function (response) {
-                console.log("Sign up Success");
+                alert(response.message)
                 console.log(response);
             },
             error: function (xhr, status, error) {
                 console.log("AJAX Request Failed");
                 console.log(xhr)
+                let alertMessage
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+
+                    alertMessage = xhr.responseJSON.message
+
+                }
                 // Check if responseJSON exists
                 if (xhr.responseJSON && xhr.responseJSON.errors && xhr.responseJSON.errors.data) {
                     const errors = xhr.responseJSON.errors.data;
-                    let alertMessage = errors.join("\n")
-
-                    // Display the alert message
-                    if (alertMessage) {
-                        alert(alertMessage);
-                    }
+                    alertMessage =  errors.join("\n")
+                }
+                // Display the alert message
+                if (alertMessage) {
+                    alert(alertMessage);
                 }
             }
         });
