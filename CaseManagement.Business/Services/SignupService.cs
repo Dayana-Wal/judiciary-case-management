@@ -112,6 +112,8 @@ namespace CaseManagement.Business.Services
             //    else { }
             //}
 
+
+
             var addPersonAndUserResult = await _dataHandler.CreatePersonAndUserAsync(person, user);
             if (addPersonAndUserResult)
             {
@@ -122,6 +124,10 @@ namespace CaseManagement.Business.Services
             
             return new OperationResult { Status = "Failed" , Message = "Failed to store person and user details"};
         }
+        //public async Task<(List<Person> persons, List<User> users)> GetAllPersonsAndUsersAsync()
+        //{
+        //    return await _dataHandler.GetAllPersonsAndUsersAsync();
+        //}
 
 
     }

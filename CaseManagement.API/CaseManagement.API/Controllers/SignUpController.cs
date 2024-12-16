@@ -48,5 +48,18 @@ namespace CaseManagement.API.Controllers
 
         }
 
+        //[HttpGet("all-users-persons")]
+        //public async Task<IActionResult> GetAllUsersAndPersons()
+        //{
+        //    var (persons, users) = await _signupService.GetAllPersonsAndUsersAsync();
+
+        //    return Ok(new
+        //    {
+        //       persons,users
+        //    });
+        //}
+
+
+
     }
 }

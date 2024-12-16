@@ -96,6 +96,15 @@ namespace CaseManagement.DataAccess.Commands
             throw new NotImplementedException();
         }
 
+        //public async Task<(List<Person> persons, List<User> users)> GetAllPersonsAndUsersAsync()
+        //{
+        //    var persons = await _context.People.ToListAsync();
+        //    var users = await _context.Users.ToListAsync();
+
+        //    return (persons, users);
+        //}
+
+
         //public async Task<bool> CreateUserAsync(User user)
         //{
         //    var existingUser = _context.Users.

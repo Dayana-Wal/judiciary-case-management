@@ -19,5 +19,7 @@ namespace CaseManagement.DataAccess.Commands
         Task UpdateAsync<T>(Person person);
 
         Task DeleteAsync<T>(Person person);
+
+        //Task<(List<Person> persons, List<User> users)> GetAllPersonsAndUsersAsync();
     }
 }

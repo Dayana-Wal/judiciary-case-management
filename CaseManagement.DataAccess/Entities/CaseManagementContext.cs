@@ -26,7 +26,7 @@ public partial class CaseManagementContext : DbContext
     public virtual DbSet<VersionInfo> VersionInfos { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //DESKTOP-H63SR17\\SQLEXPRESS01
+        //DESKTOP-H63SR17\\SQLEXPRESS01 DBConnectionString
         => optionsBuilder.UseSqlServer("Data Source=localhost;Initial Catalog=CaseManagement;Integrated Security=True;TrustServerCertificate=true");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -1,7 +1,8 @@
 using CaseManagement.Business.Common;
 using CaseManagement.Business.Services;
-
+using CaseManagement.DataAccess.Entities;
 using FluentMigrator.Runner;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,7 @@ builder.Services.AddSingleton<SmsServiceprovider>();
 // Add services to the container.
 
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
