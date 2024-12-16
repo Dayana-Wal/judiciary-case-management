@@ -17,17 +17,18 @@ namespace CaseManagement.Business.Services
 {
 
 
-    public class SignupService:BaseManager
+    public class SignupManager:BaseManager
     {
-        private readonly IValidator<SignupModel> _validator = new SignupValidator();
+        private readonly IValidator<SignupModel> _validator;
 
-        private readonly IPersonCommandHandler _dataHandler = new PersonCommandHandler();
+        private readonly IPersonCommandHandler _dataHandler;
 
 
-        //public SignupService(IValidator<SignupModel> validator)
-        //{
-        //    _validator = validator;
-        //}
+        public SignupManager()
+        {
+            _validator = new SignupValidator();
+            _dataHandler = new PersonCommandHandler();
+        }
 
 
         public async Task<OperationResult<List<string>>> ValidateSignupDetails(SignupModel userDataModel)
@@ -68,8 +69,8 @@ namespace CaseManagement.Business.Services
             PasswordService passwordService = new PasswordService();
 
             PasswordSaltHashResult storedResult = passwordService.UserRegistration(model.Password);
-            
-            string personId = Ulid.NewUlid().ToString();
+
+            string personId = NewUlid();
             
             var person = new Person
             {
@@ -112,7 +113,7 @@ namespace CaseManagement.Business.Services
             //    else { }
             //}
 
-            var addPersonAndUserResult = await _dataHandler.CreatePersonAndUserAsync(person, user);
+            var addPersonAndUserResult = await _dataHandler.CreateUserAsync(person, user);
             if (addPersonAndUserResult)
             {
                 return new OperationResult { Status = "Success", Message = "Person and User details stored successfully!" };
