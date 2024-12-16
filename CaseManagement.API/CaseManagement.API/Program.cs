@@ -2,9 +2,6 @@ using CaseManagement.Business.Common;
 using CaseManagement.Business.Services;
 
 using FluentMigrator.Runner;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +16,11 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddFluentMigratorCore()
+    .ConfigureRunner(rb => rb
+        .AddSqlServer()
+        .WithGlobalConnectionString(builder.Configuration.GetConnectionString("DBConnectionString"))
+        .ScanIn(typeof(CaseManagement.DataAccess.Migrations.CreateInitialSchemaAndSeedLookupConstants).Assembly).For.Migrations());
 builder.Services.AddScoped<SignupService>();
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
 builder.Services.AddScoped<LoginService>();
@@ -55,5 +57,11 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+using (var scope = app.Services.CreateScope())
+{
+    var runner = scope.ServiceProvider.GetRequiredService<IMigrationRunner>();
+    runner.MigrateUp();
+}
+
 
 app.Run();
