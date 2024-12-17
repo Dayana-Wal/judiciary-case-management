@@ -23,6 +23,17 @@ builder.Services.AddFluentMigratorCore()
         .ScanIn(typeof(CaseManagement.DataAccess.Migrations.CreateInitialSchemaAndSeedLookupConstants).Assembly).For.Migrations());
 builder.Services.AddScoped<SignupManager>();
 
+// Add CORS policy to allow any origin
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAnyOrigin", policy =>
+    {
+        policy.AllowAnyOrigin()  // Accept requests from any origin
+              .AllowAnyMethod()  // Accept any HTTP method (GET, POST, PUT, etc.)
+              .AllowAnyHeader(); // Accept any headers
+    });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -35,6 +46,9 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+// Enable CORS globally
+app.UseCors("AllowAnyOrigin");
 
 app.MapControllers();
 using (var scope = app.Services.CreateScope())

@@ -26,7 +26,7 @@ namespace CaseManagement.API.Controllers
 
 
         [HttpPost("person")]
-        public async Task<IActionResult> SignUp([FromForm] SignupModel signupDataModel)
+        public async Task<IActionResult> SignUp([FromBody] SignupModel signupDataModel)
         {
             if (signupDataModel == null)
             {
