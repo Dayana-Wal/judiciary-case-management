@@ -18,9 +18,56 @@ namespace CaseManagement.DataAccess.Commands
         {
         }
 
-        public async Task<bool> CreatePersonAndUserAsync(Person person, User user)
+        //public async Task<bool> CreateUserAsync(Person person, User user)
+        //{
+        //    using (var transaction = await _context.Database.BeginTransactionAsync())
+        //    {
+
+        //        try
+        //        {
+        //            var existingPerson = await _context.People
+        //                .FirstOrDefaultAsync(p => p.Email == person.Email);
+
+        //            if (existingPerson != null)
+        //            {
+        //                await transaction.RollbackAsync();
+        //                //return new OperationResult { Status="Failed", Message= $"Person with {person.Email} already exists, cannot proceed" };
+        //                return false;
+        //            }
+
+        //            await _context.People.AddAsync(person);
+
+        //            var existingUser = await _context.Users
+        //                .FirstOrDefaultAsync(u => u.UserName == user.UserName);
+
+        //            if (existingUser != null)
+        //            {
+        //                await transaction.RollbackAsync();
+        //                return false;
+        //                //return new OperationResult { Status = "Failed", Message = $"User with {user.UserName} already exists, cannot proceed" };
+        //            }
+
+        //            await _context.Users.AddAsync(user);
+
+        //            await _context.SaveChangesAsync();
+        //            await transaction.CommitAsync();
+
+        //            //return new OperationResult { Status = "Success", Message = $"Person and User Details stored successfully!" };
+
+        //            return true;
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            await transaction.RollbackAsync();
+        //            //return new OperationResult { Status = "Failed", Message = $"Exception Occured: {ex.Message}" };
+
+        //            return false;
+        //        }
+        //    }
+        //}
+
+        public async Task<bool> CreateUserAsync(Person person, User user)
         {
-            using (var transaction = await _context.Database.BeginTransactionAsync())
             {
 
                 try
@@ -30,7 +77,6 @@ namespace CaseManagement.DataAccess.Commands
 
                     if (existingPerson != null)
                     {
-                        await transaction.RollbackAsync();
                         //return new OperationResult { Status="Failed", Message= $"Person with {person.Email} already exists, cannot proceed" };
                         return false;
                     }
@@ -42,7 +88,6 @@ namespace CaseManagement.DataAccess.Commands
 
                     if (existingUser != null)
                     {
-                        await transaction.RollbackAsync();
                         return false;
                         //return new OperationResult { Status = "Failed", Message = $"User with {user.UserName} already exists, cannot proceed" };
                     }
@@ -50,7 +95,6 @@ namespace CaseManagement.DataAccess.Commands
                     await _context.Users.AddAsync(user);
 
                     await _context.SaveChangesAsync();
-                    await transaction.CommitAsync();
 
                     //return new OperationResult { Status = "Success", Message = $"Person and User Details stored successfully!" };
 
@@ -58,7 +102,6 @@ namespace CaseManagement.DataAccess.Commands
                 }
                 catch (Exception ex)
                 {
-                    await transaction.RollbackAsync();
                     //return new OperationResult { Status = "Failed", Message = $"Exception Occured: {ex.Message}" };
 
                     return false;
@@ -66,7 +109,8 @@ namespace CaseManagement.DataAccess.Commands
             }
         }
 
-        
+
+
 
 
         //public async Task<bool> CreatePersonAsync(Person person)

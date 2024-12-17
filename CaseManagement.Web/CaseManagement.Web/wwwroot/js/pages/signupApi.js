@@ -5,16 +5,21 @@
             console.log("Valid form, calling the API")
 
             // Serialize form data
-            const formData = $(this).serialize();
-
+            const formDataArray = $(this).serializeArray();
+            var formData = {}
+            formDataArray.forEach(item => formData[item.name] = item.value)
+            console.log("formData --",formData)
             $.ajax({
                 url: apiBaseUrl + "/SignUp/person",
                 type: "POST",
-                contentType: "application/x-www-form-urlencoded",
-                data: formData,
+                contentType: "application/json",
+                data: JSON.stringify(formData),
                 success: function (response) {
-                    alert(response.message)
-                    console.log(response);
+                    if (response.status.toUpperCase() == 'SUCCESS') {
+                        alert(response.message)
+                        // Reset the form fields
+                        $('#signUpForm').trigger("reset");
+                    }
                 },
                 error: function (xhr, status, error) {
                     console.log("AJAX Request Failed");
@@ -36,9 +41,6 @@
                     }
                 }
             });
-        }
-        else {
-            alert("Fill the form with proper details")
         }
     });
 });

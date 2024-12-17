@@ -21,7 +21,7 @@ builder.Services.AddFluentMigratorCore()
         .AddSqlServer()
         .WithGlobalConnectionString(builder.Configuration.GetConnectionString("DBConnectionString"))
         .ScanIn(typeof(CaseManagement.DataAccess.Migrations.CreateInitialSchemaAndSeedLookupConstants).Assembly).For.Migrations());
-builder.Services.AddScoped<SignupService>();
+builder.Services.AddScoped<SignupManager>();
 
 // Add CORS policy to allow any origin
 builder.Services.AddCors(options =>
