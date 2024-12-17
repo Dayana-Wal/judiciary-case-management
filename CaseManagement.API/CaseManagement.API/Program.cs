@@ -1,7 +1,11 @@
 using CaseManagement.Business.Common;
 using CaseManagement.Business.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+
 
 using FluentMigrator.Runner;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,7 +27,9 @@ builder.Services.AddFluentMigratorCore()
         .ScanIn(typeof(CaseManagement.DataAccess.Migrations.CreateInitialSchemaAndSeedLookupConstants).Assembly).For.Migrations());
 builder.Services.AddScoped<SignupService>();
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
-builder.Services.AddScoped<LoginService>();
+builder.Services.AddScoped<LoginManager>();
+builder.Services.AddScoped<JwtTokenProvider>();
+
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {

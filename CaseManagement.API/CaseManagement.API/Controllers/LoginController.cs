@@ -9,23 +9,22 @@ namespace CaseManagement.API.Controllers
     [Route("api/[controller]")]
     public class LoginController : Controller
     {
-        private readonly LoginService _loginService;
+        private readonly LoginManager _loginManager;
 
-        public LoginController(LoginService loginService)
+        public LoginController(LoginManager loginManager)
         {
-           _loginService = loginService;
+           _loginManager = loginManager;
         }
-        [HttpPost("login")]
+        [HttpPost("user")]
         public IActionResult Login([FromBody] LoginRequest loginRequest)
         {
-            Console.WriteLine("Started login method");
-            if (!ModelState.IsValid) {
+            Console.WriteLine("started");
+           if (!ModelState.IsValid) {
                 return BadRequest("Invalid input");
             }
-            string token =_loginService.UserLogin(loginRequest.UserName, loginRequest.Password);
+            var result =_loginManager.UserLogin(loginRequest.UserName, loginRequest.Password);
             //Call business layer
-            Console.WriteLine("Completed login method");
-            return Ok($"Login Success: {token}");
+            return Ok($"Login Success: {result}");
         }
     }
 }
