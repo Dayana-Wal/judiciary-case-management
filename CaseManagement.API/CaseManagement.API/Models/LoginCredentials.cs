@@ -2,7 +2,7 @@
 
 namespace CaseManagement.API.Models
 {
-    public class LoginRequest
+    public class LoginCredentials
     {
         [Required]
         public string UserName { get; set; }

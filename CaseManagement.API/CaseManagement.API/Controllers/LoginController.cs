@@ -7,7 +7,7 @@ namespace CaseManagement.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class LoginController : Controller
+    public class LoginController : BaseController
     {
         private readonly LoginManager _loginManager;
 
@@ -16,15 +16,25 @@ namespace CaseManagement.API.Controllers
            _loginManager = loginManager;
         }
         [HttpPost("user")]
-        public IActionResult Login([FromBody] LoginRequest loginRequest)
+        public async Task<IActionResult> Login([FromBody] LoginCredentials loginCredentials)
         {
-            Console.WriteLine("started");
-           if (!ModelState.IsValid) {
-                return BadRequest("Invalid input");
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    var errors = ModelState.Values.SelectMany(value => value.Errors).SelectMany(error => error.ErrorMessage).ToList();
+                    return BadRequest(new { Message = "Invalid user input", Error = errors});
+                }
+                var result = await _loginManager.UserLogin(loginCredentials.UserName, loginCredentials.Password);
+                return ToResponse<string>(result);
             }
-            var result =_loginManager.UserLogin(loginRequest.UserName, loginRequest.Password);
-            //Call business layer
-            return Ok($"Login Success: {result}");
+            catch(UnauthorizedAccessException unauthorized)
+            {
+                return Unauthorized(new { Message = unauthorized.Message });
+            }
+            catch (Exception ex) { 
+                return BadRequest(new {Message = "An error occurred while login", Error = ex.Message});
+            }
         }
     }
 }

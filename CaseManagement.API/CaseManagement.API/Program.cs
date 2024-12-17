@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using FluentMigrator.Runner;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using CaseManagement.DataAccess.Queries;
+using CaseManagement.DataAccess.Entities;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,10 +28,14 @@ builder.Services.AddFluentMigratorCore()
         .AddSqlServer()
         .WithGlobalConnectionString(builder.Configuration.GetConnectionString("DBConnectionString"))
         .ScanIn(typeof(CaseManagement.DataAccess.Migrations.CreateInitialSchemaAndSeedLookupConstants).Assembly).For.Migrations());
+builder.Services.AddDbContext<CaseManagementContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DBConnectionString")));
 builder.Services.AddScoped<SignupService>();
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
 builder.Services.AddScoped<LoginManager>();
 builder.Services.AddScoped<JwtTokenProvider>();
+builder.Services.AddScoped<PersonQueryHandler>();
+builder.Services.AddScoped<PasswordService>();
 
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>

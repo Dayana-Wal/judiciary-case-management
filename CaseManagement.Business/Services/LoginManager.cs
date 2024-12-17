@@ -1,4 +1,6 @@
 ﻿using CaseManagement.Business.Common;
+using CaseManagement.DataAccess.Entities;
+using CaseManagement.DataAccess.Queries;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -16,38 +18,45 @@ namespace CaseManagement.Business.Services
     {
         private readonly JwtTokenProvider _jwtTokenProvider;
         private readonly PasswordService _passwordService;
-        public LoginManager(JwtTokenProvider jwtTokenProvider, PasswordService passwordService)
+        private readonly PersonQueryHandler _personQueryHandler;
+        public LoginManager(JwtTokenProvider jwtTokenProvider, PasswordService passwordService, PersonQueryHandler personQueryHandler)
         {
             _jwtTokenProvider = jwtTokenProvider;
             _passwordService = passwordService;
+            _personQueryHandler = personQueryHandler;
         }
-        public OperationResult UserLogin(string username, string password)
+        public async Task<OperationResult<string>> UserLogin(string username, string password)
         {
-            //TODO: Get the salt and password  from user table
-            string salt = "0LtwYy1/kufYqKLdBSNNpA==";
-            string passwordFromDb = "oXnNr85vuAxfDP1YlZ/r+pq1BqpLYn4Uw/ak4PopLcA=";
+            //Get the user data from user table
+            User user = await _personQueryHandler.GetUserByUserNameAsync(username);
+            if (user == null)
+            {
+                //return new OperationResult<string>
+                //{
+                //    Status = "Failed",
+                //    Message = "User not found with the provided username"
+                //};
+                throw new UnauthorizedAccessException("User not found with the provided username");
 
-            bool isPasswordMatched = _passwordService.VerifyEnteredPassword(password, passwordFromDb, salt);
-            if(isPasswordMatched)
+            }
+            bool isPasswordMatched = _passwordService.VerifyEnteredPassword(password, user.PasswordHash, user.PasswordSalt);
+            if (isPasswordMatched)
             {
                 string token = _jwtTokenProvider.GenerateJwtToken(username, password);
-                Console.WriteLine(token);
-                //TODO: Pass the token as result
-                return new OperationResult { Status = "Success", Message = "Login Success" };
+                return new OperationResult<string> { Status = "Success", Message = "Login Success", Data = token };
 
             }
-
             else
             {
-                return new OperationResult { Status = "Failed", Message = "Incorrect Password" };
+                //return new OperationResult<string>
+                //{
+                //    Status = "Failed",
+                //    Message = "Incorrect password provided"
+                //};
+                throw new UnauthorizedAccessException("Incorrect Password");
             }
 
-            //Fetch user details(PasswordHash,PasswordSalt,RoleId) based on username --> data access
-            //Generate HashedPassword using password and salt --> can use the function in signup
-            //Compare HashedPassword and PasswordHash
-            //If same generate JWT token
-            //If not same send "Incorrect password" message
         }
-      
+
     }
 }
