@@ -14,8 +14,8 @@ namespace CaseManagement.DataAccess.Commands
         //Task<bool> CreatePersonAsync(Person person);
         //Task<bool> CreateUserAsync(User user);
 
-        Task<bool> CreateUserAsync(Person person , User user);
-
+        Task<string> CreateUserAsync(Person person , User user);
+        //Task<OperationResult> CreateUserAsync(Person person, User user);
         Task UpdateAsync<T>(Person person);
 
         Task DeleteAsync<T>(Person person);

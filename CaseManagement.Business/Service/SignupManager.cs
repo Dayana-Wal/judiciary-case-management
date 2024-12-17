@@ -1,5 +1,6 @@
 ﻿using CaseManagement.Business.Common;
 using CaseManagement.Business.Models;
+using CaseManagement.Business.Utility;
 using CaseManagement.Business.Validations;
 using CaseManagement.DataAccess.Commands;
 using CaseManagement.DataAccess.Entities;
@@ -24,10 +25,11 @@ namespace CaseManagement.Business.Services
         private readonly IPersonCommandHandler _dataHandler;
 
 
-        public SignupManager()
+        public SignupManager(IPersonCommandHandler dataHandler, SignupValidator validator)
         {
-            _validator = new SignupValidator();
-            _dataHandler = new PersonCommandHandler();
+            //_validator = new SignupValidator();
+            _validator = validator;
+            _dataHandler = dataHandler;
         }
 
 
@@ -64,11 +66,23 @@ namespace CaseManagement.Business.Services
 
         }
 
-        public async Task<OperationResult> RegisterUser(SignupModel model)
+        public async Task<OperationResult<List<string>>> RegisterUser(SignupModel model)
         {
-            PasswordService passwordService = new PasswordService();
+            var validationResult = await ValidateSignupDetails(model);
+            if (validationResult.Data.Any())
+            {
+                return validationResult;
+                //return new OperationResult<List<string>>
+                //{
+                //    Status = "Failed",
+                //    Message = "Validation failed: Please check the entered details.",
+                //    Data = validationResult.Data
+                //};
+            }
 
-            PasswordSaltHashResult storedResult = passwordService.UserRegistration(model.Password);
+            HashHelper passwordService = new HashHelper();
+
+            PasswordSaltHashResult storedResult = passwordService.HashedResult(model.Password);
 
             string personId = NewUlid();
             
@@ -114,14 +128,16 @@ namespace CaseManagement.Business.Services
             //}
 
             var addPersonAndUserResult = await _dataHandler.CreateUserAsync(person, user);
-            if (addPersonAndUserResult)
+            if (addPersonAndUserResult == "Success")
             {
-                return new OperationResult { Status = "Success", Message = "Person and User details stored successfully!" };
+                return new OperationResult<List<string>> { Status = "Success", Message = "Person and User details stored successfully!" };
             }
-            
-            //return addPersonAndUserResult;
-            
-            return new OperationResult { Status = "Failed" , Message = "Failed to store person and user details"};
+            else
+            {
+                return new OperationResult<List<string>> { Status = "Failed", Message = $"Failed to store person and user details:{addPersonAndUserResult}" };
+
+            }
+
         }
 
 

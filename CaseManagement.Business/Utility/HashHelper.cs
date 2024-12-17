@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CaseManagement.Business.Services
+namespace CaseManagement.Business.Utility
 {
 
     public class PasswordSaltHashResult
@@ -14,9 +14,9 @@ namespace CaseManagement.Business.Services
         public string Salt { get; set; }
     }
 
-    public class PasswordService
+    public class HashHelper
     {
-        public PasswordSaltHashResult UserRegistration(string password)
+        public PasswordSaltHashResult HashedResult(string password)
         {
             string saltValue = GenerateSalt();
             string hashedPasswordSalt = HashPassword(password, saltValue);
@@ -63,7 +63,7 @@ namespace CaseManagement.Business.Services
 
     //        PasswordService passwordService = new PasswordService();
 
-    //        PasswordSaltHashResult storedResult = passwordService.UserRegistration(password);
+    //        PasswordSaltHashResult storedResult = passwordService.HashedResult(password);
 
     //        Console.WriteLine($"Hashed Password: {storedResult.HashedPassword}");
     //        Console.WriteLine($"Salt: {storedResult.Salt}");

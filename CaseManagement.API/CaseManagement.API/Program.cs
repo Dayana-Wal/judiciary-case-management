@@ -1,7 +1,12 @@
 using CaseManagement.Business.Common;
 using CaseManagement.Business.Services;
-
+using CaseManagement.Business.Utility;
+using CaseManagement.Business.Validations;
+using CaseManagement.DataAccess.Commands;
+using CaseManagement.DataAccess.Entities;
 using FluentMigrator.Runner;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +15,14 @@ builder.Services.Configure<TwilioSettings>(builder.Configuration.GetSection("Twi
 // Add services to the container
 builder.Services.AddSingleton<SmsServiceprovider>();
 
-// Add services to the container.
+builder.Services.AddDbContext<CaseManagementContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DBConnectionString")));
+
+builder.Services.AddScoped<IPersonCommandHandler, PersonCommandHandler>();
+builder.Services.AddScoped<SignupManager>(); 
+builder.Services.AddScoped<SignupValidator>();
+builder.Services.AddScoped<HashHelper>();
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -21,7 +33,6 @@ builder.Services.AddFluentMigratorCore()
         .AddSqlServer()
         .WithGlobalConnectionString(builder.Configuration.GetConnectionString("DBConnectionString"))
         .ScanIn(typeof(CaseManagement.DataAccess.Migrations.CreateInitialSchemaAndSeedLookupConstants).Assembly).For.Migrations());
-builder.Services.AddScoped<SignupManager>();
 
 var app = builder.Build();
 
