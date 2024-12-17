@@ -20,25 +20,12 @@ namespace CaseManagement.DataAccess.Queries
             _context = context;
         }
 
-        public Task<Person> GetPersonByEmailAsync(string email)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Person> GetPersonByNameAsync(string name)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<User> GetUserByEmailAsync(string email)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<User> GetUserByUserNameAsync(string userName)
+        public async Task<User> GetUserAsync(string userName)
         {
             var user = await _context.Users.FirstOrDefaultAsync(user => user.UserName == userName);
-            return user; 
+            return user;
+
         }
+
     }
 }

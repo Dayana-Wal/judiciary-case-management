@@ -28,7 +28,7 @@ namespace CaseManagement.Business.Services
         public async Task<OperationResult<string>> UserLogin(string username, string password)
         {
             //Get the user data from user table
-            User user = await _personQueryHandler.GetUserByUserNameAsync(username);
+            User user = await _personQueryHandler.GetUserAsync(username);
             if (user == null)
             {
                 //return new OperationResult<string>
