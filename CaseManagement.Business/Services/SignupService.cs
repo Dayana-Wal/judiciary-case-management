@@ -3,14 +3,10 @@ using CaseManagement.Business.Models;
 using CaseManagement.Business.Validations;
 using CaseManagement.DataAccess.Commands;
 using CaseManagement.DataAccess.Entities;
+using CaseManagement.DataAccess;
+using CaseManagement.DataAccess.Queries.Common;
 using FluentValidation;
-using FluentValidation.Results;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 
 namespace CaseManagement.Business.Services
@@ -68,9 +64,10 @@ namespace CaseManagement.Business.Services
             PasswordService passwordService = new PasswordService();
 
             PasswordSaltHashResult storedResult = passwordService.UserRegistration(model.Password);
-            
+
             string personId = Ulid.NewUlid().ToString();
-            
+            int userRoleId = await LookupConstantQueryService.GetLookupConstantIdByCodeAndTypeAsync(Constants.LookupConstantGenralCode, Constants.LookupConstantTypeUserRole);
+
             var person = new Person
             {
                 Id = personId,
@@ -88,7 +85,7 @@ namespace CaseManagement.Business.Services
                 UserName = model.UserName,
                 PasswordHash = storedResult.HashedPassword,
                 PasswordSalt = storedResult.Salt,
-                RoleId = 22,
+                RoleId = userRoleId,
                 PersonId = personId
 
             };
