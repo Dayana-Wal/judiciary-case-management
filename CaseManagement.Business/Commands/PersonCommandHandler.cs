@@ -1,4 +1,5 @@
 ﻿
+using CaseManagement.Business.Common;
 using CaseManagement.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -19,9 +20,7 @@ namespace CaseManagement.DataAccess.Commands
             _context = context;
         }
 
-
-
-        public async Task<string> CreateUserAsync(Person person, User user)
+        public async Task<OperationResult<string>> CreateUserAsync(Person person, User user)
         {
             {
 
@@ -32,8 +31,8 @@ namespace CaseManagement.DataAccess.Commands
 
                     if (existingPerson != null)
                     {
-                        //return new OperationResult { Status="Failed", Message= $"Person with {person.Email} already exists, cannot proceed" };
-                        return "Person with given email id already exists";
+                        return new OperationResult<string> { Status="Failed", Message= $"Person with this email already exists", Data= person.Email};
+                        //return "Person with given email id already exists";
                     }
 
                     await _context.People.AddAsync(person);
@@ -43,23 +42,23 @@ namespace CaseManagement.DataAccess.Commands
 
                     if (existingUser != null)
                     {
-                        return "User with given user name already exists";
-                        //return new OperationResult { Status = "Failed", Message = $"User with {user.UserName} already exists, cannot proceed" };
+                        //return "User with given user name already exists";
+                        return new OperationResult<string> { Status = "Failed", Message = $"User with this username already exists" , Data=  user.UserName };
                     }
 
                     await _context.Users.AddAsync(user);
 
                     await _context.SaveChangesAsync();
 
-                    //return new OperationResult { Status = "Success", Message = $"Person and User Details stored successfully!" };
+                    return new OperationResult<string> { Status = "Success", Message = $"Details stored successfully!" };
 
-                    return "Success";
+                    //return "Success";
                 }
                 catch (Exception ex)
                 {
-                    //return new OperationResult { Status = "Failed", Message = $"Exception Occured: {ex.Message}" };
+                    return new OperationResult<string> { Status = "Failed", Message = $"An Exception Occured while storing data to database" , Data =  ex.Message };
 
-                    return $"Exception occured : {ex.Message}";
+                    //return $"Exception occured : {ex.Message}";
                 }
             }
         }

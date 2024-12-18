@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CaseManagement.DataAccess.Entities;
 
@@ -26,9 +27,9 @@ public partial class CaseManagementContext : DbContext
     public virtual DbSet<VersionInfo> VersionInfos { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //DESKTOP-H63SR17\\SQLEXPRESS01
-        => optionsBuilder.UseSqlServer("Data Source=localhost;Initial Catalog=CaseManagement;Integrated Security=True;TrustServerCertificate=true");
-
+       //DESKTOP-H63SR17\\SQLEXPRESS01
+       => optionsBuilder.UseSqlServer("Data Source=localhost;Initial Catalog=CaseManagement;Integrated Security=True;TrustServerCertificate=true");
+      
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<LookupConstant>(entity =>

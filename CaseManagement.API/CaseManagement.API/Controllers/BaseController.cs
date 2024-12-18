@@ -8,8 +8,9 @@ namespace CaseManagement.API.Controllers
     [ApiController]
     public class BaseController : ControllerBase
     {
-        public IActionResult ToResponse(OperationResult opresult) {
-            if(opresult.Status == "Success") { return Ok(opresult); }
+        public IActionResult ToResponse(OperationResult opresult)
+        {
+            if (opresult.Status == "Success") { return Ok(opresult); }
             else { return BadRequest(opresult); }
         }
         public IActionResult ToResponse(OperationResult<List<string>> opresult)

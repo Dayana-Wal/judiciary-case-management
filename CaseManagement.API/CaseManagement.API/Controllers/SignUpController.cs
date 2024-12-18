@@ -1,7 +1,8 @@
-﻿//using CaseManagement.API.Models;
-using CaseManagement.Business.Models;
+﻿using CaseManagement.Business.Common;
+using CaseManagement.Business.Features.Signup;
 using CaseManagement.Business.Services;
 using CaseManagement.Business.Utility;
+using CaseManagement.DataAccess.Commands;
 using Microsoft.AspNetCore.Authentication.BearerToken;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -13,47 +14,75 @@ namespace CaseManagement.API.Controllers
 
     public class SignupController : BaseController
     {
-        
-
         private readonly SignupManager _signupManager;
         private readonly HashHelper _passwordService;
+        private readonly IPersonCommandHandler _personCommandHandler;
 
-        public SignupController(SignupManager signupManager, HashHelper passwordservice)
+        public SignupController(SignupManager signupManager, HashHelper passwordservice,  IPersonCommandHandler personCommandHandler)
         {
             _passwordService = passwordservice;
             _signupManager = signupManager;
+            _personCommandHandler = personCommandHandler;
         }
 
 
 
         [HttpPost("person")]
-        public async Task<IActionResult> SignUp([FromForm] SignupModel signupDataModel)
+        public async Task<IActionResult> SignUp([FromForm] SignupCommand signupCommand)
         {
-            if (signupDataModel == null)
+            if (signupCommand == null)
             {
                 return BadRequest("Invalid user data.");
             }
 
-            //var validationResult = await _signupManager.ValidateSignupDetails(signupDataModel);
-            //if (validationResult.Data.Any())
-            //{
-            //    return BadRequest(new { errors = validationResult });
-            //}
+            var validationresult = signupCommand.ValidateCommand();
+
+            var signupResult = new OperationResult();
 
 
-            //password hashed value and salt value are stored in result
-            //var result = _passwordService.HashedResult(signupDataModel.Password);
-
-            var dataStoreResult = await _signupManager.RegisterUser(signupDataModel);
-            if (dataStoreResult.Status == "Success")
+            if(validationresult.IsValid)
             {
-                return Ok(new { status = "Success", message = "User registered successfully!" });
+                var dataStoreResult = await _signupManager.RegisterUser(signupCommand);
+
+                signupResult.Status = dataStoreResult.Status;
+                signupResult.Message = dataStoreResult.Message;
+
+                if (dataStoreResult.Status == "Success")
+                {
+                    
+                    return ToResponse(signupResult);
+                    //return Ok(new { status = "Success", message = "User registered successfully!" });
+                }
+                else
+                {
+                    var returnResponse = OperationResultConverter.ConvertTo(signupResult, dataStoreResult.Data);
+
+                    //signupResult.Data = dataStoreResult.Data;
+                    return ToResponse(returnResponse);
+                }
+
             }
             else
             {
-                return BadRequest(new { status = "Failed", message = dataStoreResult.Message });
+                List<string> validationErrors = new List<string>();
+
+                foreach(var errors in validationresult.Errors)
+                {
+                    validationErrors.Add(errors.ErrorMessage);
+                }
+
+                signupResult.Status = "Failed";
+                signupResult.Message = "Registration Failed";
+                //signupResult.Data = validationErrors;
+                
+                var returnResponse = OperationResultConverter.ConvertTo(signupResult, validationErrors);
+                return ToResponse(returnResponse);
+                
+                //return BadRequest(new { status = "Failed", message = "Registration Failed", errors = validationErrors });
             }
-            //return ToResponse(dataStoreResult);
+
+
+           
 
 
         }

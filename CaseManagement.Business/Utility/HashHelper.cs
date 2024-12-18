@@ -52,26 +52,4 @@ namespace CaseManagement.Business.Utility
             return enteredHashedPassword == storedHashedPassword;
         }
     }
-
-    //public class Program
-    //{
-    //    public static void Main(string[] args)
-    //    {
-    //        string? password = Console.ReadLine();
-    //        string reenteredPassword = Console.ReadLine();
-
-
-    //        PasswordService passwordService = new PasswordService();
-
-    //        PasswordSaltHashResult storedResult = passwordService.HashedResult(password);
-
-    //        Console.WriteLine($"Hashed Password: {storedResult.HashedPassword}");
-    //        Console.WriteLine($"Salt: {storedResult.Salt}");
-
-
-    //        bool comparePasswords = passwordService.VerifyEnteredPassword(reenteredPassword, storedResult.HashedPassword, storedResult.Salt);
-    //        if (comparePasswords) { Console.WriteLine("Login successful!"); }
-    //        else { Console.WriteLine("Incorrect password!"); }
-    //    }
-    //}
 }
