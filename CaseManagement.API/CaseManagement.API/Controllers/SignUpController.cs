@@ -2,6 +2,7 @@
 using CaseManagement.Business.Models;
 using CaseManagement.Business.Services;
 using Microsoft.AspNetCore.Authentication.BearerToken;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -10,6 +11,7 @@ namespace CaseManagement.API.Controllers
 {
     //[ApiController]
     //[Route("api/[controller]")]
+    [AllowAnonymous]
     public class SignUpController : BaseController
     {
         

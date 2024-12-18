@@ -1,12 +1,12 @@
 ﻿using CaseManagement.API.Models;
 using CaseManagement.Business.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CaseManagement.API.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
+    [AllowAnonymous]
     public class LoginController : BaseController
     {
         private readonly LoginManager _loginManager;

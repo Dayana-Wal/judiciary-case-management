@@ -9,6 +9,7 @@ using System.Text;
 using CaseManagement.DataAccess.Queries;
 using CaseManagement.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
+using CaseManagement.API.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,24 +37,7 @@ builder.Services.AddScoped<LoginManager>();
 builder.Services.AddScoped<JwtTokenProvider>();
 builder.Services.AddScoped<PersonQueryHandler>();
 builder.Services.AddScoped<PasswordService>();
-
-
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
-{
-    // Access JwtSettings values
-    var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JwtSettings>();
-
-    options.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
-        ValidIssuer = jwtSettings?.Issuer, 
-        ValidAudience = jwtSettings?.Audience, 
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings?.SecretKey))
-    };
-});
+builder.Services.AddScoped<JwtTokenValidatorMiddleware>();
 
 // Add CORS policy to allow any origin
 builder.Services.AddCors(options =>
@@ -79,6 +63,7 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseMiddleware<JwtTokenValidatorMiddleware>();
 
 // Enable CORS globally
 app.UseCors("AllowAnyOrigin");
