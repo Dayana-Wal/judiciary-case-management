@@ -29,15 +29,18 @@ namespace CaseManagement.Business.Services
                 new Claim(JwtRegisteredClaimNames.Jti, Ulid.NewUlid().ToString()),
                 new Claim(ClaimTypes.Role,role )
             };
-            //TODO --> Get the values from configuration file
+
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.SecretKey));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var issuer = _jwtSettings.Issuer;
+            var audience = _jwtSettings.Audience;
+            int expiresIn = int.Parse(_jwtSettings.expiresInHours);
 
             var token = new JwtSecurityToken(
-                issuer: _jwtSettings.Issuer,
-                audience: _jwtSettings.Audience,
+                issuer: issuer,
+                audience: audience,
                 claims: claims,
-                expires: DateTime.Now.AddHours(1),
+                expires: DateTime.Now.AddHours(expiresIn),
                 signingCredentials: creds
                 );
 

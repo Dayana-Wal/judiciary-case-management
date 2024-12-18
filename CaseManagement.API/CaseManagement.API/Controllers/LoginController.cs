@@ -28,10 +28,6 @@ namespace CaseManagement.API.Controllers
                 var result = await _loginManager.UserLogin(loginCredentials.UserName, loginCredentials.Password);
                 return ToResponse<string>(result);
             }
-            catch(UnauthorizedAccessException unauthorized)
-            {
-                return Unauthorized(new { Message = unauthorized.Message });
-            }
             catch (Exception ex) { 
                 return BadRequest(new {Message = "An error occurred while login", Error = ex.Message});
             }

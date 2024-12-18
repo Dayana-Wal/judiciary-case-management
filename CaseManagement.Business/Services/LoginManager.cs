@@ -31,29 +31,27 @@ namespace CaseManagement.Business.Services
             User user = await _personQueryHandler.GetUserAsync(username);
             if (user == null)
             {
-                //return new OperationResult<string>
-                //{
-                //    Status = "Failed",
-                //    Message = "User not found with the provided username"
-                //};
-                throw new UnauthorizedAccessException("User not found with the provided username");
+                return new OperationResult<string>
+                {
+                    Status = "Failed",
+                    Message = "User not found with the provided username"
+                };
 
             }
             bool isPasswordMatched = _passwordService.VerifyEnteredPassword(password, user.PasswordHash, user.PasswordSalt);
             if (isPasswordMatched)
             {
-                string token = _jwtTokenProvider.GenerateJwtToken(username, password);
+                string token = _jwtTokenProvider.GenerateJwtToken(username, user.Role.Text);
                 return new OperationResult<string> { Status = "Success", Message = "Login Success", Data = token };
 
             }
             else
             {
-                //return new OperationResult<string>
-                //{
-                //    Status = "Failed",
-                //    Message = "Incorrect password provided"
-                //};
-                throw new UnauthorizedAccessException("Incorrect Password");
+                return new OperationResult<string>
+                {
+                    Status = "Failed",
+                    Message = "Incorrect password provided"
+                };
             }
 
         }

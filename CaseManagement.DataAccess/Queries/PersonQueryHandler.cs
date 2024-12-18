@@ -22,7 +22,9 @@ namespace CaseManagement.DataAccess.Queries
 
         public async Task<User> GetUserAsync(string userName)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(user => user.UserName == userName);
+            var user = await _context.Users
+                .Include(u => u.Role)
+                .FirstOrDefaultAsync(user => user.UserName == userName);
             return user;
 
         }
