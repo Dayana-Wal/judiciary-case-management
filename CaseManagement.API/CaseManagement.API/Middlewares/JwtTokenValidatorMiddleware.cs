@@ -37,7 +37,7 @@ namespace CaseManagement.API.Middlewares
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"error from token middleware: {ex.Message}");
+                    Console.WriteLine($"Error while validating the token: {ex.Message}");
                 }
 
 
@@ -48,30 +48,24 @@ namespace CaseManagement.API.Middlewares
             }
         }
 
-        public ClaimsPrincipal? ValidateToken(string token) {
+        public ClaimsPrincipal ValidateToken(string token)
+        {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.UTF8.GetBytes(_jwtSettings.SecretKey);
 
-            try
+            var validationParameters = new TokenValidationParameters
             {
-                var validationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = _jwtSettings.Issuer,
-                    ValidAudience = _jwtSettings.Audience,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ClockSkew = TimeSpan.Zero
-                };
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = _jwtSettings.Issuer,
+                ValidAudience = _jwtSettings.Audience,
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+                ClockSkew = TimeSpan.Zero
+            };
 
-                return tokenHandler.ValidateToken(token, validationParameters, out _);
-            }
-            catch (Exception ex) { 
-                Console.WriteLine($"Token validation with error: {ex.Message}");
-                return null;
-            }
+            return tokenHandler.ValidateToken(token, validationParameters, out _);
         }
     }
 }

@@ -63,7 +63,9 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseMiddleware<JwtTokenValidatorMiddleware>();
+app.UseWhen(context => !context.Request.Path.Value.ToLower().Trim().Contains(@"/login"),
+    applicationBUilder => applicationBUilder.UseMiddleware<JwtTokenValidatorMiddleware>());
+//app.UseMiddleware<JwtTokenValidatorMiddleware>();
 
 // Enable CORS globally
 app.UseCors("AllowAnyOrigin");
