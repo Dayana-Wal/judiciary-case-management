@@ -13,5 +13,7 @@ public partial class LookupConstant
 
     public string Type { get; set; } = null!;
 
+    public virtual ICollection<Otp> Otps { get; set; } = new List<Otp>();
+
     public virtual ICollection<User> Users { get; set; } = new List<User>();
 }
