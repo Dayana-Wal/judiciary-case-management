@@ -25,7 +25,7 @@ namespace CaseManagement.Business.Services
                 {
                     return new OperationResult
                     {
-                        Status = "ERROR",
+                        Status = OperationStatus.Error,
                         Message = "Recipient phone number and message body cannot be null or empty."
                     };
                 }
@@ -39,7 +39,7 @@ namespace CaseManagement.Business.Services
                 // Return success response
                 return new OperationResult
                 {
-                    Status = "SUCCESS",
+                    Status = OperationStatus.Success,
                     Message = "SMS sent successfully."
                 };
             }
@@ -47,10 +47,11 @@ namespace CaseManagement.Business.Services
             {
                 return new OperationResult
                 {
-                    Status = "ERROR",
+                    Status = OperationStatus.Error,
                     Message = $"Failed to send SMS: {ex.Message}"
                 };
             }
         }
+
     }
 }

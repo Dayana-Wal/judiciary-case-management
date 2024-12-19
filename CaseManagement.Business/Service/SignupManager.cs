@@ -51,7 +51,7 @@ namespace CaseManagement.Business.Services
 
             var addPersonAndUserResult = await _dataHandler.CreateUserAsync(person, user);
 
-            if (addPersonAndUserResult.Status == "Success")
+            if (addPersonAndUserResult.Status == OperationStatus.Success)
             {
                 dataStoredresult.Status = addPersonAndUserResult.Status; //for success
                 dataStoredresult.Message = "Details stored successfully!";

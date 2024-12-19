@@ -1,25 +1,36 @@
+using CaseManagement.Business.Commands;
 using CaseManagement.Business.Common;
+using CaseManagement.Business.Providers;
+using CaseManagement.Business.Service;
 using CaseManagement.Business.Services;
 using CaseManagement.Business.Utility;
 using CaseManagement.DataAccess.Commands;
 using CaseManagement.DataAccess.Entities;
 using FluentMigrator.Runner;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.Configure<TwilioSettings>(builder.Configuration.GetSection("Twilio"));
-
 builder.Services.AddDbContext<CaseManagementContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DBConnectionString"))
-);
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DBConnectionString")));
 
 // Add services to the container
 builder.Services.AddSingleton<SmsServiceprovider>();
 
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
 builder.Services.AddScoped<IPersonCommandHandler, PersonCommandHandler>();
 builder.Services.AddScoped<SignupManager>(); 
 builder.Services.AddScoped<HashHelper>();
+builder.Services.AddSingleton<SmsServiceprovider>();
+builder.Services.AddSingleton<OtpProvider>();
+builder.Services.AddScoped<OtpManager>();
+builder.Services.AddScoped<IOtpCommandHandler, OtpCommandHandler>();
 
 builder.Services.AddControllers();
 
