@@ -26,7 +26,7 @@ namespace CaseManagement.Business.Providers
         {
             if (string.IsNullOrWhiteSpace(otpValue))
             {
-                throw new ArgumentException("OTP value cannot be null or empty.", nameof(otpValue));
+                return "Otp value can't be null or empty";
             }
 
             using (SHA256 sha256 = SHA256.Create())

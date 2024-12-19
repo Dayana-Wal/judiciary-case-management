@@ -16,7 +16,7 @@ namespace CaseManagement.Business.Commands
             _otpProvider = otpProvider;
         }
 
-        public async Task<Otp> StoreOtpAsync(string requestedBy, string phoneNumber, string usedForCode)
+        public async Task<Otp> StoreOtpAsync(string userId, string phoneNumber, string usedForCode)
         {
             var usedForId = await _dbContext.LookupConstants
                 .Where(lc => lc.Code == usedForCode)
@@ -29,7 +29,7 @@ namespace CaseManagement.Business.Commands
             }
 
             var existingOtp = await _dbContext.Otps
-                .FirstOrDefaultAsync(o => o.RequestedBy == requestedBy && o.UsedForId == usedForId);
+                .FirstOrDefaultAsync(o => o.RequestedBy == userId && o.UsedForId == usedForId);
 
             var (otpValue, otpHash) = OtpProvider.GenerateAndHashOtp();
 
@@ -54,7 +54,7 @@ namespace CaseManagement.Business.Commands
                     Id = BaseManager.NewUlid(),
                     OtpHash = otpHash,
                     IsVerified = false,
-                    RequestedBy = requestedBy,
+                    RequestedBy = userId,
                     UsedForId = usedForId,
                     GeneratedAt = DateTime.UtcNow,
                     ExpiresAt = DateTime.UtcNow.AddMinutes(10)
@@ -71,7 +71,7 @@ namespace CaseManagement.Business.Commands
                 OtpHash = otpHash,
                 GeneratedAt = DateTime.UtcNow,
                 ExpiresAt = DateTime.UtcNow.AddMinutes(10),
-                RequestedBy = requestedBy,
+                RequestedBy = userId,
                 UsedForId = usedForId
             };
         }

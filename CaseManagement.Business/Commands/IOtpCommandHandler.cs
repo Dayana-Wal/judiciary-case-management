@@ -5,7 +5,7 @@ namespace CaseManagement.Business.Commands
 {
     public interface IOtpCommandHandler
     {
-        Task<Otp> StoreOtpAsync(string requestedBy, string phoneNumber, string usedForCode);
+        Task<Otp> StoreOtpAsync(string userId, string phoneNumber, string usedForCode);
         Task<OperationResult> VerifyOtpAsync(string userId, string otp);
     }
 }

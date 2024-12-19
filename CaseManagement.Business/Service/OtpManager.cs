@@ -13,9 +13,9 @@ namespace CaseManagement.Business.Service
             _otpCommandHandler = otpCommandHandler;
         }
 
-        public async Task<Otp> StoreOtp(string requestedBy, string phoneNumber, string usedForCode)
+        public async Task<Otp> StoreOtp(string userId, string phoneNumber, string usedForCode)
         {
-            return await _otpCommandHandler.StoreOtpAsync(requestedBy, phoneNumber, usedForCode);
+            return await _otpCommandHandler.StoreOtpAsync(userId, phoneNumber, usedForCode);
         }
 
         public async Task<OperationResult> VerifyOtp(string userId, string otp)
