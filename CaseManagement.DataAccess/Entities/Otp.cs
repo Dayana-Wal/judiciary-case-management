@@ -12,7 +12,11 @@ public partial class Otp
 
     public DateTime GeneratedAt { get; set; }
 
+    public int UsedForId { get; set; }
+
     public DateTime? ExpiresAt { get; set; }
 
     public virtual Person RequestedByNavigation { get; set; } = null!;
+
+    public virtual LookupConstant UsedFor { get; set; } = null!;
 }
