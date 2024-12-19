@@ -37,7 +37,5 @@ Judge
 1. Make judgement & close case
 
 Admin
-1. Add role
-2. Assign the role
-3. Add judicial official and advocate
+1. Assign, change or remove the role
 

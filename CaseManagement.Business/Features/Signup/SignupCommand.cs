@@ -1,16 +1,28 @@
-﻿using CaseManagement.Business.Models;
-using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FluentValidation;
+using FluentValidation.Results;
 
-namespace CaseManagement.Business.Validations
+namespace CaseManagement.Business.Features.Signup
 {
-    public class SignupValidator : AbstractValidator<SignupModel>
+    public class SignupCommand
     {
-        public SignupValidator() {
+        public string Name { get; set; } = null!;
+        public string UserName { get; set; } = null!;
+        public string Password { get; set; } = null!;
+        public string Email { get; set; } = null!;
+        public string Contact { get; set; } = null!;
+        public DateTime DateOfBirth { get; set; } 
+        public string Gender { get; set; } = null!;
+
+        public ValidationResult ValidateCommand() { 
+            SignupCommandValidator validator = new SignupCommandValidator();
+            return validator.Validate(this);
+        }
+    }
+
+    public class SignupCommandValidator : AbstractValidator<SignupCommand>
+    {
+        public SignupCommandValidator()
+        {
 
             RuleFor(model => model.Name).NotEmpty().WithMessage("Name is required.");
 
@@ -20,19 +32,11 @@ namespace CaseManagement.Business.Validations
             RuleFor(model => model.Password).NotEmpty().WithMessage("Password is required.")
                 .Length(7, 20).WithMessage("Password length should be between 7 and 20");
 
-            //RuleFor(model => model.ConfirmPassword).NotEmpty().WithMessage("confirm Password is required.")
-            //    .Equal(model => model.Password).WithMessage("Passwords don't match");
-
             RuleFor(model => model.Email).NotEmpty().WithMessage("Email is required.")
                 .EmailAddress().WithMessage("Email is invalid");
 
             RuleFor(model => model.Contact).NotEmpty().WithMessage("Contact is required.")
                 .Matches(@"^\d{10}$").WithMessage("Incorrect number");
-
-            //RuleFor(model => model.AlternateContact).NotEmpty().WithMessage("Alternate contact is required.")
-            //.Matches(@"^\d{10}$");
-
-            //RuleFor(model => model.Address).NotEmpty().WithMessage("Address is required.");
 
             RuleFor(model => model.DateOfBirth).NotEmpty().WithMessage("Date of Birth is required");
 

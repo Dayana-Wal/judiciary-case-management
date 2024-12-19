@@ -1,22 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace CaseManagement.Business.Services
+namespace CaseManagement.Business.Utility
 {
-
     public class PasswordSaltHashResult
     {
-        public string HashedPassword { get; set; }
-        public string Salt { get; set; }
+        public string HashedPassword { get; set; } = null!;
+        public string Salt { get; set; } = null!;
     }
 
-    public class PasswordService
+    public class HashHelper
     {
-        public PasswordSaltHashResult UserRegistration(string password)
+        public PasswordSaltHashResult HashedResult(string password)
         {
             string saltValue = GenerateSalt();
             string hashedPasswordSalt = HashPassword(password, saltValue);
@@ -33,7 +28,6 @@ namespace CaseManagement.Business.Services
             }
         }
 
-        //hashing the password with salt included
         public string HashPassword(string password, string salt)
         {
             string saltedPassword = password + salt;
@@ -52,26 +46,4 @@ namespace CaseManagement.Business.Services
             return enteredHashedPassword == storedHashedPassword;
         }
     }
-
-    //public class Program
-    //{
-    //    public static void Main(string[] args)
-    //    {
-    //        string? password = Console.ReadLine();
-    //        string reenteredPassword = Console.ReadLine();
-
-
-    //        PasswordService passwordService = new PasswordService();
-
-    //        PasswordSaltHashResult storedResult = passwordService.UserRegistration(password);
-
-    //        Console.WriteLine($"Hashed Password: {storedResult.HashedPassword}");
-    //        Console.WriteLine($"Salt: {storedResult.Salt}");
-
-
-    //        bool comparePasswords = passwordService.VerifyEnteredPassword(reenteredPassword, storedResult.HashedPassword, storedResult.Salt);
-    //        if (comparePasswords) { Console.WriteLine("Login successful!"); }
-    //        else { Console.WriteLine("Incorrect password!"); }
-    //    }
-    //}
 }

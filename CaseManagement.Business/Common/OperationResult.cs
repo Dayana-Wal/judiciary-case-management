@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 
 namespace CaseManagement.Business.Common
 {
@@ -13,11 +9,24 @@ namespace CaseManagement.Business.Common
         public string Message { get; set; }
         
     }
+    public class OperationResult
+    {
+        public string Status { get; set; }
+        public string Message { get; set; }
+    }
 
-        public class OperationResult
+    public class OperationResultConverter
+    {
+        public static OperationResult<T> ConvertTo<T>(OperationResult result, T data)
         {
-            public string Status { get; set; }
-            public string Message { get; set; }
+            return new OperationResult<T>
+            {
+                Status = result.Status,
+                Message = result.Message,
+                Data = data
+            };
+
         }
+    }
 
 }

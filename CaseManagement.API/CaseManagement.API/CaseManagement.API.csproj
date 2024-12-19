@@ -27,7 +27,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\CaseManagement.Business\CaseManagement.Business.csproj" />
-    <ProjectReference Include="..\..\CaseManagement.DataAccess\CaseManagement.DataAccess.csproj" />
   </ItemGroup>
 
 </Project>

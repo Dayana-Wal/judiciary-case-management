@@ -1,51 +1,81 @@
-﻿//using CaseManagement.API.Models;
-using CaseManagement.Business.Models;
+﻿using CaseManagement.Business.Common;
+using CaseManagement.Business.Features.Signup;
 using CaseManagement.Business.Services;
-using Microsoft.AspNetCore.Authentication.BearerToken;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
+using CaseManagement.Business.Utility;
+using CaseManagement.DataAccess.Commands;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CaseManagement.API.Controllers
 {
     //[ApiController]
     //[Route("api/[controller]")]
-    [AllowAnonymous]
     public class SignUpController : BaseController
     {
-        
+        private readonly SignupManager _signupManager;
+        private readonly HashHelper _passwordService;
+        private readonly IPersonCommandHandler _personCommandHandler;
 
-        private readonly SignupService _signupService = new SignupService();
-        private readonly PasswordService _passwordService;
-
-        public SignUpController()
+        public SignupController(SignupManager signupManager, HashHelper passwordservice,  IPersonCommandHandler personCommandHandler)
         {
-            _passwordService = new PasswordService();
+            _passwordService = passwordservice;
+            _signupManager = signupManager;
+            _personCommandHandler = personCommandHandler;
         }
 
 
 
         [HttpPost("person")]
-        public async Task<IActionResult> SignUp([FromForm] SignupModel signupDataModel)
+        public async Task<IActionResult> SignUp([FromForm] SignupCommand signupCommand)
         {
-            if (signupDataModel == null)
+            if (signupCommand == null)
             {
                 return BadRequest("Invalid user data.");
             }
 
-            var validationResult = await _signupService.ValidateSignupDetails(signupDataModel);
-            if (validationResult.Data.Any())
+            var validationresult = signupCommand.ValidateCommand();
+
+            var signupResult = new OperationResult();
+
+
+            if(validationresult.IsValid)
             {
-                return BadRequest(new { errors = validationResult });
+                var dataStoreResult = await _signupManager.RegisterUser(signupCommand);
+
+                signupResult.Status = dataStoreResult.Status;
+                signupResult.Message = dataStoreResult.Message;
+
+                if (dataStoreResult.Status == "Success")
+                {
+                    
+                    return ToResponse(signupResult);
+                }
+                else
+                {
+                    var returnResponse = OperationResultConverter.ConvertTo(signupResult, dataStoreResult.Data);
+
+                    return ToResponse(returnResponse);
+                }
+
+            }
+            else
+            {
+                List<string> validationErrors = new List<string>();
+
+                foreach(var errors in validationresult.Errors)
+                {
+                    validationErrors.Add(errors.ErrorMessage);
+                }
+
+                signupResult.Status = "Failed";
+                signupResult.Message = "Registration Failed";
+                
+                var returnResponse = OperationResultConverter.ConvertTo(signupResult, validationErrors);
+                return ToResponse(returnResponse);
+                
             }
 
 
-            //password hashed value and salt value are stored in result
-            //var result = _passwordService.UserRegistration(signupDataModel.Password);
-
-            var dataStoreResult = await _signupService.RegisterUser(signupDataModel);
-            return ToResponse(dataStoreResult);
+           
 
 
         }
