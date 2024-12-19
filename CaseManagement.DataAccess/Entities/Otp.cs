@@ -1,4 +1,7 @@
-﻿namespace CaseManagement.DataAccess.Entities;
+﻿using System;
+using System.Collections.Generic;
+
+namespace CaseManagement.DataAccess.Entities;
 
 public partial class Otp
 {
