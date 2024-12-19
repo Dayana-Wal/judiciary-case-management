@@ -1,34 +1,26 @@
-﻿using CaseManagement.Business.Common;
+﻿using CaseManagement.API.Models;
+using CaseManagement.Business.Common;
+using CaseManagement.Business.Queries;
+using CaseManagement.Business.Utility;
 using CaseManagement.DataAccess.Entities;
-using CaseManagement.DataAccess.Queries;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace CaseManagement.Business.Services
+namespace CaseManagement.Business.Service
 {
     public class LoginManager
     {
         private readonly JwtTokenProvider _jwtTokenProvider;
-        private readonly PasswordService _passwordService;
+        private readonly HashHelper _hashHelper;
         private readonly PersonQueryHandler _personQueryHandler;
-        public LoginManager(JwtTokenProvider jwtTokenProvider, PasswordService passwordService, PersonQueryHandler personQueryHandler)
+        public LoginManager(JwtTokenProvider jwtTokenProvider, HashHelper hashHelper, PersonQueryHandler personQueryHandler)
         {
             _jwtTokenProvider = jwtTokenProvider;
-            _passwordService = passwordService;
+            _hashHelper = hashHelper;
             _personQueryHandler = personQueryHandler;
         }
-        public async Task<OperationResult<string>> UserLogin(string username, string password)
+        public async Task<OperationResult<string>> UserLogin(LoginQuery loginQuery)
         {
             //Get the user data from user table
-            User user = await _personQueryHandler.GetUserAsync(username);
+            User user = await _personQueryHandler.GetUserAsync(loginQuery.UserName);
             if (user == null)
             {
                 return new OperationResult<string>
@@ -38,10 +30,10 @@ namespace CaseManagement.Business.Services
                 };
 
             }
-            bool isPasswordMatched = _passwordService.VerifyEnteredPassword(password, user.PasswordHash, user.PasswordSalt);
+            bool isPasswordMatched = _hashHelper.VerifyEnteredPassword(loginQuery.Password, user.PasswordHash, user.PasswordSalt);
             if (isPasswordMatched)
             {
-                string token = _jwtTokenProvider.GenerateJwtToken(username, user.Role.Text);
+                string token = _jwtTokenProvider.GenerateJwtToken(loginQuery.UserName, user.Role.Text);
                 return new OperationResult<string> { Status = "Success", Message = "Login Success", Data = token };
 
             }

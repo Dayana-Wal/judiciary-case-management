@@ -1,6 +1,7 @@
 ﻿using CaseManagement.DataAccess.Entities;
+using Microsoft.EntityFrameworkCore;
 
-namespace CaseManagement.DataAccess.Queries
+namespace CaseManagement.Business.Queries
 {
     public class PersonQueryHandler : IPersonQueryHandler
     {

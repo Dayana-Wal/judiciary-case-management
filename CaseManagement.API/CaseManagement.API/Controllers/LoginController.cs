@@ -1,12 +1,9 @@
 ﻿using CaseManagement.API.Models;
-using CaseManagement.Business.Services;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
+using CaseManagement.Business.Service;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CaseManagement.API.Controllers
 {
-    [AllowAnonymous]
     public class LoginController : BaseController
     {
         private readonly LoginManager _loginManager;
@@ -16,17 +13,25 @@ namespace CaseManagement.API.Controllers
            _loginManager = loginManager;
         }
         [HttpPost("user")]
-        public async Task<IActionResult> Login([FromBody] LoginCredentials loginCredentials)
+        public async Task<IActionResult> Login([FromBody] LoginQuery loginQuery)
         {
             try
             {
-                if (!ModelState.IsValid)
-                {
-                    var errors = ModelState.Values.SelectMany(value => value.Errors).SelectMany(error => error.ErrorMessage).ToList();
-                    return BadRequest(new { Message = "Invalid user input", Error = errors});
+                if (loginQuery == null) {
+                    return BadRequest("Invalid user data");
                 }
-                var result = await _loginManager.UserLogin(loginCredentials.UserName, loginCredentials.Password);
-                return ToResponse<string>(result);
+
+                var validationResult = loginQuery.ValidateQuery();
+                if (validationResult.IsValid)
+                {
+                    var result = await _loginManager.UserLogin(loginQuery);
+                    return ToResponse<string>(result);
+                }
+                else {
+                    //TODO
+                    Console.WriteLine("validations failed");
+                    return BadRequest("validations failed");
+                }
             }
             catch (Exception ex) { 
                 return BadRequest(new {Message = "An error occurred while login", Error = ex.Message});

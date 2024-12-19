@@ -9,14 +9,16 @@ using System.Text;
 
 namespace CaseManagement.API.Middlewares
 {
-    public class JwtTokenValidatorMiddleware : IMiddleware
+    public class JwtTokenValidatorMiddleware 
     {
         private readonly JwtSettings _jwtSettings;
-        public JwtTokenValidatorMiddleware(IOptions<JwtSettings> jwtSettings)
+        private readonly RequestDelegate _next;
+        public JwtTokenValidatorMiddleware(RequestDelegate next,IOptions<JwtSettings> jwtSettings)
         {
+            _next = next;
             _jwtSettings = jwtSettings.Value;
         }
-        public async Task InvokeAsync(HttpContext context, RequestDelegate next)
+        public async Task InvokeAsync(HttpContext context)
         {
             var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
             if (token != null)
@@ -27,7 +29,7 @@ namespace CaseManagement.API.Middlewares
                     if (claims != null)
                     {
                         context.User = claims;
-                        await next(context);
+                        await _next(context);
                     }
                     else
                     {
@@ -46,6 +48,7 @@ namespace CaseManagement.API.Middlewares
             {
                 Console.WriteLine("Token not found");
             }
+
         }
 
         public ClaimsPrincipal ValidateToken(string token)

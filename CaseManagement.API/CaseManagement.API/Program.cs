@@ -1,12 +1,13 @@
 using CaseManagement.Business.Common;
 using CaseManagement.Business.Services;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-
-
 using CaseManagement.Business.Utility;
 using CaseManagement.DataAccess.Commands;
 using CaseManagement.DataAccess.Entities;
 using FluentMigrator.Runner;
+using Microsoft.EntityFrameworkCore;
+using CaseManagement.API.Middlewares;
+using CaseManagement.Business.Service;
+using CaseManagement.Business.Queries;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,15 +19,17 @@ builder.Services.AddDbContext<CaseManagementContext>(options =>
 
 // Add services to the container
 builder.Services.AddSingleton<SmsServiceprovider>();
-
 builder.Services.AddScoped<IPersonCommandHandler, PersonCommandHandler>();
 builder.Services.AddScoped<SignupManager>(); 
 builder.Services.AddScoped<HashHelper>();
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
+builder.Services.AddScoped<JwtTokenProvider>();
+builder.Services.AddScoped<PersonQueryHandler>();
+builder.Services.AddScoped<LoginManager>();
+
+
 
 builder.Services.AddControllers();
-
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddFluentMigratorCore()
@@ -34,7 +37,6 @@ builder.Services.AddFluentMigratorCore()
         .AddSqlServer()
         .WithGlobalConnectionString(builder.Configuration.GetConnectionString("DBConnectionString"))
         .ScanIn(typeof(CaseManagement.DataAccess.Migrations.CreateInitialSchemaAndSeedLookupConstants).Assembly).For.Migrations());
-builder.Services.AddScoped<SignupService>();
 
 // Add CORS policy to allow any origin
 builder.Services.AddCors(options =>
@@ -57,16 +59,15 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseAuthentication();
 app.UseAuthorization();
+
 app.UseWhen(context => !context.Request.Path.Value.ToLower().Trim().Contains(@"/login"),
     applicationBUilder => applicationBUilder.UseMiddleware<JwtTokenValidatorMiddleware>());
 //app.UseMiddleware<JwtTokenValidatorMiddleware>();
 
 // Enable CORS globally
 app.UseCors("AllowAnyOrigin");
-
 app.MapControllers();
 using (var scope = app.Services.CreateScope())
 {

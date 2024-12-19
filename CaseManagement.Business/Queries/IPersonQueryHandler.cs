@@ -1,6 +1,6 @@
 ﻿using CaseManagement.DataAccess.Entities;
 
-namespace CaseManagement.DataAccess.Queries
+namespace CaseManagement.Business.Queries
 {
     public interface IPersonQueryHandler
     {

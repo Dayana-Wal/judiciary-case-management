@@ -9,7 +9,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CaseManagement.Business.Services
+namespace CaseManagement.Business.Service
 {
     public class JwtTokenProvider
     {

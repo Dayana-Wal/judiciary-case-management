@@ -9,7 +9,7 @@ namespace CaseManagement.API.Controllers
 {
     //[ApiController]
     //[Route("api/[controller]")]
-    public class SignUpController : BaseController
+    public class SignupController : BaseController
     {
         private readonly SignupManager _signupManager;
         private readonly HashHelper _passwordService;
