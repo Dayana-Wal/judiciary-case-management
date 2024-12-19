@@ -67,7 +67,6 @@ namespace CaseManagement.DataAccess.Migrations
 
         public override void Down()
         {
-            // Delete all tables
             Delete.Table("User");
             Delete.Table("Person");
             Delete.Table("LookupConstant");
