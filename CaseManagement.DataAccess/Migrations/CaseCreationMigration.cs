@@ -2,7 +2,7 @@
 
 namespace CaseManagement.DataAccess.Migrations
 {
-    [Migration(202412191149)]
+    [Migration(202412191120)]
     public class CaseCreationMigration : Migration
     {
         public override void Up()
