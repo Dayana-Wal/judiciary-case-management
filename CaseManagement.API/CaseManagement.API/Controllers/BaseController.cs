@@ -1,5 +1,4 @@
 ﻿using CaseManagement.Business.Common;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CaseManagement.API.Controllers

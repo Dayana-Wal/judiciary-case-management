@@ -1,13 +1,4 @@
-﻿
-
-
-using CaseManagement.DataAccess.Entities;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CaseManagement.DataAccess.Entities;
 
 namespace CaseManagement.DataAccess.Queries
 {

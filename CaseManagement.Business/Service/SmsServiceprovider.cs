@@ -1,10 +1,8 @@
-﻿using Microsoft.Extensions.Options;
-using Twilio.Types;
+﻿using CaseManagement.Business.Common;
+using Microsoft.Extensions.Options;
 using Twilio;
 using Twilio.Rest.Api.V2010.Account;
-using CaseManagement.Business.Common;
-using System;
-using System.Threading.Tasks;
+using Twilio.Types;
 
 namespace CaseManagement.Business.Services
 {

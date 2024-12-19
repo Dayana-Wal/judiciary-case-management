@@ -3,11 +3,7 @@ using CaseManagement.Business.Features.Signup;
 using CaseManagement.Business.Services;
 using CaseManagement.Business.Utility;
 using CaseManagement.DataAccess.Commands;
-using Microsoft.AspNetCore.Authentication.BearerToken;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 
 namespace CaseManagement.API.Controllers
 {
@@ -51,13 +47,11 @@ namespace CaseManagement.API.Controllers
                 {
                     
                     return ToResponse(signupResult);
-                    //return Ok(new { status = "Success", message = "User registered successfully!" });
                 }
                 else
                 {
                     var returnResponse = OperationResultConverter.ConvertTo(signupResult, dataStoreResult.Data);
 
-                    //signupResult.Data = dataStoreResult.Data;
                     return ToResponse(returnResponse);
                 }
 
@@ -73,12 +67,10 @@ namespace CaseManagement.API.Controllers
 
                 signupResult.Status = "Failed";
                 signupResult.Message = "Registration Failed";
-                //signupResult.Data = validationErrors;
                 
                 var returnResponse = OperationResultConverter.ConvertTo(signupResult, validationErrors);
                 return ToResponse(returnResponse);
                 
-                //return BadRequest(new { status = "Failed", message = "Registration Failed", errors = validationErrors });
             }
 
 

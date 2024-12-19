@@ -2,12 +2,7 @@
 using CaseManagement.Business.Common;
 using CaseManagement.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace CaseManagement.DataAccess.Commands
 {
@@ -32,7 +27,7 @@ namespace CaseManagement.DataAccess.Commands
                     if (existingPerson != null)
                     {
                         return new OperationResult<string> { Status="Failed", Message= $"Person with this email already exists", Data= person.Email};
-                        //return "Person with given email id already exists";
+                    
                     }
 
                     await _context.People.AddAsync(person);
@@ -42,7 +37,6 @@ namespace CaseManagement.DataAccess.Commands
 
                     if (existingUser != null)
                     {
-                        //return "User with given user name already exists";
                         return new OperationResult<string> { Status = "Failed", Message = $"User with this username already exists" , Data=  user.UserName };
                     }
 
@@ -52,13 +46,11 @@ namespace CaseManagement.DataAccess.Commands
 
                     return new OperationResult<string> { Status = "Success", Message = $"Details stored successfully!" };
 
-                    //return "Success";
                 }
                 catch (Exception ex)
                 {
                     return new OperationResult<string> { Status = "Failed", Message = $"An Exception Occured while storing data to database" , Data =  ex.Message };
 
-                    //return $"Exception occured : {ex.Message}";
                 }
             }
         }

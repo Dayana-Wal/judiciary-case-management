@@ -5,7 +5,6 @@ using CaseManagement.DataAccess.Commands;
 using CaseManagement.DataAccess.Entities;
 using FluentMigrator.Runner;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 

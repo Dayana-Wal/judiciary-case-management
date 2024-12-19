@@ -3,32 +3,17 @@ using CaseManagement.Business.Common;
 using CaseManagement.Business.Utility;
 using CaseManagement.DataAccess.Commands;
 using CaseManagement.DataAccess.Entities;
-using FluentValidation;
-using FluentValidation.Results;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 
 namespace CaseManagement.Business.Services
 {
-
-
     public class SignupManager:BaseManager
     {
-        //private readonly IValidator<SignupDataModel> _validator;
-
         private readonly IPersonCommandHandler _dataHandler;
-
 
         public SignupManager(IPersonCommandHandler dataHandler)
         {
             _dataHandler = dataHandler;
         }
-
 
         public async Task<OperationResult<List<string>>> RegisterUser(SignupCommand command)
         {

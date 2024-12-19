@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace CaseManagement.Business.Utility
 {
-
     public class PasswordSaltHashResult
     {
-        public string HashedPassword { get; set; }
-        public string Salt { get; set; }
+        public string HashedPassword { get; set; } = null!;
+        public string Salt { get; set; } = null!;
     }
 
     public class HashHelper
@@ -33,7 +28,6 @@ namespace CaseManagement.Business.Utility
             }
         }
 
-        //hashing the password with salt included
         public string HashPassword(string password, string salt)
         {
             string saltedPassword = password + salt;
