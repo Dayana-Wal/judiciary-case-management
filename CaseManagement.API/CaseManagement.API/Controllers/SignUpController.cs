@@ -7,8 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CaseManagement.API.Controllers
 {
-
-    public class SignupController : BaseController
+    //[ApiController]
+    //[Route("api/[controller]")]
+    public class SignUpController : BaseController
     {
         private readonly SignupManager _signupManager;
         private readonly HashHelper _passwordService;

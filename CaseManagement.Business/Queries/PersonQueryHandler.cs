@@ -11,13 +11,14 @@ namespace CaseManagement.DataAccess.Queries
             _context = context;
         }
 
-        Task<Person> IPersonQueryHandler.GetPersonByEmailAsync { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public Task<Person> GetPersonByNameAsync { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public Task<User> GetUserByEmailAsync { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public async Task<User> GetUserAsync(string userName)
+        {
+            var user = await _context.Users
+                .Include(u => u.Role)
+                .FirstOrDefaultAsync(user => user.UserName == userName);
+            return user;
 
-       
-
-       
+        }
 
     }
 }

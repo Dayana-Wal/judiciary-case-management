@@ -1,10 +1,12 @@
 using CaseManagement.Business.Common;
 using CaseManagement.Business.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+
+
 using CaseManagement.Business.Utility;
 using CaseManagement.DataAccess.Commands;
 using CaseManagement.DataAccess.Entities;
 using FluentMigrator.Runner;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +34,7 @@ builder.Services.AddFluentMigratorCore()
         .AddSqlServer()
         .WithGlobalConnectionString(builder.Configuration.GetConnectionString("DBConnectionString"))
         .ScanIn(typeof(CaseManagement.DataAccess.Migrations.CreateInitialSchemaAndSeedLookupConstants).Assembly).For.Migrations());
+builder.Services.AddScoped<SignupService>();
 
 // Add CORS policy to allow any origin
 builder.Services.AddCors(options =>
@@ -55,7 +58,11 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
+app.UseWhen(context => !context.Request.Path.Value.ToLower().Trim().Contains(@"/login"),
+    applicationBUilder => applicationBUilder.UseMiddleware<JwtTokenValidatorMiddleware>());
+//app.UseMiddleware<JwtTokenValidatorMiddleware>();
 
 // Enable CORS globally
 app.UseCors("AllowAnyOrigin");
