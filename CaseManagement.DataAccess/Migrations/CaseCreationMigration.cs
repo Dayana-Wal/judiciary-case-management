@@ -3,7 +3,7 @@
 namespace CaseManagement.DataAccess.Migrations
 {
     [Migration(202412191149)]
-    class CaseCreationMigration : Migration
+    public class CaseCreationMigration : Migration
     {
         public override void Up()
         {
@@ -19,10 +19,10 @@ namespace CaseManagement.DataAccess.Migrations
 
             Create.Table("File")
                 .WithColumn("Id").AsString(26).PrimaryKey()
-                .WithColumn("FileTypeId").AsInt32().NotNullable().ForeignKey("LookupCostant", "Id")
-                .WithColumn("FileName").AsString(64).NotNullable()
+                .WithColumn("FileTypeId").AsInt32().NotNullable().ForeignKey("LookupConstant", "Id")
+                .WithColumn("FileName").AsString(128).NotNullable()
                 .WithColumn("FilePath").AsString(255).NotNullable()
-                .WithColumn("UploadedBy").AsString(64).NotNullable().ForeignKey("Person", "Id");
+                .WithColumn("UploadedBy").AsString(26).NotNullable().ForeignKey("Person", "Id");
 
             Create.Table("CaseFiles")
                 .WithColumn("Id").AsString(26).PrimaryKey() 
