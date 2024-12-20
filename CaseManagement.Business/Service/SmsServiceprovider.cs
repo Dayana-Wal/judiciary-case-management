@@ -23,11 +23,13 @@ namespace CaseManagement.Business.Services
             {
                 if (string.IsNullOrWhiteSpace(toPhoneNumber) || string.IsNullOrWhiteSpace(messageBody))
                 {
-                    return new OperationResult
-                    {
-                        Status = "ERROR",
-                        Message = "Recipient phone number and message body cannot be null or empty."
-                    };
+                    //return new OperationResult
+                    //{
+                    //    Status = "ERROR",
+                    //    Message = "Recipient phone number and message body cannot be null or empty."
+                    //};
+
+                    return OperationResult.Failed(message: "Recipient phone number and message body cannot be null or empty.");
                 }
                 // Send SMS via Twilio
                 var message = await MessageResource.CreateAsync(
@@ -37,19 +39,25 @@ namespace CaseManagement.Business.Services
                 );
 
                 // Return success response
-                return new OperationResult
-                {
-                    Status = "SUCCESS",
-                    Message = "SMS sent successfully."
-                };
+                //return new OperationResult
+                //{
+                //    Status = "SUCCESS",
+                //    Message = "SMS sent successfully."
+                //};
+
+                return OperationResult.Success(message: "SMS sent successfully.");
+
             }
             catch (Exception ex)
             {
-                return new OperationResult
-                {
-                    Status = "ERROR",
-                    Message = $"Failed to send SMS: {ex.Message}"
-                };
+                //return new OperationResult
+                //{
+                //    Status = "ERROR",
+                //    Message = $"Failed to send SMS: {ex.Message}"
+                //};
+
+                return OperationResult.Failed(message: $"Failed to send SMS: {ex.Message}");
+
             }
         }
     }

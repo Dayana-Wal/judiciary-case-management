@@ -21,5 +21,11 @@ namespace CaseManagement.Web.Controllers
             ViewBag.ApiBaseUrl = apiBaseUrl;
             return View();
         }
+
+        [HttpGet("create-case")]
+        public IActionResult CreateCase()
+        {
+            return View();
+        }
     }
 }

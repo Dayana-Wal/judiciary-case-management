@@ -3,6 +3,7 @@ using CaseManagement.Business.Features.Signup;
 using CaseManagement.Business.Services;
 using CaseManagement.Business.Utility;
 using CaseManagement.DataAccess.Commands;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CaseManagement.API.Controllers
@@ -31,51 +32,58 @@ namespace CaseManagement.API.Controllers
                 return BadRequest("Invalid user data.");
             }
 
-            var validationresult = signupCommand.ValidateCommand();
-
+            var validationResult = signupCommand.ValidateCommand();
             var signupResult = new OperationResult();
 
+            //var signupResult = new OperationResult();
 
-            if(validationresult.IsValid)
+
+            if (validationResult.IsValid)
             {
                 var dataStoreResult = await _signupManager.RegisterUser(signupCommand);
 
-                signupResult.Status = dataStoreResult.Status;
-                signupResult.Message = dataStoreResult.Message;
+                //signupResult.Status = dataStoreResult.Status;
+                //signupResult.Message = dataStoreResult.Message;
 
                 if (dataStoreResult.Status == "Success")
                 {
-                    
-                    return ToResponse(signupResult);
+                    signupResult = OperationResult.Success(message: dataStoreResult.Message);
+                    //return ToResponse(signupResult);
                 }
-                else
+                else if(dataStoreResult.Status == "Failed")
                 {
-                    var returnResponse = OperationResultConverter.ConvertTo(signupResult, dataStoreResult.Data);
+                    signupResult = OperationResult.Failed(message: dataStoreResult.Message);
 
-                    return ToResponse(returnResponse);
                 }
+                //signupResult = OperationResultConverter.ConvertTo(signupResult, dataStoreResult.Data);
+
+                //var returnResponse = OperationResultConverter.ConvertTo(signupResult, dataStoreResult.Data);
+
+                return ToResponse(signupResult);
+
 
             }
             else
             {
-                List<string> validationErrors = new List<string>();
+                var validationErrors = new List<string>();
 
-                foreach(var errors in validationresult.Errors)
+                foreach(var errors in validationResult.Errors)
                 {
                     validationErrors.Add(errors.ErrorMessage);
                 }
 
-                signupResult.Status = "Failed";
-                signupResult.Message = "Registration Failed";
+                //signupResult.Status = "Failed";
+                //signupResult.Message = "Registration Failed";
+
+                //var returnResponse = OperationResultConverter.ConvertTo(signupResult, validationErrors);
+
+                //signupResult = OperationResultT<List<string>>.ValidationError(validationErrors);
                 
-                var returnResponse = OperationResultConverter.ConvertTo(signupResult, validationErrors);
+                var returnResponse = OperationResult<List<string>>.ValidationError(data: validationErrors);
+
                 return ToResponse(returnResponse);
                 
             }
-
-
-           
-
 
         }
 

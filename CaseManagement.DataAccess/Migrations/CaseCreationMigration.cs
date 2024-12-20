@@ -30,7 +30,6 @@ namespace CaseManagement.DataAccess.Migrations
                 .WithColumn("FileId").AsString(26).NotNullable().ForeignKey("File", "Id");
 
 
-
         }
         public override void Down() 
         {
