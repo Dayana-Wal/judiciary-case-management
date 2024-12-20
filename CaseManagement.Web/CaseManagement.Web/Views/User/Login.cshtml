@@ -1,0 +1,25 @@
+﻿@using CaseManagement.Web.Models
+@model LoginModel
+@{
+    var apiBaseUrl = ViewBag.ApiBaseUrl;
+}
+<div class="container w-50 p-3 border rounded shadow mt-5">
+    <h3 class="text-center mb-4">Login </h3>
+    <form id="signUpForm">
+        <div class="container w-75">
+            <div class="mb-3">
+                <label asp-for="UserName" class="form-label">UserName</label>
+                <input asp-for="UserName" class="form-control" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Password" class="form-label">Password</label>
+                <input asp-for="Password" type="password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="d-flex justify-content-end mt-3">
+                <button type="submit" class="btn btn-outline-primary">Login</button>
+            </div>
+        </div>
+    </form>
+</div>

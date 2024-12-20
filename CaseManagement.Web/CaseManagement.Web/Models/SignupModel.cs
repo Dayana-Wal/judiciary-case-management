@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CaseManagement.Web.Models
 {
-    public class UserModel
+    public class SignupModel
     {
         [Required(ErrorMessage = "Enter your {0} here")]
         [DisplayName("Full name")]
