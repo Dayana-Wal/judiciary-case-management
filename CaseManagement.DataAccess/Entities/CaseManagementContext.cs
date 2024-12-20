@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace CaseManagement.DataAccess.Entities;
 
@@ -13,22 +15,107 @@ public partial class CaseManagementContext : DbContext
     {
     }
 
+    public virtual DbSet<Case> Cases { get; set; }
+
+    public virtual DbSet<CaseFile> CaseFiles { get; set; }
+
+    public virtual DbSet<File> Files { get; set; }
+
     public virtual DbSet<LookupConstant> LookupConstants { get; set; }
 
     public virtual DbSet<Otp> Otps { get; set; }
 
     public virtual DbSet<Person> People { get; set; }
 
+    public virtual DbSet<Request> Requests { get; set; }
+
+    public virtual DbSet<ScheduleHearing> ScheduleHearings { get; set; }
+
     public virtual DbSet<User> Users { get; set; }
 
     public virtual DbSet<VersionInfo> VersionInfos { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    
-       => optionsBuilder.UseSqlServer("Data Source=localhost;Initial Catalog=CaseManagement;Integrated Security=True;TrustServerCertificate=true");
-      
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Data Source=DESKTOP-H63SR17\\SQLEXPRESS01;Initial Catalog=CaseManagement;Integrated Security=True;TrustServerCertificate=true");
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Case>(entity =>
+        {
+            entity.ToTable("Case");
+
+            entity.HasIndex(e => e.CaseNumber, "IX_Case_CaseNumber").IsUnique();
+
+            entity.Property(e => e.Id).HasMaxLength(26);
+            entity.Property(e => e.AccusedId).HasMaxLength(26);
+            entity.Property(e => e.AdvocateId).HasMaxLength(26);
+            entity.Property(e => e.CaseNumber).HasMaxLength(50);
+            entity.Property(e => e.Description).HasMaxLength(1000);
+            entity.Property(e => e.VictimId).HasMaxLength(26);
+
+            entity.HasOne(d => d.Accused).WithMany(p => p.CaseAccuseds)
+                .HasForeignKey(d => d.AccusedId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Case_AccusedId_Person_Id");
+
+            entity.HasOne(d => d.Advocate).WithMany(p => p.CaseAdvocates)
+                .HasForeignKey(d => d.AdvocateId)
+                .HasConstraintName("FK_Case_AdvocateId_Person_Id");
+
+            entity.HasOne(d => d.CaseStatus).WithMany(p => p.CaseCaseStatuses)
+                .HasForeignKey(d => d.CaseStatusId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Case_CaseStatusId_LookupConstant_Id");
+
+            entity.HasOne(d => d.CaseType).WithMany(p => p.CaseCaseTypes)
+                .HasForeignKey(d => d.CaseTypeId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Case_CaseTypeId_LookupConstant_Id");
+
+            entity.HasOne(d => d.Victim).WithMany(p => p.CaseVictims)
+                .HasForeignKey(d => d.VictimId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Case_VictimId_Person_Id");
+        });
+
+        modelBuilder.Entity<CaseFile>(entity =>
+        {
+            entity.Property(e => e.Id).HasMaxLength(26);
+            entity.Property(e => e.CaseId).HasMaxLength(26);
+            entity.Property(e => e.FileId).HasMaxLength(26);
+
+            entity.HasOne(d => d.Case).WithMany(p => p.CaseFiles)
+                .HasForeignKey(d => d.CaseId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_CaseFiles_CaseId_Case_Id");
+
+            entity.HasOne(d => d.File).WithMany(p => p.CaseFiles)
+                .HasForeignKey(d => d.FileId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_CaseFiles_FileId_File_Id");
+        });
+
+        modelBuilder.Entity<File>(entity =>
+        {
+            entity.ToTable("File");
+
+            entity.Property(e => e.Id).HasMaxLength(26);
+            entity.Property(e => e.FileName).HasMaxLength(128);
+            entity.Property(e => e.FilePath).HasMaxLength(255);
+            entity.Property(e => e.UploadedBy).HasMaxLength(26);
+
+            entity.HasOne(d => d.FileType).WithMany(p => p.Files)
+                .HasForeignKey(d => d.FileTypeId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_File_FileTypeId_LookupConstant_Id");
+
+            entity.HasOne(d => d.UploadedByNavigation).WithMany(p => p.Files)
+                .HasForeignKey(d => d.UploadedBy)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_File_UploadedBy_Person_Id");
+        });
+
         modelBuilder.Entity<LookupConstant>(entity =>
         {
             entity.ToTable("LookupConstant");
@@ -52,6 +139,11 @@ public partial class CaseManagementContext : DbContext
                 .HasForeignKey(d => d.RequestedBy)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_OTP_RequestedBy_Person_Id");
+
+            entity.HasOne(d => d.UsedFor).WithMany(p => p.Otps)
+                .HasForeignKey(d => d.UsedForId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_OTP_UsedForId_LookupConstant_Id");
         });
 
         modelBuilder.Entity<Person>(entity =>
@@ -65,6 +157,63 @@ public partial class CaseManagementContext : DbContext
             entity.Property(e => e.Email).HasMaxLength(255);
             entity.Property(e => e.Gender).HasMaxLength(50);
             entity.Property(e => e.Name).HasMaxLength(255);
+        });
+
+        modelBuilder.Entity<Request>(entity =>
+        {
+            entity.ToTable("Request");
+
+            entity.Property(e => e.Id).HasMaxLength(26);
+            entity.Property(e => e.CaseId).HasMaxLength(26);
+            entity.Property(e => e.Description).HasMaxLength(255);
+            entity.Property(e => e.FileId).HasMaxLength(26);
+            entity.Property(e => e.RaisedBy).HasMaxLength(26);
+
+            entity.HasOne(d => d.Case).WithMany(p => p.Requests)
+                .HasForeignKey(d => d.CaseId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Request_CaseId_Case_Id");
+
+            entity.HasOne(d => d.File).WithMany(p => p.Requests)
+                .HasForeignKey(d => d.FileId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Request_FileId_File_Id");
+
+            entity.HasOne(d => d.RaisedByNavigation).WithMany(p => p.Requests)
+                .HasForeignKey(d => d.RaisedBy)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Request_RaisedBy_Person_Id");
+
+            entity.HasOne(d => d.RequestStatus).WithMany(p => p.RequestRequestStatuses)
+                .HasForeignKey(d => d.RequestStatusId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Request_RequestStatusId_LookupConstant_Id");
+
+            entity.HasOne(d => d.RequestType).WithMany(p => p.RequestRequestTypes)
+                .HasForeignKey(d => d.RequestTypeId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Request_RequestTypeId_LookupConstant_Id");
+        });
+
+        modelBuilder.Entity<ScheduleHearing>(entity =>
+        {
+            entity.ToTable("ScheduleHearing");
+
+            entity.Property(e => e.Id).HasMaxLength(26);
+            entity.Property(e => e.CaseId).HasMaxLength(26);
+            entity.Property(e => e.JudgeId).HasMaxLength(26);
+            entity.Property(e => e.Judgement).HasMaxLength(255);
+            entity.Property(e => e.ScheduledAt).HasColumnType("datetime");
+
+            entity.HasOne(d => d.Case).WithMany(p => p.ScheduleHearings)
+                .HasForeignKey(d => d.CaseId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ScheduleHearing_CaseId_Case_Id");
+
+            entity.HasOne(d => d.Judge).WithMany(p => p.ScheduleHearings)
+                .HasForeignKey(d => d.JudgeId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ScheduleHearing_JudgeId_User_Id");
         });
 
         modelBuilder.Entity<User>(entity =>

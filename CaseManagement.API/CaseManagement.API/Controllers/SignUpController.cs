@@ -44,7 +44,7 @@ namespace CaseManagement.API.Controllers
                 signupResult.Status = dataStoreResult.Status;
                 signupResult.Message = dataStoreResult.Message;
 
-                if (dataStoreResult.Status == "Success")
+                if (dataStoreResult.Status == OperationStatus.Success)
                 {
                     
                     return ToResponse(signupResult);
@@ -66,7 +66,7 @@ namespace CaseManagement.API.Controllers
                     validationErrors.Add(errors.ErrorMessage);
                 }
 
-                signupResult.Status = "Failed";
+                signupResult.Status = OperationStatus.Failed;
                 signupResult.Message = "Registration Failed";
                 
                 var returnResponse = OperationResultConverter.ConvertTo(signupResult, validationErrors);

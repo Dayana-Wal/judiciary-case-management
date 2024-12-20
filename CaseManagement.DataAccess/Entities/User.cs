@@ -1,4 +1,7 @@
-﻿namespace CaseManagement.DataAccess.Entities;
+﻿using System;
+using System.Collections.Generic;
+
+namespace CaseManagement.DataAccess.Entities;
 
 public partial class User
 {
@@ -17,4 +20,6 @@ public partial class User
     public virtual Person Person { get; set; } = null!;
 
     public virtual LookupConstant Role { get; set; } = null!;
+
+    public virtual ICollection<ScheduleHearing> ScheduleHearings { get; set; } = new List<ScheduleHearing>();
 }

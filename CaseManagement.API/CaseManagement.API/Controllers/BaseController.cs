@@ -7,15 +7,16 @@ namespace CaseManagement.API.Controllers
     [ApiController]
     public class BaseController : ControllerBase
     {
-        public IActionResult ToResponse<T>(OperationResult<T> opResult) {
-            if (opResult.Status == "Success") { return Ok(opResult); }
-            else { return BadRequest(opResult); } 
+        public IActionResult ToResponse(OperationResult opresult)
+        {
+            if (opresult.Status == OperationStatus.Success) { return Ok(opresult); }
+            else { return BadRequest(opresult); }
         }
 
         public IActionResult ToResponse(OperationResult opResult)
         {
-            if (opResult.Status == "Success") { return Ok(opResult); }
-            else { return BadRequest(opResult); }
+            if (opresult.Status == OperationStatus.Success) { return Ok(opresult); }
+            else { return BadRequest(opresult); }
         }
     }
 }
