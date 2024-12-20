@@ -6,7 +6,7 @@ namespace CaseManagement.Web.Models
     public class LoginModel
     {
         [Required(ErrorMessage = "Enter {0} here")]
-        [DisplayName("User name")]
+        [DisplayName("UserName")]
         [StringLength(20,MinimumLength = 3, ErrorMessage = "User name must be between 3 and 20 characters.")]
         public required string UserName { get; set; }
 
