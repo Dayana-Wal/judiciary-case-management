@@ -1,7 +1,4 @@
-using CaseManagement.Business.Commands;
 using CaseManagement.Business.Common;
-using CaseManagement.Business.Providers;
-using CaseManagement.Business.Service;
 using CaseManagement.Business.Services;
 using CaseManagement.Business.Utility;
 using CaseManagement.DataAccess.Commands;
@@ -11,22 +8,23 @@ using Microsoft.EntityFrameworkCore;
 using CaseManagement.API.Middlewares;
 using CaseManagement.Business.Service;
 using CaseManagement.Business.Queries;
-using System.Text.Json.Serialization;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.Configure<TwilioSettings>(builder.Configuration.GetSection("Twilio"));
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
 builder.Services.AddDbContext<CaseManagementContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DBConnectionString")));
 
 // Add services to the container
 builder.Services.AddSingleton<SmsServiceprovider>();
-
 builder.Services.AddScoped<IPersonCommandHandler, PersonCommandHandler>();
 builder.Services.AddScoped<SignupManager>(); 
 builder.Services.AddScoped<HashHelper>();
-
-
+builder.Services.AddScoped<JwtTokenProvider>();
+builder.Services.AddScoped<LoginManager>();
+builder.Services.AddScoped<IPersonQueryHandler>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -59,7 +57,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseAuthentication();
-app.UseAuthorization();
 app.UseWhen(context => !context.Request.Path.Value.ToLower().Trim().Contains(@"/login") &&
         !context.Request.Path.Value.ToLower().Trim().Contains("/signup"),
         applicationBUilder => applicationBUilder.UseMiddleware<JwtAuthMiddleware>());
