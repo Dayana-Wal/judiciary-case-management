@@ -57,7 +57,7 @@ namespace CaseManagement.Business.Services
                 //dataStoredresult.Status = addPersonAndUserResult.Status; //for success
                 //dataStoredresult.Message = "Details stored successfully!";
 
-                dataStoredResult = OperationResult<List<string>>.Success(data: [], message: "Details stored successfully!");
+                dataStoredResult = OperationResult<List<string>>.Success(data: [], message: addPersonAndUserResult.Message);
             }
             else
             {

@@ -33,7 +33,7 @@ namespace CaseManagement.API.Controllers
             }
 
             var validationResult = signupCommand.ValidateCommand();
-            var signupResult = new OperationResult();
+            var signupResult = new OperationResult<List<string>>();
 
             //var signupResult = new OperationResult();
 
@@ -47,12 +47,12 @@ namespace CaseManagement.API.Controllers
 
                 if (dataStoreResult.Status == "Success")
                 {
-                    signupResult = OperationResult.Success(message: dataStoreResult.Message);
+                    signupResult = OperationResult<List<string>>.Success(message: dataStoreResult.Message, data: null);
                     //return ToResponse(signupResult);
                 }
                 else if(dataStoreResult.Status == "Failed")
                 {
-                    signupResult = OperationResult.Failed(message: dataStoreResult.Message);
+                    signupResult = OperationResult<List<string>>.Failed(message: dataStoreResult.Message, data: dataStoreResult.Data);
 
                 }
                 //signupResult = OperationResultConverter.ConvertTo(signupResult, dataStoreResult.Data);
