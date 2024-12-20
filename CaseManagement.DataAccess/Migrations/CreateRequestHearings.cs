@@ -3,7 +3,7 @@
 namespace CaseManagement.DataAccess.Migrations
 {
     [Migration(202412191135)]
-    public class CreateRequsetHearings : Migration
+    public class CreateRequestHearings : Migration
     {
         public override void Up()
         {
