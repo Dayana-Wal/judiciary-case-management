@@ -1,5 +1,6 @@
 ﻿
 using CaseManagement.Business.Common;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -9,11 +10,11 @@ using System.Text;
 
 namespace CaseManagement.API.Middlewares
 {
-    public class JwtTokenValidatorMiddleware 
+    public class JwtAuthMiddleware 
     {
         private readonly JwtSettings _jwtSettings;
         private readonly RequestDelegate _next;
-        public JwtTokenValidatorMiddleware(RequestDelegate next,IOptions<JwtSettings> jwtSettings)
+        public JwtAuthMiddleware(RequestDelegate next,IOptions<JwtSettings> jwtSettings)
         {
             _next = next;
             _jwtSettings = jwtSettings.Value;
@@ -34,19 +35,40 @@ namespace CaseManagement.API.Middlewares
                     else
                     {
                         context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                        await context.Response.WriteAsync("Invalid or expired token");
+                        OperationResult opResult = new OperationResult
+                        {
+                            Status = StatusCodes.Status401Unauthorized.ToString(),
+                            Message = "Invalid or expired token"
+
+                        };
+                        context.Response.ContentType = "application/json";
+                        await context.Response.WriteAsJsonAsync(opResult);
                     }
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Error while validating the token: {ex.Message}");
+                    context.Response.StatusCode = StatusCodes.Status400BadRequest;
+                    OperationResult opResult = new OperationResult
+                    {
+                        Status = StatusCodes.Status400BadRequest.ToString(),
+                        Message = "Invalid token"
+
+                    };
+                    context.Response.ContentType = "application/json";
+                    await context.Response.WriteAsJsonAsync(opResult);
                 }
-
-
             }
             else
             {
-                Console.WriteLine("Token not found");
+                context.Response.StatusCode = StatusCodes.Status400BadRequest;
+                OperationResult opResult = new OperationResult
+                {
+                   Status = StatusCodes.Status400BadRequest.ToString(),
+                   Message = "Token not found"
+
+                };
+                context.Response.ContentType = "application/json";
+                await context.Response.WriteAsJsonAsync(opResult);
             }
 
         }
