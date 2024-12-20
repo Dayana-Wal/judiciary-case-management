@@ -16,7 +16,7 @@ namespace CaseManagement.Business.Commands
             _otpProvider = otpProvider;
         }
 
-        public async Task<Otp> StoreOtpAsync(string userId, string phoneNumber, string usedForCode)
+        public async Task<OperationResult<Otp>> StoreOtpAsync(string userId, string phoneNumber, string usedForCode)
         {
             var usedForId = await _dbContext.LookupConstants
                 .Where(lc => lc.Code == usedForCode)
@@ -25,7 +25,7 @@ namespace CaseManagement.Business.Commands
 
             if (usedForId == 0)
             {
-                throw new InvalidOperationException("Invalid UsedForId.");
+                return OperationResult<Otp>.Failed(null, "Invalid UsedForId");
             }
 
             var existingOtp = await _dbContext.Otps
@@ -37,7 +37,7 @@ namespace CaseManagement.Business.Commands
             {
                 if (existingOtp.IsVerified)
                 {
-                    return existingOtp;
+                    return OperationResult<Otp>.Success(existingOtp, "OTP already verified.");
                 }
 
                 existingOtp.OtpHash = otpHash;
@@ -66,25 +66,21 @@ namespace CaseManagement.Business.Commands
             await _dbContext.SaveChangesAsync();
             await _otpProvider.SendOtp(phoneNumber, otpValue);
 
-            return existingOtp ?? new Otp
+            return OperationResult<Otp>.Success(existingOtp ?? new Otp
             {
                 OtpHash = otpHash,
                 GeneratedAt = DateTime.UtcNow,
                 ExpiresAt = DateTime.UtcNow.AddMinutes(10),
                 RequestedBy = userId,
                 UsedForId = usedForId
-            };
+            });
         }
 
-        public async Task<OperationResult> VerifyOtpAsync(string userId, string otp)
+        public async Task<OperationResult<string>> VerifyOtpAsync(string userId, string otp)
         {
             if (string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(otp))
             {
-                return new OperationResult
-                {
-                    Status = OperationStatus.Error,
-                    Message = "User ID and OTP cannot be null or empty."
-                };
+                return OperationResult<string>.Failed("User ID and OTP cannot be null or empty.", null);
             }
 
             //Get existed otp from db based on hash value and userId
@@ -94,31 +90,19 @@ namespace CaseManagement.Business.Commands
             //If otp is not existed
             if(otpExisted == null)
             {
-                return new OperationResult
-                {
-                    Status = OperationStatus.Error,
-                    Message = "OTP not found or invalid User ID."
-                };
+                return OperationResult<string>.Failed("OTP not found or invalid User ID.", null);
             }
 
             //Compare OtpHash and otp
             if (otpExisted.OtpHash != OtpProvider.HashOtp(otp))
             {
-                return new OperationResult
-                {
-                    Status = OperationStatus.Error,
-                    Message = "Invalid OTP. Verification failed."
-                };
+                return OperationResult<string>.Failed("Invalid OTP. Verification failed.", null);
             }
 
             //Check the is otp expired or not
             if (otpExisted.ExpiresAt.HasValue && otpExisted.ExpiresAt.Value < DateTime.UtcNow)
             {
-                return new OperationResult
-                {
-                    Status = OperationStatus.Error,
-                    Message = "OTP has expired."
-                };
+                return OperationResult<string>.Failed("OTP has expired.", null);
             }
 
             //Update in db
@@ -126,11 +110,7 @@ namespace CaseManagement.Business.Commands
             _dbContext.Otps.Update(otpExisted);
             await _dbContext.SaveChangesAsync();
 
-            return new OperationResult
-            {
-                Status = OperationStatus.Success,
-                Message = "OTP verification successful."
-            };
+            return OperationResult<string>.Success("OTP verification successful.");
         }
     }
 }

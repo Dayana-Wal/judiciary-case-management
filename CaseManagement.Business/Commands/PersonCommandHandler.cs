@@ -3,7 +3,6 @@ using CaseManagement.Business.Common;
 using CaseManagement.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 
-
 namespace CaseManagement.DataAccess.Commands
 {
     public class PersonCommandHandler : IPersonCommandHandler
@@ -18,7 +17,6 @@ namespace CaseManagement.DataAccess.Commands
         public async Task<OperationResult<string>> CreateUserAsync(Person person, User user)
         {
             {
-
                 try
                 {
                     var existingPerson = await _context.People
@@ -26,7 +24,8 @@ namespace CaseManagement.DataAccess.Commands
 
                     if (existingPerson != null)
                     {
-                        return new OperationResult<string> { Status=OperationStatus.Failed, Message= $"Person with this email already exists", Data= person.Email};
+                        return OperationResult<string>.Failed($"Person with this email already exists", person.Email);
+                        //return new OperationResultT<string> { Status="Failed", Message= $"Person with this email already exists", Data= person.Email};
                     
                     }
 
@@ -37,19 +36,26 @@ namespace CaseManagement.DataAccess.Commands
 
                     if (existingUser != null)
                     {
-                        return new OperationResult<string> { Status = OperationStatus.Failed, Message = $"User with this username already exists" , Data=  user.UserName };
+                        return OperationResult<string>.Failed($"User with this username already exists", user.UserName);
+
+                        //return new OperationResultT<string> { Status = "Failed", Message = $"User with this username already exists" , Data=  user.UserName };
                     }
 
                     await _context.Users.AddAsync(user);
 
                     await _context.SaveChangesAsync();
 
-                    return new OperationResult<string> { Status = OperationStatus.Success, Message = $"Details stored successfully!" };
+                    return OperationResult<string>.Success("Details stored successfully!");
+
+                    //$"User with this username already exists" , Data=  user.UserName 
+                    //return new OperationResultT<string> { Status = "Success", Message = $"Details stored successfully!" };
 
                 }
                 catch (Exception ex)
                 {
-                    return new OperationResult<string> { Status = OperationStatus.Failed, Message = $"An Exception Occured while storing data to database" , Data =  ex.Message };
+                    return OperationResult<string>.Failed("An Exception Occured while storing data to database", ex.Message);
+
+                    //return new OperationResultT<string> { Status = "Failed", Message = $"An Exception Occured while storing data to database" , Data =  ex.Message };
 
                 }
             }

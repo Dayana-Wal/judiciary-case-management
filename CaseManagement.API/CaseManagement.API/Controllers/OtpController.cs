@@ -19,34 +19,35 @@ namespace CaseManagement.API.Controllers
         {
             var validationResult = otpCommand.ValidateCommand();
 
-            var otpResult = new OperationResult();
-
+            var otpOperationResult = new OperationResult();
             if (validationResult.IsValid)
             {
-                try
-                {
-                    var otp = await _otpManager.StoreOtp(otpCommand.UserId, otpCommand.PhoneNumber, otpCommand.UsedForCode);
+                // Generate OTP and store it
+                var otpResult = await _otpManager.StoreOtp(otpCommand.UserId, otpCommand.PhoneNumber, otpCommand.UsedForCode);
 
-                    otpResult.Status = OperationStatus.Success;
-                    otpResult.Message = otp.IsVerified ? "OTP has already been verified. No new OTP sent." : "OTP sent successfully";
-
-                    return ToResponse(otpResult);
-                }
-                catch (Exception ex)
+                if (otpResult.Status == OperationStatus.Success && otpResult.Data != null)
                 {
-                    otpResult.Status = OperationStatus.Failed;
-                    otpResult.Message = "OTP sending failed due to an exception.";
-                    return StatusCode(500, otpResult);
+                    var otp = otpResult.Data;
+
+                    otpOperationResult.Status = OperationStatus.Success;
+                    otpOperationResult.Message = otp.IsVerified ? "OTP has already been verified. No new OTP sent." : "OTP sent successfully";
                 }
+                else
+                {
+                    otpOperationResult.Status = OperationStatus.Failed;
+                    otpOperationResult.Message = "OTP generation failed.";
+                }
+
+                return ToResponse(otpOperationResult);
             }
             else
             {
                 // Collect validation errors
                 List<string> validationErrors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
 
-                otpResult.Status = OperationStatus.Failed;
-                otpResult.Message = "Validation failed";
-                var returnResponse = OperationResultConverter.ConvertTo(otpResult, validationErrors);
+                otpOperationResult.Status = OperationStatus.Failed;
+                otpOperationResult.Message = "Validation failed";
+                var returnResponse = OperationResultConverter.ConvertTo(otpOperationResult, validationErrors);
                 return ToResponse(returnResponse);
             }
         }
@@ -63,7 +64,18 @@ namespace CaseManagement.API.Controllers
                 try
                 {
                     var verificationResult = await _otpManager.VerifyOtp(otpCommand.UserId, otpCommand.Otp);
-                    return ToResponse(verificationResult);
+                    if (verificationResult.Status == OperationStatus.Success)
+                    {
+                        result.Status = OperationStatus.Success;
+                        result.Message = "OTP verified successfully.";
+                    }
+                    else
+                    {
+                        result.Status = OperationStatus.Failed;
+                        result.Message = verificationResult.Message;  // Message from VerifyOtpAsync
+                    }
+
+                    return ToResponse(result);
                 }
                 catch (Exception ex)
                 {
@@ -79,7 +91,7 @@ namespace CaseManagement.API.Controllers
 
                 result.Status = OperationStatus.Failed;
                 result.Message = "Validation failed";
-                var returnResponse = OperationResultConverter.ConvertTo(result, validationErrors);
+                var returnResponse = OperationResult<List<string>>.ValidationError(data: validationErrors);
                 return ToResponse(returnResponse);
             }
         }
