@@ -25,6 +25,8 @@ namespace CaseManagement.Web.Controllers
         [HttpGet("login")]
         public IActionResult Login()
         {
+            var apiBaseUrl = _configuration["ApiSettings:BaseUrl"];
+            ViewBag.ApiBaseUrl = apiBaseUrl;
             return View();
         }
     }
