@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CaseManagement.API.Controllers
 {
-
     public class SignupController : BaseController
     {
         private readonly SignupManager _signupManager;

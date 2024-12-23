@@ -15,7 +15,15 @@ namespace CaseManagement.Web.Controllers
 
         //Display the form
         [HttpGet("signup")]
-        public IActionResult SignUp()
+        public IActionResult Signup()
+        {
+            var apiBaseUrl = _configuration["ApiSettings:BaseUrl"];
+            ViewBag.ApiBaseUrl = apiBaseUrl;
+            return View();
+        }
+
+        [HttpGet("login")]
+        public IActionResult Login()
         {
             var apiBaseUrl = _configuration["ApiSettings:BaseUrl"];
             ViewBag.ApiBaseUrl = apiBaseUrl;

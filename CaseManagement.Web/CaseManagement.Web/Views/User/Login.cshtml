@@ -1,0 +1,31 @@
+﻿@using CaseManagement.Web.Models
+@model LoginModel
+@{
+    var apiBaseUrl = ViewBag.ApiBaseUrl;
+}
+<div class="container w-50 p-3 border rounded shadow mt-5">
+    <h3 class="text-center mb-4">Login </h3>
+    <form id="loginForm">
+        <div class="container w-75">
+            <div class="mb-3">
+                <label asp-for="UserName" class="form-label">UserName</label>
+                <input asp-for="UserName" class="form-control" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Password" class="form-label">Password</label>
+                <input asp-for="Password" type="password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="d-flex justify-content-end mt-3">
+                <button type="submit" class="btn btn-outline-primary">Login</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    // Set the API base URL in a global JavaScript variable
+    var apiBaseUrl = "@apiBaseUrl"; // This will be replaced by the value from ViewData
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="~/js/pages/login.js"></script>

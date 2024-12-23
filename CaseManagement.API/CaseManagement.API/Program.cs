@@ -1,41 +1,41 @@
-using CaseManagement.Business.Commands;
 using CaseManagement.Business.Common;
-using CaseManagement.Business.Providers;
-using CaseManagement.Business.Service;
 using CaseManagement.Business.Services;
 using CaseManagement.Business.Utility;
 using CaseManagement.DataAccess.Commands;
 using CaseManagement.DataAccess.Entities;
 using FluentMigrator.Runner;
 using Microsoft.EntityFrameworkCore;
+using CaseManagement.API.Middlewares;
+using CaseManagement.Business.Service;
+using CaseManagement.Business.Queries;
 using System.Text.Json.Serialization;
+using CaseManagement.Business.Commands;
+using CaseManagement.Business.Providers;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.Configure<TwilioSettings>(builder.Configuration.GetSection("Twilio"));
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
 builder.Services.AddDbContext<CaseManagementContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DBConnectionString")));
-
-// Add services to the container
-builder.Services.AddSingleton<SmsServiceprovider>();
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
+
 builder.Services.AddScoped<IPersonCommandHandler, PersonCommandHandler>();
-builder.Services.AddScoped<SignupManager>(); 
+builder.Services.AddScoped<SignupManager>();
 builder.Services.AddScoped<HashHelper>();
 builder.Services.AddSingleton<SmsServiceprovider>();
 builder.Services.AddSingleton<OtpProvider>();
 builder.Services.AddScoped<OtpManager>();
 builder.Services.AddScoped<IOtpCommandHandler, OtpCommandHandler>();
-
-builder.Services.AddControllers();
-
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-
+builder.Services.AddScoped<JwtTokenProvider>();
+builder.Services.AddScoped<LoginManager>();
+builder.Services.AddScoped<PersonQueryHandler>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddFluentMigratorCore()
@@ -65,12 +65,15 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseAuthentication();
 app.UseAuthorization();
+app.UseWhen(context => !context.Request.Path.Value.ToLower().Trim().Contains(@"/login") &&
+        !context.Request.Path.Value.ToLower().Trim().Contains("/signup"),
+        applicationBUilder => applicationBUilder.UseMiddleware<JwtAuthMiddleware>());
+//app.UseMiddleware<JwtTokenValidatorMiddleware>();
 
 // Enable CORS globally
 app.UseCors("AllowAnyOrigin");
-
 app.MapControllers();
 using (var scope = app.Services.CreateScope())
 {
