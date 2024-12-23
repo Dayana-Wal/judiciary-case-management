@@ -1,7 +1,5 @@
 ﻿
 using CaseManagement.Business.Common;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -37,7 +35,7 @@ namespace CaseManagement.API.Middlewares
                         context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                         OperationResult opResult = new OperationResult
                         {
-                            Status = StatusCodes.Status401Unauthorized.ToString(),
+                            Status = OperationStatus.Error,
                             Message = "Invalid or expired token"
 
                         };
@@ -50,7 +48,7 @@ namespace CaseManagement.API.Middlewares
                     context.Response.StatusCode = StatusCodes.Status400BadRequest;
                     OperationResult opResult = new OperationResult
                     {
-                        Status = StatusCodes.Status400BadRequest.ToString(),
+                        Status = OperationStatus.Error,
                         Message = "Invalid token"
 
                     };
@@ -63,7 +61,7 @@ namespace CaseManagement.API.Middlewares
                 context.Response.StatusCode = StatusCodes.Status400BadRequest;
                 OperationResult opResult = new OperationResult
                 {
-                   Status = StatusCodes.Status400BadRequest.ToString(),
+                   Status = OperationStatus.Error,
                    Message = "Token not found"
 
                 };

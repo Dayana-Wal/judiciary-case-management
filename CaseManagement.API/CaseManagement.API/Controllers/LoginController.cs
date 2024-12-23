@@ -1,4 +1,4 @@
-﻿using CaseManagement.API.Models;
+﻿using CaseManagement.Business.Features.Login;
 using CaseManagement.Business.Service;
 using Microsoft.AspNetCore.Mvc;
 

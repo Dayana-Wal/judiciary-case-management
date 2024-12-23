@@ -1,5 +1,5 @@
-﻿using CaseManagement.API.Models;
-using CaseManagement.Business.Common;
+﻿using CaseManagement.Business.Common;
+using CaseManagement.Business.Features.Login;
 using CaseManagement.Business.Queries;
 using CaseManagement.Business.Utility;
 using CaseManagement.DataAccess.Entities;
@@ -25,7 +25,7 @@ namespace CaseManagement.Business.Service
             {
                 return new OperationResult<string>
                 {
-                    Status = "Failed",
+                    Status = OperationStatus.Error,
                     Message = "User not found with the provided username"
                 };
 
@@ -34,14 +34,14 @@ namespace CaseManagement.Business.Service
             if (isPasswordMatched)
             {
                 string token = _jwtTokenProvider.GenerateJwtToken(loginQuery.UserName, user.Role.Text);
-                return new OperationResult<string> { Status = "Success", Message = "Login Success", Data = token };
+                return new OperationResult<string> { Status = OperationStatus.Success, Message = "Login Success", Data = token };
 
             }
             else
             {
                 return new OperationResult<string>
                 {
-                    Status = "Failed",
+                    Status = OperationStatus.Error,
                     Message = "Incorrect password provided"
                 };
             }

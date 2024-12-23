@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
 
-namespace CaseManagement.API.Models
+namespace CaseManagement.Business.Features.Login
 {
     public class LoginQuery
     {
