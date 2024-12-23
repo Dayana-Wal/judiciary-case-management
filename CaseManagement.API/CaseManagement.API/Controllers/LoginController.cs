@@ -1,4 +1,5 @@
-﻿using CaseManagement.Business.Features.Login;
+﻿using CaseManagement.Business.Common;
+using CaseManagement.Business.Features.Login;
 using CaseManagement.Business.Service;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,31 +11,35 @@ namespace CaseManagement.API.Controllers
 
         public LoginController(LoginManager loginManager)
         {
-           _loginManager = loginManager;
+            _loginManager = loginManager;
         }
         [HttpPost("user")]
         public async Task<IActionResult> Login([FromBody] LoginQuery loginQuery)
         {
             try
             {
-                if (loginQuery == null) {
-                    return BadRequest("Invalid user data");
+                if (loginQuery == null)
+                {
+                    return ToResponse(OperationResult.Failed("Invalid user data"));
                 }
 
                 var validationResult = loginQuery.ValidateQuery();
-                if (validationResult.IsValid)
+                if (!validationResult.IsValid)
                 {
-                    var result = await _loginManager.UserLogin(loginQuery);
-                    return ToResponse<string>(result);
+                    var validationErrors = new List<string>();
+                    validationErrors.AddRange(validationResult.Errors.Select(err => err.ToString()));
+                    var result = OperationResult<List<string>>.ValidationError(validationErrors);
+                    return ToResponse<List<string>>(result);
+
                 }
-                else {
-                    //TODO
-                    Console.WriteLine("validations failed");
-                    return BadRequest("validations failed");
-                }
+
+                var opresult = await _loginManager.UserLogin(loginQuery);
+                return ToResponse<string>(opresult);
+
             }
-            catch (Exception ex) { 
-                return BadRequest(new {Message = "An error occurred while login", Error = ex.Message});
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = "An error occurred while login", Error = ex.Message });
             }
         }
     }

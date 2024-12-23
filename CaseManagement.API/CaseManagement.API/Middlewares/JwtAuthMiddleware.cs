@@ -1,4 +1,5 @@
 ﻿
+using CaseManagement.API.Common;
 using CaseManagement.Business.Common;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -32,41 +33,17 @@ namespace CaseManagement.API.Middlewares
                     }
                     else
                     {
-                        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                        OperationResult opResult = new OperationResult
-                        {
-                            Status = OperationStatus.Failed,
-                            Message = "Invalid or expired token"
-
-                        };
-                        context.Response.ContentType = "application/json";
-                        await context.Response.WriteAsJsonAsync(opResult);
+                        await SendResponse.ResponseWithError(context, 401, "Invalid or expired token");
                     }
                 }
                 catch (Exception ex)
                 {
-                    context.Response.StatusCode = StatusCodes.Status400BadRequest;
-                    OperationResult opResult = new OperationResult
-                    {
-                        Status = OperationStatus.Failed,
-                        Message = "Invalid token"
-
-                    };
-                    context.Response.ContentType = "application/json";
-                    await context.Response.WriteAsJsonAsync(opResult);
+                    await SendResponse.ResponseWithError(context, 400, "Invalid token");
                 }
             }
             else
             {
-                context.Response.StatusCode = StatusCodes.Status400BadRequest;
-                OperationResult opResult = new OperationResult
-                {
-                   Status = OperationStatus.Failed,
-                   Message = "Token not found"
-
-                };
-                context.Response.ContentType = "application/json";
-                await context.Response.WriteAsJsonAsync(opResult);
+                await SendResponse.ResponseWithError(context, 400, "Token not found");
             }
 
         }

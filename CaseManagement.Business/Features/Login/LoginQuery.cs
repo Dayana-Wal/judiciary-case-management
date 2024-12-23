@@ -20,8 +20,8 @@ namespace CaseManagement.Business.Features.Login
     {
         public LoginQueryValidator()
         {
-            RuleFor(model => model.UserName).NotEmpty().WithMessage("Username is required.");
-            RuleFor(model => model.Password).NotEmpty().WithMessage("Password is required.");
+            RuleFor(model => model.UserName).NotEmpty().WithMessage("Username should not be empty.");
+            RuleFor(model => model.Password).NotEmpty().WithMessage("Password should not be empty.");
         }
     }
 }

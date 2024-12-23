@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using CaseManagement.API.Middlewares;
 using CaseManagement.Business.Service;
 using CaseManagement.Business.Queries;
+using System.Text.Json.Serialization;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,9 +25,13 @@ builder.Services.AddScoped<SignupManager>();
 builder.Services.AddScoped<HashHelper>();
 builder.Services.AddScoped<JwtTokenProvider>();
 builder.Services.AddScoped<LoginManager>();
-builder.Services.AddScoped<IPersonQueryHandler>();
+builder.Services.AddScoped<PersonQueryHandler>();
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddFluentMigratorCore()
