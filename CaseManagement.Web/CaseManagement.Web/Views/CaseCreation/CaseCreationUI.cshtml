@@ -1,0 +1,94 @@
+﻿@using CaseManagement.Web.Models
+@model CaseModel
+
+@{
+    var apiBaseUrl = ViewBag.ApiBaseUrl;
+}
+<div class="container w-75 p-3 border rounded shadow">
+    <h3 class="text-center mb-4">Create Case</h3>
+    <form id="caseCreationForm">
+        <div class="row">
+            <div class="col-6">
+                <div class="container w-100">
+                    <div class="mb-3">
+                        <label asp-for="CaseType" class="form-label">Case Type</label>
+                        <select asp-for="CaseType" class="form-control">
+                            <option value="">Select Case Type</option>
+                            <option value="1">Criminal</option>
+                            <option value="2">Civil</option>
+                        </select>
+                        <span asp-validation-for="CaseType" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Description" class="form-label">Description</label>
+                        <textarea asp-for="Description" class="form-control" rows="5"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="CaseNumber" class="form-label">Case Number</label>
+                        <input asp-for="CaseNumber" class="form-control" />
+                        <span asp-validation-for="CaseNumber" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-6">
+                <div class="container w-100">
+                    <div class="mb-3">
+                        <label asp-for="Accused" class="form-label">Accused</label>
+                        <select asp-for="Accused" class="form-control">
+                            <option value="">Select Accused</option>
+                            <option value="1">John Doe</option>
+                            <option value="2">Jane Smith</option>
+                        </select>
+                        <span asp-validation-for="Accused" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Victim" class="form-label">Victim</label>
+                        <select asp-for="Victim" class="form-control">
+                            <option value="">Select Victim</option>
+                            <option value="1">Alice Johnson</option>
+                            <option value="2">Bob Brown</option>
+                        </select>
+                        <span asp-validation-for="Victim" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Advocate" class="form-label">Advocate (Optional)</label>
+                        <select asp-for="Advocate" class="form-control">
+                            <option value="">Select Advocate (Optional)</option>
+                            <option value="1">Michael Green</option>
+                            <option value="2">Sarah White</option>
+                        </select>
+                        <span asp-validation-for="Advocate" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="CaseStatus" class="form-label">Case Status</label>
+                        <select asp-for="CaseStatus" class="form-control">
+                            <option value="">Select Case Status</option>
+                            <option value="1">Open</option>
+                            <option value="2">Closed</option>
+                            <option value="3">Pending</option>
+                        </select>
+                        <span asp-validation-for="CaseStatus" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Attach Files</label>
+            <input type="file" id="fileUpload" class="form-control" multiple />
+            <span asp-validation-for="Files" class="text-danger"></span>
+        </div>
+
+        <div class="d-flex justify-content-center mt-3">
+            <button type="submit" class="btn btn-outline-primary">Create Case</button>
+            <a href="@Url.Action("Index", "Case")" class="btn btn-outline-secondary ms-2">Cancel</a>
+        </div>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    var apiBaseUrl = "@apiBaseUrl"; // This will be replaced by the value from ViewData
+</script>
+<script src="~/js/pages/caseCreationApi.js"></script>
