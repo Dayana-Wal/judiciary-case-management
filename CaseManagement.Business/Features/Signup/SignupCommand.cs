@@ -10,7 +10,7 @@ namespace CaseManagement.Business.Features.Signup
         public string Password { get; set; } = null!;
         public string Email { get; set; } = null!;
         public string Contact { get; set; } = null!;
-        public DateTime DateOfBirth { get; set; } 
+        public DateTime? DateOfBirth { get; set; } 
         public string Gender { get; set; } = null!;
 
         public ValidationResult ValidateCommand() { 

@@ -25,7 +25,7 @@ namespace CaseManagement.API.Controllers
 
 
         [HttpPost("person")]
-        public async Task<IActionResult> SignUp([FromForm] SignupCommand signupCommand)
+        public async Task<IActionResult> SignUp([FromBody] SignupCommand signupCommand)
         {
             if (signupCommand == null)
             {
