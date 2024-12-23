@@ -9,6 +9,8 @@ using CaseManagement.API.Middlewares;
 using CaseManagement.Business.Service;
 using CaseManagement.Business.Queries;
 using System.Text.Json.Serialization;
+using CaseManagement.Business.Commands;
+using CaseManagement.Business.Providers;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,20 +20,22 @@ builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"))
 builder.Services.AddDbContext<CaseManagementContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DBConnectionString")));
 
-// Add services to the container
-builder.Services.AddSingleton<SmsServiceprovider>();
-builder.Services.AddScoped<IPersonCommandHandler, PersonCommandHandler>();
-builder.Services.AddScoped<SignupManager>(); 
-builder.Services.AddScoped<HashHelper>();
-builder.Services.AddScoped<JwtTokenProvider>();
-builder.Services.AddScoped<LoginManager>();
-builder.Services.AddScoped<PersonQueryHandler>();
-
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
+
+builder.Services.AddScoped<IPersonCommandHandler, PersonCommandHandler>();
+builder.Services.AddScoped<SignupManager>();
+builder.Services.AddScoped<HashHelper>();
+builder.Services.AddSingleton<SmsServiceprovider>();
+builder.Services.AddSingleton<OtpProvider>();
+builder.Services.AddScoped<OtpManager>();
+builder.Services.AddScoped<IOtpCommandHandler, OtpCommandHandler>();
+builder.Services.AddScoped<JwtTokenProvider>();
+builder.Services.AddScoped<LoginManager>();
+builder.Services.AddScoped<PersonQueryHandler>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddFluentMigratorCore()
