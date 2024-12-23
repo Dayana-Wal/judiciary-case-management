@@ -11,7 +11,7 @@
             return new OperationResult<T>(){ Status = OperationStatus.Success, Message = message, Data = data};
         }
 
-        public static OperationResult<T> Failed(T data, string message = "Operation Failed")
+        public static OperationResult<T> Failed(T? data, string message = "Operation Failed")
         {
             return new OperationResult<T>() { Status = OperationStatus.Failed, Message = message, Data = data };
         }

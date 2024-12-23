@@ -23,27 +23,18 @@ namespace CaseManagement.Business.Service
             User user = await _personQueryHandler.GetUserAsync(loginQuery.UserName);
             if (user == null)
             {
-                return new OperationResult<string>
-                {
-                    Status = OperationStatus.Error,
-                    Message = "User not found with the provided username"
-                };
+                return OperationResult<string>.Failed(null, "User not found with the provided username");
 
             }
             bool isPasswordMatched = _hashHelper.VerifyEnteredPassword(loginQuery.Password, user.PasswordHash, user.PasswordSalt);
             if (isPasswordMatched)
             {
                 string token = _jwtTokenProvider.GenerateJwtToken(loginQuery.UserName, user.Role.Text);
-                return new OperationResult<string> { Status = OperationStatus.Success, Message = "Login Success", Data = token };
-
+                return OperationResult<string>.Success(token, "Login success");
             }
             else
             {
-                return new OperationResult<string>
-                {
-                    Status = OperationStatus.Error,
-                    Message = "Incorrect password provided"
-                };
+                return OperationResult<string>.Failed(null, "Incorrect password provided");
             }
 
         }
