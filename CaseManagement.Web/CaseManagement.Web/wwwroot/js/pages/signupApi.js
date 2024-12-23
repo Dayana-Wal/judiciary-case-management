@@ -8,7 +8,10 @@
             const formDataArray = $(this).serializeArray();
             var formData = {}
             formDataArray.forEach(item => formData[item.name] = item.value)
-            console.log("formData --",formData)
+            if (!formData.DateOfBirth) {
+                formData.DateOfBirth = null;
+            }
+            console.log("formData --", formData)
             $.ajax({
                 url: apiBaseUrl + "/SignUp/person",
                 type: "POST",
@@ -27,13 +30,26 @@
                     let alertMessage
                     if (xhr.responseJSON && xhr.responseJSON.message) {
 
-                        alertMessage = xhr.responseJSON.message
+                        alertMessage = xhr.responseJSON.message + "\n"
 
                     }
                     // Check if responseJSON exists
-                    if (xhr.responseJSON && xhr.responseJSON.errors && xhr.responseJSON.errors.data) {
-                        const errors = xhr.responseJSON.errors.data;
-                        alertMessage = errors.join("\n")
+                    if (xhr.responseJSON && xhr.responseJSON.errors) {
+                        const errors = xhr.responseJSON.errors;
+                        const errorMessages = [];
+                        for (const field in errors) {
+                            if (errors[field] && errors[field].length > 0) {
+                                errorMessages.push(`${field}: ${errors[field].join(", ")}`);
+                            }
+                        }
+
+                        // Combine errors into a single alert message
+                        if (errorMessages.length > 0) {
+                            alertMessage = errorMessages.join("\n");
+                        }
+                    }
+                    if (xhr.responseJSON && xhr.responseJSON.data) {
+                        alertMessage += xhr.responseJSON.data.join("\n")
                     }
                     // Display the alert message
                     if (alertMessage) {
