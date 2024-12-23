@@ -33,6 +33,13 @@ namespace CaseManagement.Business.Commands
 
             var (otpValue, otpHash) = OtpProvider.GenerateAndHashOtp();
 
+            // Send OTP first
+            var otpSent = await _otpProvider.SendOtp(phoneNumber, otpValue);
+            if (!otpSent)
+            {
+                return OperationResult<Otp>.Failed(null, "Failed to send OTP.");
+            }
+
             if (existingOtp != null)
             {
                 if (existingOtp.IsVerified)
@@ -64,7 +71,6 @@ namespace CaseManagement.Business.Commands
             }
 
             await _dbContext.SaveChangesAsync();
-            await _otpProvider.SendOtp(phoneNumber, otpValue);
 
             return OperationResult<Otp>.Success(existingOtp ?? new Otp
             {
