@@ -1,3 +1,5 @@
+using CaseManagement.API.Filters;
+using CaseManagement.Business.Commands;
 using CaseManagement.Business.Common;
 using CaseManagement.Business.Services;
 using CaseManagement.Business.Utility;
@@ -25,6 +27,11 @@ builder.Services.AddControllers()
     {
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
+
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<GlobalExceptionFilter>();
+});
 
 builder.Services.AddScoped<IPersonCommandHandler, PersonCommandHandler>();
 builder.Services.AddScoped<SignupManager>();
@@ -68,7 +75,9 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseWhen(context => !context.Request.Path.Value.ToLower().Trim().Contains(@"/login") &&
-        !context.Request.Path.Value.ToLower().Trim().Contains("/signup"),
+        !context.Request.Path.Value.ToLower().Trim().Contains("/signup") &&
+        !context.Request.Path.Value.ToLower().Trim().Contains("/generate") &&
+        !context.Request.Path.Value.ToLower().Trim().Contains("/verify"),
         applicationBUilder => applicationBUilder.UseMiddleware<JwtAuthMiddleware>());
 //app.UseMiddleware<JwtTokenValidatorMiddleware>();
 

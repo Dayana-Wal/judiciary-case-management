@@ -44,10 +44,11 @@ namespace CaseManagement.Business.Providers
             return (otpValue, otpHash);
         }
 
-        public async Task SendOtp(string phoneNumber, string otpValue)
+        public async Task<bool> SendOtp(string phoneNumber, string otpValue)
         {
             var message = $"Your OTP code is: {otpValue}";
             await _smsServiceProvider.SendSms(phoneNumber, message);
+            return true;
         }
 
     }

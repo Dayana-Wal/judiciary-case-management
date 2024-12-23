@@ -1,8 +1,12 @@
-﻿namespace CaseManagement.Business.Common
+﻿using System.Text.Json.Serialization;
+
+namespace CaseManagement.Business.Common
 {
     public class OperationResult<T>
     {
         public T Data { get; set; }
+
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public OperationStatus Status { get; set; }
         public string Message { get; set; }
 
@@ -24,6 +28,7 @@
     }
     public class OperationResult
     {
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public OperationStatus Status { get; set; }
         public string Message { get; set; }
 
