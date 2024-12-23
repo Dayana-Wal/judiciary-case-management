@@ -66,6 +66,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseAuthentication();
+app.UseAuthorization();
 app.UseWhen(context => !context.Request.Path.Value.ToLower().Trim().Contains(@"/login") &&
         !context.Request.Path.Value.ToLower().Trim().Contains("/signup"),
         applicationBUilder => applicationBUilder.UseMiddleware<JwtAuthMiddleware>());
