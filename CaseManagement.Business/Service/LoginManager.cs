@@ -1,5 +1,6 @@
 ﻿using CaseManagement.Business.Common;
 using CaseManagement.Business.Features.Login;
+using CaseManagement.Business.Providers;
 using CaseManagement.Business.Queries;
 using CaseManagement.Business.Utility;
 using CaseManagement.DataAccess.Entities;
