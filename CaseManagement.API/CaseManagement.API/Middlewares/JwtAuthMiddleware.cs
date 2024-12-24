@@ -9,7 +9,7 @@ using System.Text;
 
 namespace CaseManagement.API.Middlewares
 {
-    public class JwtAuthMiddleware 
+    public class JwtAuthMiddleware
     {
         private readonly JwtSettings _jwtSettings;
         private readonly RequestDelegate _next;
@@ -23,23 +23,18 @@ namespace CaseManagement.API.Middlewares
             var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
             if (token != null)
             {
-                try
+
+                var claims = ValidateToken(token);
+                if (claims != null)
                 {
-                    var claims = ValidateToken(token);
-                    if (claims != null)
-                    {
-                        context.User = claims;
-                        await _next(context);
-                    }
-                    else
-                    {
-                        await SendResponse.ResponseWithError(context, 401, "Invalid or expired token");
-                    }
+                    context.User = claims;
+                    await _next(context);
                 }
-                catch (Exception ex)
+                else
                 {
-                    await SendResponse.ResponseWithError(context, 400, "Invalid token");
+                    await SendResponse.ResponseWithError(context, 401, "Invalid or expired token");
                 }
+
             }
             else
             {

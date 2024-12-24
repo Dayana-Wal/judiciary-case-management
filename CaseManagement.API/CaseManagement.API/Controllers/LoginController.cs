@@ -16,31 +16,25 @@ namespace CaseManagement.API.Controllers
         [HttpPost("user")]
         public async Task<IActionResult> Login([FromBody] LoginQuery loginQuery)
         {
-            try
+            if (loginQuery == null)
             {
-                if (loginQuery == null)
-                {
-                    return ToResponse(OperationResult.Failed("Invalid user data"));
-                }
+                return ToResponse(OperationResult.Failed("Invalid user data"));
+            }
 
-                var validationResult = loginQuery.ValidateQuery();
-                if (!validationResult.IsValid)
-                {
-                    var validationErrors = new List<string>();
-                    validationErrors.AddRange(validationResult.Errors.Select(err => err.ToString()));
-                    var result = OperationResult<List<string>>.ValidationError(validationErrors);
-                    return ToResponse<List<string>>(result);
-
-                }
-
-                var opresult = await _loginManager.UserLogin(loginQuery);
-                return ToResponse<string>(opresult);
+            var validationResult = loginQuery.ValidateQuery();
+            if (!validationResult.IsValid)
+            {
+                var validationErrors = new List<string>();
+                validationErrors.AddRange(validationResult.Errors.Select(err => err.ToString()));
+                var result = OperationResult<List<string>>.ValidationError(validationErrors);
+                return ToResponse<List<string>>(result);
 
             }
-            catch (Exception ex)
-            {
-                return BadRequest(new { Message = "An error occurred while login", Error = ex.Message });
-            }
+
+            var opresult = await _loginManager.UserLogin(loginQuery);
+            return ToResponse<string>(opresult);
+
         }
+
     }
 }
