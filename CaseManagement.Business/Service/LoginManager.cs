@@ -10,8 +10,8 @@ namespace CaseManagement.Business.Service
     {
         private readonly JwtTokenProvider _jwtTokenProvider;
         private readonly HashHelper _hashHelper;
-        private readonly PersonQueryHandler _personQueryHandler;
-        public LoginManager(JwtTokenProvider jwtTokenProvider, HashHelper hashHelper, PersonQueryHandler personQueryHandler)
+        private readonly IPersonQueryHandler _personQueryHandler;
+        public LoginManager(JwtTokenProvider jwtTokenProvider, HashHelper hashHelper, IPersonQueryHandler personQueryHandler)
         {
             _jwtTokenProvider = jwtTokenProvider;
             _hashHelper = hashHelper;
