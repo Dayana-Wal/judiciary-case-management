@@ -1,0 +1,100 @@
+﻿using CaseManagement.API.Filters;
+using CaseManagement.Business.Commands;
+using CaseManagement.Business.Common;
+using CaseManagement.Business.Providers;
+using CaseManagement.Business.Queries;
+using CaseManagement.Business.Service;
+using CaseManagement.Business.Services;
+using CaseManagement.Business.Utility;
+using CaseManagement.DataAccess.Commands;
+using CaseManagement.DataAccess.Entities;
+using FluentMigrator.Runner;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+
+namespace CaseManagement.API
+{
+    public static class ServiceExtension
+    {
+        public static IServiceCollection AddApplicationService(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.Configure<TwilioSettings>(configuration.GetSection("Twilio"));
+            services.Configure<JwtSettings>(configuration.GetSection("Jwt"));
+
+            services.AddScoped<IPersonCommandHandler, PersonCommandHandler>();
+            services.AddScoped<SignupManager>();
+            services.AddScoped<HashHelper>();
+            services.AddScoped<SmsServiceprovider>();
+            services.AddScoped<OtpProvider>();
+            services.AddScoped<OtpManager>();
+            services.AddScoped<IOtpCommandHandler, OtpCommandHandler>();
+            services.AddScoped<JwtTokenProvider>();
+            services.AddScoped<LoginManager>();
+            services.AddScoped<IPersonQueryHandler, PersonQueryHandler>();
+
+            services.AddControllers(options =>
+            {
+                options.Filters.Add<GlobalExceptionFilter>();
+            });
+            services.AddEndpointsApiExplorer();
+            services.AddSwaggerGen();
+
+            return services;
+
+        }
+
+        public static IServiceCollection AddInfraStructureService(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddDbContext<CaseManagementContext>(options =>
+            {
+                options.UseSqlServer(configuration.GetConnectionString("DBConnectionString"));
+            });
+
+            services.AddFluentMigratorCore()
+                .ConfigureRunner(rb => rb
+                .AddSqlServer()
+                .WithGlobalConnectionString(configuration.GetConnectionString("DBConnectionString"))
+                .ScanIn(typeof(CaseManagement.DataAccess.Migrations.CreateInitialSchemaAndSeedLookupConstants).Assembly).For.Migrations());
+            
+            return services;
+        }
+    
+        public static IServiceCollection ConfigureAuthentication(this IServiceCollection services, IConfiguration configuration)
+        {
+            var jwtSettings = configuration.GetSection("Jwt").Get<JwtSettings>();
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = jwtSettings.Issuer,
+                        ValidAudience = jwtSettings.Audience,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.SecretKey))
+                    };
+                });
+
+            return services;
+        }
+    
+        public static IServiceCollection ConfigureCors(this IServiceCollection services)
+        {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAnyOrigin", policy =>
+                {
+                    policy.AllowAnyOrigin()
+                          .AllowAnyMethod()
+                          .AllowAnyHeader();
+                });
+            });
+
+            return services;
+        }
+    }
+}
