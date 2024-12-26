@@ -74,6 +74,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseWhen(context => !context.Request.Path.Value.ToLower().Trim().Contains(@"/login") &&
         !context.Request.Path.Value.ToLower().Trim().Contains("/signup") &&
         !context.Request.Path.Value.ToLower().Trim().Contains("/generate") &&
