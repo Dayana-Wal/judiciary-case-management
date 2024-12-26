@@ -1,6 +1,7 @@
 ﻿
 using CaseManagement.Business.Queries;
 using CaseManagement.DataAccess.Entities;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Security.Claims;
@@ -23,7 +24,7 @@ namespace CaseManagement.API.Filters
                 context.Result = new UnauthorizedResult();
                 return;
             }
-            //User.FindFirst(ClaimTypes.Role)?.Value
+
             var userName = userClaims.FindFirst(ClaimTypes.Name)?.Value;
             var role = userClaims.FindFirst(ClaimTypes.Role)?.Value;
 
@@ -35,7 +36,8 @@ namespace CaseManagement.API.Filters
             var user = await _personQueryHandler.GetUserAsync(userName);
 
             if (user == null || !string.Equals(role, _requiredRole, StringComparison.OrdinalIgnoreCase)) { 
-                context.Result = new ForbidResult();
+                context.Result = new ForbidResult(JwtBearerDefaults.AuthenticationScheme);
+                return;
             }
 
         }
