@@ -3,7 +3,6 @@ using CaseManagement.API;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddApplicationService(builder.Configuration);
 builder.Services.AddInfraStructureService(builder.Configuration);
-builder.Services.ConfigureAuthentication(builder.Configuration);
 builder.Services.ConfigureCors();
 var app = builder.Build();
 

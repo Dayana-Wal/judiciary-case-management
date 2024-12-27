@@ -1,27 +1,28 @@
 ﻿
+using CaseManagement.Business.Common;
 using CaseManagement.Business.Queries;
-using CaseManagement.DataAccess.Entities;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using System.Linq;
 using System.Security.Claims;
 
 namespace CaseManagement.API.Filters
 {
     public class CustomAuthorizationFilter : Attribute, IAsyncAuthorizationFilter
     {
-        private readonly string _requiredRole;
+        private readonly string[] _allowedRoles;
         private readonly IPersonQueryHandler _personQueryHandler;
-        public CustomAuthorizationFilter(string requiredRole, IPersonQueryHandler personQueryHandler)
+        public CustomAuthorizationFilter(string[] allowedRoles, IPersonQueryHandler personQueryHandler)
         {
-            _requiredRole = requiredRole;
+            _allowedRoles = allowedRoles;
             _personQueryHandler = personQueryHandler;
         }
         public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
         {
             var userClaims = context.HttpContext.User;
             if (userClaims?.Identity?.IsAuthenticated != true) {
-                context.Result = new UnauthorizedResult();
+                var op = OperationResult.Failed("User is not authenticated. Please log in.");
+                context.Result = new JsonResult(op) { StatusCode = 401 };
                 return;
             }
 
@@ -29,14 +30,16 @@ namespace CaseManagement.API.Filters
             var role = userClaims.FindFirst(ClaimTypes.Role)?.Value;
 
             if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(role)) {
-                context.Result = new UnauthorizedResult();
+                var op = OperationResult.Failed("Missing required claims, UserName or Role is not included in the token");
+                context.Result = new JsonResult(op) { StatusCode = 401};
                 return;
             }
 
             var user = await _personQueryHandler.GetUserAsync(userName);
 
-            if (user == null || !string.Equals(role, _requiredRole, StringComparison.OrdinalIgnoreCase)) { 
-                context.Result = new ForbidResult(JwtBearerDefaults.AuthenticationScheme);
+            if (user == null || !_allowedRoles.Contains(role, StringComparer.OrdinalIgnoreCase)) { 
+                var op = OperationResult.Failed($"Access denied. The role '{role}' is not authorized to access this resource.");
+                context.Result = new JsonResult(op) { StatusCode = 403 };
                 return;
             }
 
@@ -45,10 +48,10 @@ namespace CaseManagement.API.Filters
 
     public class CustomAuthorizationAttribute : TypeFilterAttribute
     {
-        public CustomAuthorizationAttribute(string requiredRole)
+        public CustomAuthorizationAttribute(params string[] allowedRole)
             : base(typeof(CustomAuthorizationFilter))
         {
-            Arguments = new object[] { requiredRole };
+            Arguments = new object[] { allowedRole };
         }
     }
 }
