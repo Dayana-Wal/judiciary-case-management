@@ -1,6 +1,11 @@
+using CaseManagement.DataAccess.Entities;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<CaseManagementContext>(options =>
+    options.UseSqlServer("Data Source=localhost;Initial Catalog=CaseManagement;Integrated Security=True;TrustServerCertificate=true;"));
 
 var app = builder.Build();
 

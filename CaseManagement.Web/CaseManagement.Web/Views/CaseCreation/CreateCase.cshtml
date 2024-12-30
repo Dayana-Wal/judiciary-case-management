@@ -1,0 +1,82 @@
+﻿@using CaseManagement.Web.Models
+@model CaseCreationModel
+
+@{
+    var apiBaseUrl = ViewBag.ApiBaseUrl;
+}
+
+<div class="container w-75 p-4 border rounded shadow">
+    <h3 class="text-center mb-4">Create Case</h3>
+    <form id="caseCreationForm" method="post">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label asp-for="CaseType" class="form-label">Case Type</label>
+                    <select asp-for="CaseType" class="form-control">
+                        <option value="">Select Case Type</option>
+                        @foreach (var caseType in Model.CaseTypes)
+                        {
+                            <option value="@caseType">@caseType</option>
+                        }
+                    </select>
+                    <span asp-validation-for="CaseType" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="VictimName" class="form-label">Victim Name</label>
+                    <input asp-for="VictimName" type="text" class="form-control" />
+                    <span asp-validation-for="VictimName" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="AccusedName" class="form-label">Accused Name</label>
+                    <input asp-for="AccusedName" type="text" class="form-control" />
+                    <span asp-validation-for="AccusedName" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <label asp-for="IncidentDate" class="form-label">Incident Date</label>
+                    <input asp-for="IncidentDate" type="datetime-local" class="form-control"  />
+                    <span asp-validation-for="IncidentDate" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="IncidentLocation" class="form-label">Incident Location</label>
+                    <input asp-for="IncidentLocation" type="text" class="form-control" />
+                    <span asp-validation-for="IncidentLocation" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="CaseFiles" class="form-label">Upload Case Documents </label>
+                    <input asp-for="CaseFiles" type="file" class="form-control" multiple />
+                    <span asp-validation-for="CaseFiles" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label">Description</label>
+            <textarea asp-for="Description" rows="3" class="form-control"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+
+        <div class="form-check mb-3">
+            <input asp-for="Confirm" type="checkbox" class="form-check-input" />
+            <label class="form-check-label" for="Confirm">I confirm the details are correct</label>
+            <span asp-validation-for="Confirm" class="text-danger"></span>
+        </div>
+
+        <div class="d-flex justify-content-center mt-4">
+            <button type="submit" class="btn btn-outline-primary">Create Case</button>
+        </div>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    // Set the API base URL in a global JavaScript variable
+    var apiBaseUrl = "@apiBaseUrl"; // This will be replaced by the value from ViewData
+</script>
+<script src="~/js/pages/caseCreationApi.js"></script>
