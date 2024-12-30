@@ -5,6 +5,10 @@ namespace CaseManagement.DataAccess.Entities;
 
 public partial class Case
 {
+    public string VictimName { get; set; } = null!;
+
+    public long VictimContact { get; set; } = 0!;
+
     public string Id { get; set; } = null!;
 
     public int CaseTypeId { get; set; }
@@ -12,6 +16,8 @@ public partial class Case
     public string Description { get; set; } = null!;
 
     public string CaseNumber { get; set; } = null!;
+
+    public DateTime DateOfIncident;
 
     public string AccusedId { get; set; } = null!;
 
