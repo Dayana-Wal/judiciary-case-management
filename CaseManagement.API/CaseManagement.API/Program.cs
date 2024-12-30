@@ -24,7 +24,7 @@ builder.Services.AddControllers()
     {
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
-builder.Services.AddScoped<IPersonCommandHandler, PersonCommandHandler>();
+builder.Services.AddScoped<CaseManagement.DataAccess.Commands.IPersonCommandHandler, PersonCommandHandler>();
 builder.Services.AddScoped<SignupManager>(); 
 builder.Services.AddScoped<HashHelper>();
 builder.Services.AddSingleton<SmsServiceprovider>();

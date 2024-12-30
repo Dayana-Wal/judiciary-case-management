@@ -10,6 +10,10 @@ namespace CaseManagement.Business.Commands
 {
     public interface ICaseCommandHandler
     {
+        Task<int> GetCaseTypeId(string caseType);
+        Task<Person> GetPersonAsync(string name, int contact);
+        Task<int> GetCaseStatusId(string caseStatus);
+
         Task<OperationResult<string>> CreateCaseAsync(Case newCase);
         Task<OperationResult<Case>> GetCaseByIdAsync(string caseNumber);
         Task<OperationResult<IEnumerable<Case>>> GetAllCasesAsync();

@@ -24,7 +24,7 @@ namespace CaseManagement.Web.Models
 
 
         [Required(ErrorMessage = "{0} is Required")]
-        public DateTime IncidentDate { get; set; }
+        public DateTime DateOfIncident { get; set; }
 
 
         [Required(ErrorMessage = "{0} is Required")]
