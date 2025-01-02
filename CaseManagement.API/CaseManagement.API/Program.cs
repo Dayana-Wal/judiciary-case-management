@@ -43,6 +43,7 @@ builder.Services.AddScoped<IOtpCommandHandler, OtpCommandHandler>();
 builder.Services.AddScoped<JwtTokenProvider>();
 builder.Services.AddScoped<LoginManager>();
 builder.Services.AddScoped<PersonQueryHandler>();
+builder.Services.AddScoped<RoleIdProvider>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddFluentMigratorCore()
