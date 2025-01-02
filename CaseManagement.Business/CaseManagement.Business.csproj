@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CaseManagement.DataAccess\CaseManagement.DataAccess.csproj" />
+    <ProjectReference Include="..\CaseManagement.Web\CaseManagement.Web\CaseManagement.Web.csproj" />
   </ItemGroup>
 
 </Project>

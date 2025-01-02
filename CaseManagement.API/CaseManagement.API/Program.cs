@@ -43,6 +43,8 @@ builder.Services.AddScoped<IOtpCommandHandler, OtpCommandHandler>();
 builder.Services.AddScoped<JwtTokenProvider>();
 builder.Services.AddScoped<LoginManager>();
 builder.Services.AddScoped<PersonQueryHandler>();
+builder.Services.AddScoped<ISearchCasesQueryHandler, SearchCaseQueryHandler>();
+builder.Services.AddScoped<CaseSearchManager>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddFluentMigratorCore()
@@ -78,7 +80,8 @@ app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseWhen(context => !context.Request.Path.Value.ToLower().Trim().Contains(@"/login") &&
         !context.Request.Path.Value.ToLower().Trim().Contains("/signup") &&
         !context.Request.Path.Value.ToLower().Trim().Contains("/generate") &&
-        !context.Request.Path.Value.ToLower().Trim().Contains("/verify"),
+        !context.Request.Path.Value.ToLower().Trim().Contains("/verify") &&
+        !context.Request.Path.Value.ToLower().Trim().Contains("/search"),
         applicationBUilder => applicationBUilder.UseMiddleware<JwtAuthMiddleware>());
 //app.UseMiddleware<JwtTokenValidatorMiddleware>();
 
