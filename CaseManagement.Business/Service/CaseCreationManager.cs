@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CaseManagement.Business.Service
 {
-    internal class CaseCreationManager
+    public class CaseCreationManager
     {
     }
 }

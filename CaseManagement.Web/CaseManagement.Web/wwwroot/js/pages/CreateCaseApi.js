@@ -56,7 +56,6 @@
                     }
                 }
 
-                // Display alert with error details
                 alert(alertMessage);
             }
         });
