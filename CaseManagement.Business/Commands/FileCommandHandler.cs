@@ -13,21 +13,14 @@ namespace CaseManagement.Business.Commands
             _context = context;
         }
 
-        public async Task<OperationResult<string>> AddFileAsync(DataAccess.Entities.File file)
+        public async Task<OperationResult<List<string>>> AddFilesAsync(List<Files> files)
         {
-            try
-            {
-                await _context.Files.AddAsync(file);
-                await _context.SaveChangesAsync();
-                //TODO: send the inserted file id
-                return OperationResult<string>.Success("File details stored successfully!");
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return OperationResult<string>.Failed($"{ex.Message}");
 
-            }
+            await _context.Files.AddRangeAsync(files);
+            await _context.SaveChangesAsync();
+
+            var insertedFileIds = files.Select(file => file.Id).ToList();
+            return OperationResult<List<string>>.Success(insertedFileIds, "Successfully added to database");
 
         }
     }

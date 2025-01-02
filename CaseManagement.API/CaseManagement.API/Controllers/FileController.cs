@@ -25,13 +25,14 @@ namespace CaseManagement.API.Controllers
                 return ToResponse(OperationResult.Failed("Invalid data to upload files"));
             }
 
+            //TODO: Test all validations
             var validationResult = filesCommand.ValidateCommand();
             if (!validationResult.IsValid)
             {
                 return ToResponse(OperationResult.ValidationError("Validations failed for files"));
             }
 
-            var user = await _personQueryHandler.GetPersonAsync(filesCommand.UploadedBy);
+            var user = await _personQueryHandler.GetUserAsync(filesCommand.UploadedBy);
             if (user == null)
             {
                 var opResult = OperationResult.Failed("User not found with the given userName for uploadedBy field");
@@ -39,9 +40,9 @@ namespace CaseManagement.API.Controllers
             }
             filesCommand.UploadedBy = user.Id;
 
-            await _fileManager.UploadFile(filesCommand);
+            var res = await _fileManager.UploadFile(filesCommand);
 
-            return ToResponse(OperationResult.Success("Files uploaded and stored."));
+            return ToResponse(res);
         }
     }
 }

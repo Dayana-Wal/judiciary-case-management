@@ -21,7 +21,7 @@ public partial class Request
 
     public virtual Case Case { get; set; } = null!;
 
-    public virtual File File { get; set; } = null!;
+    public virtual Files File { get; set; } = null!;
 
     public virtual Person RaisedByNavigation { get; set; } = null!;
 

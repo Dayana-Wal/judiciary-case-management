@@ -1,10 +1,8 @@
 ﻿using CaseManagement.Business.Commands;
+using CaseManagement.Business.Common;
 using CaseManagement.Business.Features.Files;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using CaseManagement.DataAccess.Entities;
+
 
 namespace CaseManagement.Business.Service
 {
@@ -15,35 +13,36 @@ namespace CaseManagement.Business.Service
         {
             _fileCommandHandler = fileCommandHandler;
         }
-        public async Task UploadFile(FilesCommand filesCommand)
+        public async Task<OperationResult<List<string>>> UploadFile(FilesCommand filesCommand)
         {
             var uploadsPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", $"{filesCommand.UploadedBy}");
             if (!Directory.Exists(uploadsPath))
             {
                 Directory.CreateDirectory(uploadsPath);
             }
+            List<Files> filesToInsert = new List<Files>();
 
             foreach (var file in filesCommand.Files)
             {
                 var currentTimestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+                //TODO: Generating file name  --> Add fileId last 4 letters in the filename
                 var fileName = $"{Path.GetFileNameWithoutExtension(file.FileName)}_{currentTimestamp}{Path.GetExtension(file.FileName)}";
                 var filePath = Path.Combine(uploadsPath, fileName);
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
                     await file.CopyToAsync(stream);
                 }
-
-                DataAccess.Entities.File newFile = new DataAccess.Entities.File
+                filesToInsert.Add(new Files
                 {
                     Id = NewUlid(),
                     FileName = fileName,
-                    FilePath = filePath,
+                    FilePath = Path.Combine("wwwroot","uploads" , fileName),
                     FileTypeId = filesCommand.FileTypeId,
                     UploadedBy = filesCommand.UploadedBy,
-                };
-
-                var res = await _fileCommandHandler.AddFileAsync(newFile);
+                });
             }
+            var res = await _fileCommandHandler.AddFilesAsync(filesToInsert);
+            return res;
         }
     }
 }

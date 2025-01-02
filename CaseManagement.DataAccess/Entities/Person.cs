@@ -23,8 +23,6 @@ public partial class Person
 
     public virtual ICollection<Case> CaseVictims { get; set; } = new List<Case>();
 
-    public virtual ICollection<File> Files { get; set; } = new List<File>();
-
     public virtual ICollection<Otp> Otps { get; set; } = new List<Otp>();
 
     public virtual ICollection<Request> Requests { get; set; } = new List<Request>();

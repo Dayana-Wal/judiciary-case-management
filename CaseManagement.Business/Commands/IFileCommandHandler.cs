@@ -1,9 +1,10 @@
 ﻿using CaseManagement.Business.Common;
+using CaseManagement.DataAccess.Entities;
 
 namespace CaseManagement.Business.Commands
 {
     public interface IFileCommandHandler
     {
-        Task<OperationResult<string>> AddFileAsync(DataAccess.Entities.File file);
+        Task<OperationResult<List<string>>> AddFilesAsync(List<Files> file);
     }
 }

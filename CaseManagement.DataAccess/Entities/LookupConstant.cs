@@ -17,7 +17,7 @@ public partial class LookupConstant
 
     public virtual ICollection<Case> CaseCaseTypes { get; set; } = new List<Case>();
 
-    public virtual ICollection<File> Files { get; set; } = new List<File>();
+    public virtual ICollection<Files> Files { get; set; } = new List<Files>();
 
     public virtual ICollection<Otp> Otps { get; set; } = new List<Otp>();
 
