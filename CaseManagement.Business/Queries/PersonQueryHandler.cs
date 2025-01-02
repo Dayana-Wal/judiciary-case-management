@@ -12,6 +12,13 @@ namespace CaseManagement.Business.Queries
             _context = context;
         }
 
+        public async Task<Person> GetPersonAsync(string personName)
+        {
+            var person = await _context.People
+                .FirstOrDefaultAsync(user => user.Name == personName);
+            return person;
+        }
+
         public async Task<User> GetUserAsync(string userName)
         {
             var user = await _context.Users

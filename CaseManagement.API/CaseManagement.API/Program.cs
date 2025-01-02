@@ -33,6 +33,8 @@ builder.Services.AddControllers(options =>
     options.Filters.Add<GlobalExceptionFilter>();
 });
 
+builder.Services.AddScoped<IFileCommandHandler, FileCommandHandler>();
+builder.Services.AddScoped<FileManager>();
 builder.Services.AddScoped<IPersonCommandHandler, PersonCommandHandler>();
 builder.Services.AddScoped<SignupManager>();
 builder.Services.AddScoped<HashHelper>();
@@ -42,7 +44,7 @@ builder.Services.AddScoped<OtpManager>();
 builder.Services.AddScoped<IOtpCommandHandler, OtpCommandHandler>();
 builder.Services.AddScoped<JwtTokenProvider>();
 builder.Services.AddScoped<LoginManager>();
-builder.Services.AddScoped<PersonQueryHandler>();
+builder.Services.AddScoped<IPersonQueryHandler, PersonQueryHandler>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddFluentMigratorCore()
@@ -88,6 +90,6 @@ app.MapControllers();
 using (var scope = app.Services.CreateScope())
 {
     var runner = scope.ServiceProvider.GetRequiredService<IMigrationRunner>();
-    runner.MigrateUp();
+     runner.MigrateUp();
 }
 app.Run();
