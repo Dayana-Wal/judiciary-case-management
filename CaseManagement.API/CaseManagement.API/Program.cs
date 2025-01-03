@@ -57,6 +57,7 @@ builder.Services.AddScoped<LoginManager>();
 builder.Services.AddScoped<PersonQueryHandler>();
 builder.Services.AddScoped<AdminManager>();
 builder.Services.AddScoped<IAdminQueryHandler, AdminQueryHandler>();
+builder.Services.AddScoped<RoleIdProvider>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddFluentMigratorCore()
@@ -80,6 +81,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseWhen(context => !context.Request.Path.Value.ToLower().Trim().Contains(@"/login") &&
         !context.Request.Path.Value.ToLower().Trim().Contains("/signup") &&
         !context.Request.Path.Value.ToLower().Trim().Contains("/generate") &&
