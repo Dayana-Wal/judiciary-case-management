@@ -20,15 +20,15 @@ namespace CaseManagement.API.Controllers
         }
 
         [HttpGet("search")]
-        public async Task<IActionResult> SearchCases([FromQuery] CaseSearchQuery searchModel)
+        public async Task<IActionResult> SearchCases([FromQuery] CaseSearchQuery searchQuery)
         {
-            if (searchModel == null)
+            if (searchQuery == null)
             {
                 return BadRequest("Invalid search query.");
             }
 
             // Validate the search model
-            var validationResult = searchModel.ValidateSearchModel();
+            var validationResult = searchQuery.Validate();
 
             if (!validationResult.IsValid)
             {
@@ -39,8 +39,8 @@ namespace CaseManagement.API.Controllers
 
             var searchResult = await _caseSearchManager.SearchCasesAsync(new CaseSearchQuery
             {
-                SearchCategory = searchModel.SearchCategory,
-                SearchValue = searchModel.SearchValue
+                SearchCategory = searchQuery.SearchCategory,
+                SearchValue = searchQuery.SearchValue
             });
 
             if (searchResult == null || searchResult.Count == 0)

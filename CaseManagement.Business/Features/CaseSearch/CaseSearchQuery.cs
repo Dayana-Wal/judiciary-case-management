@@ -1,14 +1,15 @@
-﻿using FluentValidation;
+﻿using CaseManagement.Business.Features;
+using FluentValidation;
 using FluentValidation.Results;
 
 namespace CaseManagement.Web.Models
 {
-    public class CaseSearchQuery
+    public class CaseSearchQuery : AbstractQuery
     {
         public string? SearchCategory { get; set; }
         public string? SearchValue { get; set; }
 
-        public ValidationResult ValidateSearchModel()
+        public override ValidationResult Validate()
         {
             var validator = new SearchModelValidator();
             return validator.Validate(this);
