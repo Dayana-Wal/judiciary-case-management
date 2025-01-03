@@ -3,16 +3,19 @@ using CaseManagement.Business.Common;
 using CaseManagement.Business.Utility;
 using CaseManagement.DataAccess.Commands;
 using CaseManagement.DataAccess.Entities;
+using CaseManagement.Business.Providers;
 
 namespace CaseManagement.Business.Services
 {
-    public class SignupManager:BaseManager
+    public class SignupManager: BaseManager
     {
         private readonly IPersonCommandHandler _dataHandler;
+        private readonly RoleIdProvider _roleIdProvider;
 
-        public SignupManager(IPersonCommandHandler dataHandler)
+        public SignupManager(IPersonCommandHandler dataHandler, RoleIdProvider roleIdProvider)
         {
             _dataHandler = dataHandler;
+            _roleIdProvider = roleIdProvider;
         }
 
         public async Task<OperationResult<List<string>>> RegisterUser(SignupCommand command)
@@ -23,7 +26,8 @@ namespace CaseManagement.Business.Services
             PasswordSaltHashResult storedResult = passwordService.HashedResult(command.Password);
 
             string personId = NewUlid();
-            
+            int RoleId = await _roleIdProvider.GetRoleId(GeneralRoleConstant.RoleCode, GeneralRoleConstant.RoleType);
+
             var person = new Person
             {
                 Id = personId,
@@ -41,7 +45,7 @@ namespace CaseManagement.Business.Services
                 UserName = command.UserName,
                 PasswordHash = storedResult.HashedPassword,
                 PasswordSalt = storedResult.Salt,
-                RoleId = 22,
+                RoleId = RoleId,
                 PersonId = personId
 
             };
