@@ -32,7 +32,7 @@ namespace CaseManagement.API.Controllers
             }
 
             var opresult = await _loginManager.UserLogin(loginQuery);
-            return ToResponse<string>(opresult);
+            return ToResponse<object>(opresult);
 
         }
 

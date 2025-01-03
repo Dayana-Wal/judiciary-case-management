@@ -18,8 +18,15 @@
                 contentType: "application/json",
                 data: JSON.stringify(formData),
                 success: function (response) {
+                    console.log("Response:", response)
                     if (response.status.toUpperCase() == 'SUCCESS') {
                         alert(response.message)
+
+                        //store token and user details in localstorage
+                        const token = response.data.token;
+                        const user = response.data.user;
+
+                        storeUserSession(token, user);
                         // Reset the form fields
                         $('#loginForm').trigger("reset");
                     }

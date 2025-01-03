@@ -18,24 +18,34 @@ namespace CaseManagement.Business.Service
             _hashHelper = hashHelper;
             _personQueryHandler = personQueryHandler;
         }
-        public async Task<OperationResult<string>> UserLogin(LoginQuery loginQuery)
+        public async Task<OperationResult<object>> UserLogin(LoginQuery loginQuery)
         {
             //Get the user data from user table
             User user = await _personQueryHandler.GetUserAsync(loginQuery.UserName);
             if (user == null)
             {
-                return OperationResult<string>.Failed(null, "User not found with the provided username");
+                return OperationResult<object>.Failed(null, "User not found with the provided username");
 
             }
             bool isPasswordMatched = _hashHelper.VerifyEnteredPassword(loginQuery.Password, user.PasswordHash, user.PasswordSalt);
             if (isPasswordMatched)
             {
                 string token = _jwtTokenProvider.GenerateJwtToken(loginQuery.UserName, user.Role.Text);
-                return OperationResult<string>.Success(token, "Login success");
+                var response = new
+                {
+                    Token = token,
+                    User = new
+                    {
+                        Id = user.Id,
+                        UserName = user.UserName,
+                        Role = user.Role.Text
+                    }
+                };
+                return OperationResult<object>.Success(response, "Login success");
             }
             else
             {
-                return OperationResult<string>.Failed(null, "Incorrect password provided");
+                return OperationResult<object>.Failed(null, "Incorrect password provided");
             }
 
         }
