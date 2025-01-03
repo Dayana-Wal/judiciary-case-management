@@ -15,7 +15,7 @@ namespace CaseManagement.Business.Service
         }
         public async Task<OperationResult<List<string>>> UploadFile(FilesCommand filesCommand)
         {
-            var uploadsPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", $"{filesCommand.UploadedBy}");
+            var uploadsPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
             if (!Directory.Exists(uploadsPath))
             {
                 Directory.CreateDirectory(uploadsPath);
@@ -25,7 +25,7 @@ namespace CaseManagement.Business.Service
             foreach (var file in filesCommand.Files)
             {
                 var currentTimestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-                //TODO: Generating file name  --> Add fileId last 4 letters in the filename
+                //TODO: Doubt about Generating file name with current timestamp
                 var fileName = $"{Path.GetFileNameWithoutExtension(file.FileName)}_{currentTimestamp}{Path.GetExtension(file.FileName)}";
                 var filePath = Path.Combine(uploadsPath, fileName);
                 using (var stream = new FileStream(filePath, FileMode.Create))

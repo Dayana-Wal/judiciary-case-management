@@ -29,4 +29,8 @@
     <ProjectReference Include="..\..\CaseManagement.Business\CaseManagement.Business.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
 </Project>

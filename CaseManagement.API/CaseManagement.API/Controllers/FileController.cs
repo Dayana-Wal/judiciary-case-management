@@ -25,11 +25,12 @@ namespace CaseManagement.API.Controllers
                 return ToResponse(OperationResult.Failed("Invalid data to upload files"));
             }
 
-            //TODO: Test all validations
             var validationResult = filesCommand.ValidateCommand();
             if (!validationResult.IsValid)
             {
-                return ToResponse(OperationResult.ValidationError("Validations failed for files"));
+                var validationErrors = new List<string>(); 
+                validationErrors.AddRange(validationResult.Errors.Select(err => err.ToString()));
+                return ToResponse(OperationResult<List<string>>.ValidationError(validationErrors, "Validations failed for files"));
             }
 
             var user = await _personQueryHandler.GetUserAsync(filesCommand.UploadedBy);

@@ -29,7 +29,7 @@ namespace CaseManagement.Business.Features.Files
                 .ForEach(rule =>
                 {
                     rule.Must(HaveExtension)
-                    .WithMessage("Invalid file extension, only allowed jpg,png and pdf files")
+                    .WithMessage("Invalid file extension, only allowed jpg,jpeg,png and pdf files")
                     .Must(HaveValidSize)
                     .WithMessage("File size should be less than 2 MB.");
 
