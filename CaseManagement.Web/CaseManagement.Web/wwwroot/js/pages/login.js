@@ -27,9 +27,12 @@
                         const user = response.data.user;
 
                         storeUserSession(token, user);
-                        // Reset the form fields
-                        //$('#loginForm').trigger("reset");
-                        window.location.href = '/Admin';
+                        // Redirect based on the role
+                        if (user.role.toLowerCase() === 'admin') {
+                            window.location.href = '/Admin';
+                        } else {
+                            window.location.href = '/';
+                        }
                     }
                 },
                 error: function (xhr, status, error) {
