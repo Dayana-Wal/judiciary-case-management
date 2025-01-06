@@ -17,7 +17,9 @@ namespace CaseManagement.API.Middlewares
                 await _next(context);
             }
             catch (Exception ex) {
-                await SendResponse.ResponseWithError(context, 500,ex.Message);
+                var messageParts = ex.Message.Split(':').Skip(1);
+                var message = messageParts.Any() ? String.Join(':',messageParts) : $"An error occurred: {ex.Message}";
+                await SendResponse.ResponseWithError(context, 500,message);
             }
         }
     }
