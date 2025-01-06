@@ -4,18 +4,17 @@ using Microsoft.AspNetCore.Http;
 
 namespace CaseManagement.Business.Features.Files
 {
-    public class FilesCommand
+    public class FilesCommand: AbstractCommand
     {
         public int FileTypeId { get; set; } 
         public string UploadedBy { get; set; } = null!;
         public List<IFormFile> Files { get; set; } = null!;
 
-        public ValidationResult ValidateCommand()
+        public override ValidationResult Validate()
         {
             FileValidator validator = new FileValidator();
             return validator.Validate(this);
         }
-
     }
 
     public class FileValidator : AbstractValidator<FilesCommand> {

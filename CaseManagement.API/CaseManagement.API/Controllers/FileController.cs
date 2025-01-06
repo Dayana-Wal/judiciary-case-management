@@ -3,6 +3,7 @@ using CaseManagement.Business.Common;
 using CaseManagement.Business.Features.Files;
 using CaseManagement.Business.Queries;
 using CaseManagement.Business.Service;
+using CaseManagement.Business.Utility;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CaseManagement.API.Controllers
@@ -25,12 +26,12 @@ namespace CaseManagement.API.Controllers
                 return ToResponse(OperationResult.Failed("Invalid data to upload files"));
             }
 
-            var validationResult = filesCommand.ValidateCommand();
+            var validationResult = filesCommand.Validate();
             if (!validationResult.IsValid)
             {
-                var validationErrors = new List<string>(); 
-                validationErrors.AddRange(validationResult.Errors.Select(err => err.ToString()));
-                return ToResponse(OperationResult<List<string>>.ValidationError(validationErrors, "Validations failed for files"));
+                var validationErrors = validationResult.GetErrors();
+                var returnResponse = OperationResult<List<string>>.ValidationError(data: validationErrors);
+                return ToResponse(returnResponse);
             }
 
             var user = await _personQueryHandler.GetUserAsync(filesCommand.UploadedBy);
