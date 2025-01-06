@@ -4,12 +4,13 @@
 
     loadUsers(currentPage, pageSize);
 
+    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidmVua3kiLCJzdWIiOiJ2ZW5reSIsImp0aSI6IjAxSkdYMkdKSzczMlpDM0VXWk43MlIxVlo5IiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiR2VuZXJhbCIsImV4cCI6MTczNjE0NjEwNiwiaXNzIjoiSXNzdWVyIiwiYXVkIjoiQXVkaWVuY2UifQ.Slm5RuFd2sgl0h9HRxMJV7-LDtPN93BHzJsPwhRkxmE";
     function loadUsers(page, pageSize) {
         $.ajax({
             url: `https://localhost:7123/api/admin/users?PageNumber=${page}&PageSize=${pageSize}`,
             type: 'GET',
             headers: {
-                'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoid2VyIiwic3ViIjoid2VyIiwianRpIjoiMDFKR1dZR1g1UVFRRDdaQTNRVlpHMU5TRE4iLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJIb2xkIiwiZXhwIjoxNzM2MTQxOTIzLCJpc3MiOiJJc3N1ZXIiLCJhdWQiOiJBdWRpZW5jZSJ9.u3SXAI1meda79oaBSmmlxHyScux6Gil5W3LczqMpZGQ'
+                'Authorization': `Bearer ${token}`
             },
             success: function (response) {
                 if (response.status === 'Success') {
