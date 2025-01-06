@@ -17,6 +17,18 @@ using CaseManagement.Business.Providers;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add CORS policy to allow any origin
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAnyOrigin", policy =>
+    {
+        policy.AllowAnyOrigin()  // Accept requests from any origin
+              .AllowAnyMethod()  // Accept any HTTP method (GET, POST, PUT, etc.)
+              .AllowAnyHeader(); // Accept any headers
+    });
+});
+
+
 builder.Services.Configure<TwilioSettings>(builder.Configuration.GetSection("Twilio"));
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
 builder.Services.AddDbContext<CaseManagementContext>(options =>
@@ -43,6 +55,8 @@ builder.Services.AddScoped<IOtpCommandHandler, OtpCommandHandler>();
 builder.Services.AddScoped<JwtTokenProvider>();
 builder.Services.AddScoped<LoginManager>();
 builder.Services.AddScoped<PersonQueryHandler>();
+builder.Services.AddScoped<AdminManager>();
+builder.Services.AddScoped<IAdminQueryHandler, AdminQueryHandler>();
 builder.Services.AddScoped<RoleIdProvider>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -52,18 +66,10 @@ builder.Services.AddFluentMigratorCore()
         .WithGlobalConnectionString(builder.Configuration.GetConnectionString("DBConnectionString"))
         .ScanIn(typeof(CaseManagement.DataAccess.Migrations.CreateInitialSchemaAndSeedLookupConstants).Assembly).For.Migrations());
 
-// Add CORS policy to allow any origin
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAnyOrigin", policy =>
-    {
-        policy.AllowAnyOrigin()  // Accept requests from any origin
-              .AllowAnyMethod()  // Accept any HTTP method (GET, POST, PUT, etc.)
-              .AllowAnyHeader(); // Accept any headers
-    });
-});
 
 var app = builder.Build();
+// Enable CORS globally
+app.UseCors("AllowAnyOrigin");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -83,8 +89,7 @@ app.UseWhen(context => !context.Request.Path.Value.ToLower().Trim().Contains(@"/
         applicationBUilder => applicationBUilder.UseMiddleware<JwtAuthMiddleware>());
 //app.UseMiddleware<JwtTokenValidatorMiddleware>();
 
-// Enable CORS globally
-app.UseCors("AllowAnyOrigin");
+
 app.MapControllers();
 using (var scope = app.Services.CreateScope())
 {
