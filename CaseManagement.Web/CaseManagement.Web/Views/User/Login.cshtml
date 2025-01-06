@@ -2,9 +2,13 @@
 @model LoginModel
 @{
     var apiBaseUrl = ViewBag.ApiBaseUrl;
+    var role = Context.Request.Query["role"].ToString();
 }
 <div class="container w-50 p-3 border rounded shadow mt-5">
-    <h3 class="text-center mb-4">Login </h3>
+    <h3 class="text-center mb-4">Login @if (role == "admin")
+        {
+            <span>(Admin)</span>
+        }</h3>
     <form id="loginForm">
         <div class="container w-75">
             <div class="mb-3">

@@ -19,9 +19,10 @@
                 data: JSON.stringify(formData),
                 success: function (response) {
                     if (response.status.toUpperCase() == 'SUCCESS') {
-                        alert(response.message)
+                        alert("Hey there")
                         // Reset the form fields
-                        $('#loginForm').trigger("reset");
+                        //$('#loginForm').trigger("reset");
+                        window.location.href = '/Admin';
                     }
                 },
                 error: function (xhr, status, error) {
