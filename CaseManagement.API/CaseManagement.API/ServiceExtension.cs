@@ -9,10 +9,7 @@ using CaseManagement.Business.Utility;
 using CaseManagement.DataAccess.Commands;
 using CaseManagement.DataAccess.Entities;
 using FluentMigrator.Runner;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 
 namespace CaseManagement.API
 {
@@ -33,10 +30,10 @@ namespace CaseManagement.API
             services.AddScoped<JwtTokenProvider>();
             services.AddScoped<LoginManager>();
             services.AddScoped<IPersonQueryHandler, PersonQueryHandler>();
-            builder.Services.AddScoped<IAdminQueryHandler, AdminQueryHandler>();
-            builder.Services.AddScoped<RoleIdProvider>();
-            builder.Services.AddScoped<ISearchCasesQueryHandler, SearchCaseQueryHandler>();
-            builder.Services.AddScoped<CaseSearchManager>();
+            services.AddScoped<IAdminQueryHandler, AdminQueryHandler>();
+            services.AddScoped<RoleIdProvider>();
+            services.AddScoped<ISearchCasesQueryHandler, SearchCaseQueryHandler>();
+            services.AddScoped<CaseSearchManager>();
 
             services.AddControllers(options =>
             {
