@@ -1,0 +1,57 @@
+﻿@using CaseManagement.Web.Models
+@model SearchModel
+@{
+    var apiBaseUrl = ViewBag.ApiBaseUrl;
+}
+
+<div class="container mt-5">
+    <h3 class="text-center mb-4">Global Case Search</h3>
+
+    <!-- Form for Search -->
+    <form id="searchForm">
+        <!-- Row to contain dropdown, input field, and search button -->
+        <div class="row justify-content-center align-items-center">
+            <!-- Dropdown for Search Category -->
+            <div class="col-md-3 mb-3">
+                <label for="searchCategory" class="form-label">Search By:</label>
+                <select id="searchCategory" name="searchCategory" class="form-select" required>
+                    <option value="" selected disabled>--Select--</option>
+                    <option value="CaseNumber">Case Number</option>
+                    <option value="VictimName">Victim Name</option>
+                    <option value="AccusedName">Accused Name</option>
+                    <option value="AdvocateName">Advocate Name</option>
+                    <option value="EmailAddress">Email Address</option>
+                    <option value="PhoneNumber">Phone Number</option>
+                </select>
+            </div>
+
+            <!-- Input for Search Value -->
+            <div class="col-md-4 mb-3">
+                <label for="searchValue" class="form-label">Search:</label>
+                <input type="text" id="searchValue" name="searchValue" class="form-control" required />
+            </div>
+
+            <!-- Search Button -->
+            <div class="col-md-1 mb-1">
+                <button type="submit" class="btn btn-primary border p-2 d-flex align-items-center justify-content-center w-100">
+                    <i class="bi bi-search"></i>
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <!-- Search Results -->
+    <div id="searchResults" class="mt-4">
+        <!-- Results will be appended here -->
+    </div>
+</div>
+
+<script>
+    var apiBaseUrl = "@apiBaseUrl";
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="~/js/pages/AuthService.js"></script>
+<script src="~/js/pages/search.js"></script>
+
+<!-- Bootstrap Icons for search icon -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
