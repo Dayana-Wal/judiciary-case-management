@@ -33,6 +33,10 @@ namespace CaseManagement.API
             services.AddScoped<JwtTokenProvider>();
             services.AddScoped<LoginManager>();
             services.AddScoped<IPersonQueryHandler, PersonQueryHandler>();
+            builder.Services.AddScoped<IAdminQueryHandler, AdminQueryHandler>();
+            builder.Services.AddScoped<RoleIdProvider>();
+            builder.Services.AddScoped<ISearchCasesQueryHandler, SearchCaseQueryHandler>();
+            builder.Services.AddScoped<CaseSearchManager>();
 
             services.AddControllers(options =>
             {

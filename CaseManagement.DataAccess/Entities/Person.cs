@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace CaseManagement.DataAccess.Entities;
 
@@ -17,10 +18,13 @@ public partial class Person
 
     public string Gender { get; set; } = null!;
 
+    [JsonIgnore]
     public virtual ICollection<Case> CaseAccuseds { get; set; } = new List<Case>();
 
+    [JsonIgnore]
     public virtual ICollection<Case> CaseAdvocates { get; set; } = new List<Case>();
 
+    [JsonIgnore]
     public virtual ICollection<Case> CaseVictims { get; set; } = new List<Case>();
 
     public virtual ICollection<File> Files { get; set; } = new List<File>();

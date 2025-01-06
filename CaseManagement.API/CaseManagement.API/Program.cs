@@ -5,7 +5,6 @@ builder.Services.AddApplicationService(builder.Configuration);
 builder.Services.AddInfraStructureService(builder.Configuration);
 builder.Services.ConfigureCors();
 var app = builder.Build();
-
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -16,6 +15,7 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseCustomMiddleware();
+// Enable CORS globally
 app.UseCors("AllowAnyOrigin");
 app.MapControllers();
 
