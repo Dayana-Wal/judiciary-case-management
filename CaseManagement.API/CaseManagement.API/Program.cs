@@ -23,9 +23,4 @@ app.MapControllers();
 app.MigrateDatabase();
 
 app.MapControllers();
-using (var scope = app.Services.CreateScope())
-{
-    var runner = scope.ServiceProvider.GetRequiredService<IMigrationRunner>();
-    runner.MigrateUp();
-}
 app.Run();
