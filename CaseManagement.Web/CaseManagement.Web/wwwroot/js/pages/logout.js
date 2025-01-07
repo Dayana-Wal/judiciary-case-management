@@ -1,7 +1,6 @@
 ﻿function logout() {
     // Clear session-related data
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('user');
+    removeToken();
 
     // Show a confirmation message
     alert('You have been logged out successfully.');
