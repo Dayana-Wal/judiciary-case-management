@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace CaseManagement.DataAccess.Entities;
 
-public partial class File
+public partial class Files
 {
     public string Id { get; set; } = null!;
 
@@ -21,5 +21,5 @@ public partial class File
 
     public virtual ICollection<Request> Requests { get; set; } = new List<Request>();
 
-    public virtual Person UploadedByNavigation { get; set; } = null!;
+    public virtual User UploadedByNavigation { get; set; } = null!;
 }

@@ -22,4 +22,5 @@ app.MapControllers();
 //Run migrations
 app.MigrateDatabase();
 
+app.MapControllers();
 app.Run();

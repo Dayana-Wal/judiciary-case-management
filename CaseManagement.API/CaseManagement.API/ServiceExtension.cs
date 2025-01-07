@@ -34,6 +34,8 @@ namespace CaseManagement.API
             services.AddScoped<RoleIdProvider>();
             services.AddScoped<ISearchCasesQueryHandler, SearchCaseQueryHandler>();
             services.AddScoped<CaseSearchManager>();
+            services.AddScoped<IFileCommandHandler, FileCommandHandler>();
+            services.AddScoped<FileManager>();
 
             services.AddControllers(options =>
             {
