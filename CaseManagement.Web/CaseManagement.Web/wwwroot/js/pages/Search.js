@@ -6,7 +6,7 @@
         console.log("token", token)
         if (!token) {
             alert("You need to log in to perform a search.");
-            window.location.href = "https://localhost:7218/User/login"; // Redirect to the login page
+            window.location.href = "/User/Login"; // Redirect to the login page
             return;
         }
 
