@@ -1,5 +1,6 @@
 ﻿using CaseManagement.Business.Common;
 using CaseManagement.Business.Features.Signup;
+using CaseManagement.Business.Service;
 using CaseManagement.Business.Services;
 using CaseManagement.Business.Utility;
 using CaseManagement.DataAccess.Commands;
@@ -12,12 +13,14 @@ namespace CaseManagement.API.Controllers
     {
         private readonly SignupManager _signupManager;
         private readonly HashHelper _passwordService;
+        private readonly BgService _bgService;
         private readonly IPersonCommandHandler _personCommandHandler;
 
-        public SignupController(SignupManager signupManager, HashHelper passwordservice,  IPersonCommandHandler personCommandHandler)
+        public SignupController(SignupManager signupManager, HashHelper passwordservice, BgService bgService, IPersonCommandHandler personCommandHandler)
         {
             _passwordService = passwordservice;
             _signupManager = signupManager;
+            _bgService = bgService;
             _personCommandHandler = personCommandHandler;
         }
 
@@ -80,6 +83,7 @@ namespace CaseManagement.API.Controllers
                 
                 var returnResponse = OperationResult<List<string>>.ValidationError(data: validationErrors);
 
+                //_bgService.QueueEmail("dayyubiddika@gmail.com", "Hello", "Hello email");
                 return ToResponse(returnResponse);
                 
             }

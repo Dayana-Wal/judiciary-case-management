@@ -36,6 +36,8 @@ namespace CaseManagement.API
             services.AddScoped<CaseSearchManager>();
             services.AddScoped<IFileCommandHandler, FileCommandHandler>();
             services.AddScoped<FileManager>();
+            services.AddSingleton<EmailService>();
+            services.AddHostedService<BgService>();
 
             services.AddControllers(options =>
             {
