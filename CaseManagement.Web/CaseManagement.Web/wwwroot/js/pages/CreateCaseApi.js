@@ -18,7 +18,7 @@
 
         // Make the AJAX call
         $.ajax({
-            url: `${apiBaseUrl}/CaseCreation`, // API endpoint for case creation
+            url: `${apiBaseUrl}/CreateCase/createcase`, // API endpoint for case creation
             type: "POST",
             contentType: "application/json",
             data: JSON.stringify(formData),
@@ -34,7 +34,7 @@
             error: function (xhr) {
                 console.error("AJAX request failed:", xhr);
 
-                let alertMessage = "An error occurred. Please try again.";
+                let alertMessage = "An error occurred. Please try again. ";
 
                 // Extract detailed error messages, if available
                 if (xhr.responseJSON) {

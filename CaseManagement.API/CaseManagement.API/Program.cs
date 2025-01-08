@@ -16,6 +16,8 @@ builder.Services.Configure<TwilioSettings>(builder.Configuration.GetSection("Twi
 builder.Services.AddDbContext<CaseManagementContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DBConnectionString")));
 
+builder.Services.AddMemoryCache();
+
 // Add services to the container
 builder.Services.AddSingleton<SmsServiceprovider>();
 
@@ -24,13 +26,15 @@ builder.Services.AddControllers()
     {
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
-builder.Services.AddScoped<IPersonCommandHandler, PersonCommandHandler>();
-builder.Services.AddScoped<SignupManager>(); 
+builder.Services.AddScoped<CaseManagement.DataAccess.Commands.IPersonCommandHandler, PersonCommandHandler>();
+builder.Services.AddScoped<SignupManager>();
+builder.Services.AddScoped<CaseCreationManager>();
 builder.Services.AddScoped<HashHelper>();
 builder.Services.AddSingleton<SmsServiceprovider>();
 builder.Services.AddSingleton<OtpProvider>();
 builder.Services.AddScoped<OtpManager>();
 builder.Services.AddScoped<IOtpCommandHandler, OtpCommandHandler>();
+builder.Services.AddScoped<ICaseCommandHandler, CaseCommandHandler>();
 
 builder.Services.AddControllers();
 

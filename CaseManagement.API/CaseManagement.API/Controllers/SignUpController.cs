@@ -65,12 +65,7 @@ namespace CaseManagement.API.Controllers
             }
             else
             {
-                var validationErrors = new List<string>();
-
-                foreach(var errors in validationResult.Errors)
-                {
-                    validationErrors.Add(errors.ErrorMessage);
-                }
+                var validationErrors = Extension.GetErrors(validationResult);
 
                 //signupResult.Status = "Failed";
                 //signupResult.Message = "Registration Failed";

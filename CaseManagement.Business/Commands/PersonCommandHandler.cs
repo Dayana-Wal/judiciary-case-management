@@ -17,15 +17,13 @@ namespace CaseManagement.DataAccess.Commands
         public async Task<OperationResult<string>> CreateUserAsync(Person person, User user)
         {
             {
-                try
-                {
+                
                     var existingPerson = await _context.People
                         .FirstOrDefaultAsync(p => p.Email == person.Email);
 
                     if (existingPerson != null)
                     {
                         return OperationResult<string>.Failed($"Person with this email already exists", person.Email);
-                        //return new OperationResultT<string> { Status="Failed", Message= $"Person with this email already exists", Data= person.Email};
                     
                     }
 
@@ -38,7 +36,6 @@ namespace CaseManagement.DataAccess.Commands
                     {
                         return OperationResult<string>.Failed($"User with this username already exists", user.UserName);
 
-                        //return new OperationResultT<string> { Status = "Failed", Message = $"User with this username already exists" , Data=  user.UserName };
                     }
 
                     await _context.Users.AddAsync(user);
@@ -47,17 +44,15 @@ namespace CaseManagement.DataAccess.Commands
 
                     return OperationResult<string>.Success("Details stored successfully!");
 
-                    //$"User with this username already exists" , Data=  user.UserName 
-                    //return new OperationResultT<string> { Status = "Success", Message = $"Details stored successfully!" };
 
-                }
-                catch (Exception ex)
-                {
-                    return OperationResult<string>.Failed("An Exception Occured while storing data to database", ex.Message);
+                //}
+                //catch (Exception ex)
+                //{
+                //    return OperationResult<string>.Failed("An Exception Occured while storing data to database", ex.Message);
 
-                    //return new OperationResultT<string> { Status = "Failed", Message = $"An Exception Occured while storing data to database" , Data =  ex.Message };
+                //    //return new OperationResultT<string> { Status = "Failed", Message = $"An Exception Occured while  storing data to database" , Data =  ex.Message };
 
-                }
+                //}
             }
         }
 

@@ -2,23 +2,23 @@
 using CaseManagement.Business.Common;
 using CaseManagement.Business.Features.Case;
 using CaseManagement.Business.Service;
-using Microsoft.AspNetCore.Identity;
+using CaseManagement.Business.Utility;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CaseManagement.API.Controllers
 {
-    public class CaseCreationController : BaseController
+    public class CreateCaseController : BaseController
     {
         private readonly CaseCreationManager _caseCreationManager;
         private readonly ICaseCommandHandler _caseCommandHandler;
 
-        public CaseCreationController(CaseCreationManager caseCreationManager, ICaseCommandHandler caseCommandHandler)
+        public CreateCaseController(CaseCreationManager caseCreationManager, ICaseCommandHandler caseCommandHandler)
         {
             _caseCreationManager = caseCreationManager;
             _caseCommandHandler = caseCommandHandler;
         }
 
-        [HttpPost]
+        [HttpPost("createcase")]
         public async Task<IActionResult> CreateCase([FromBody] CreateCaseCommand createCaseCommand)
         {
             if (createCaseCommand == null)
@@ -31,7 +31,7 @@ namespace CaseManagement.API.Controllers
 
             if (validationResult.IsValid)
             {
-                var dataStoreResult = await _caseCreationManager.CreateCase(createCaseCommand);
+                var dataStoreResult = await _caseCreationManager.RegisterCase(createCaseCommand);
                 if (dataStoreResult.Status == OperationStatus.Success)
                 {
                     caseCreationResult = OperationResult.Success(message: dataStoreResult.Message);
@@ -48,13 +48,8 @@ namespace CaseManagement.API.Controllers
             }
             else
             {
-                var validationErrors = new List<string>();
-
-                foreach (var errors in validationResult.Errors)
-                {
-                    validationErrors.Add(errors.ErrorMessage);
-                }
-
+                var validationErrors = Extension.GetErrors(validationResult);
+              
                 var returnResponse = OperationResult<List<string>>.ValidationError(data: validationErrors);
 
                 return ToResponse(returnResponse);
