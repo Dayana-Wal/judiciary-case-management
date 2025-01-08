@@ -60,7 +60,8 @@ namespace CaseManagement.API.Controllers
                 //signupResult = OperationResultConverter.ConvertTo(signupResult, dataStoreResult.Data);
 
                 //var returnResponse = OperationResultConverter.ConvertTo(signupResult, dataStoreResult.Data);
-
+                //TODO: Pass to,subject,body
+                _bgService.QueueEmail("To", "Sub", "Body");
                 return ToResponse(signupResult);
 
 

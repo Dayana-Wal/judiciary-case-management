@@ -25,12 +25,10 @@ namespace CaseManagement.Business.Service
                 {
                     try
                     {
-                        //Console.WriteLine(email);
                         _emailService.SendEmail(email.To, email.Subject, email.Body);
                     }
                     catch (Exception ex)
                     {
-                        // Handle errors (e.g., log them)
                         Console.WriteLine($"Error sending email: {ex.Message}");
                     }
                 }

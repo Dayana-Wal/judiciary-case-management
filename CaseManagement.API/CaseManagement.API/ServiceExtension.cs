@@ -37,7 +37,8 @@ namespace CaseManagement.API
             services.AddScoped<IFileCommandHandler, FileCommandHandler>();
             services.AddScoped<FileManager>();
             services.AddSingleton<EmailService>();
-            services.AddHostedService<BgService>();
+            services.AddSingleton<BgService>();
+            services.AddHostedService(provider => provider.GetRequiredService<BgService>());
 
             services.AddControllers(options =>
             {
