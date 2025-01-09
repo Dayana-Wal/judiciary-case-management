@@ -19,26 +19,18 @@ namespace CaseManagement.Business.Services
 
         public async Task<OperationResult> SendSms(string toPhoneNumber, string messageBody)
         {
-            try
+            if (string.IsNullOrWhiteSpace(toPhoneNumber) || string.IsNullOrWhiteSpace(messageBody))
             {
-                if (string.IsNullOrWhiteSpace(toPhoneNumber) || string.IsNullOrWhiteSpace(messageBody))
-                {
-                    return OperationResult.Failed(message: "Recipient phone number and message body cannot be null or empty.");
-                }
-                // Send SMS via Twilio
-                var message = await MessageResource.CreateAsync(
-                    body: messageBody,
-                    from: new PhoneNumber(_twilioSettings.PhoneNumber),
-                    to: new PhoneNumber(toPhoneNumber)
-                );
-
-                return OperationResult.Success(message: "SMS sent successfully.");
-
+                return OperationResult.Failed(message: "Recipient phone number and message body cannot be null or empty.");
             }
-            catch (Exception ex)
-            {
-                return OperationResult.Failed(message: $"Failed to send SMS: {ex.Message}");
-            }
+            // Send SMS via Twilio
+            var message = await MessageResource.CreateAsync(
+                body: messageBody,
+                from: new PhoneNumber(_twilioSettings.PhoneNumber),
+                to: new PhoneNumber(toPhoneNumber)
+            );
+
+            return OperationResult.Success(message: "SMS sent successfully.");
         }
 
     }

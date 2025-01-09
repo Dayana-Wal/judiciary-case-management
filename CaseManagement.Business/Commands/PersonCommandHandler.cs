@@ -17,55 +17,45 @@ namespace CaseManagement.DataAccess.Commands
         public async Task<OperationResult<string>> CreateUserAsync(Person person, User user)
         {
             {
-                
-                    var existingPerson = await _context.People
-                        .FirstOrDefaultAsync(p => p.Email == person.Email);
 
-                    if (existingPerson != null)
-                    {
-                        return OperationResult<string>.Failed($"Person with this email already exists", person.Email);
-                    
-                    }
+                var existingPerson = await _context.People
+                    .FirstOrDefaultAsync(p => p.Email == person.Email);
 
-                    await _context.People.AddAsync(person);
+                if (existingPerson != null)
+                {
+                    return OperationResult<string>.Failed($"Person with this email already exists", person.Email);
+                    //return new OperationResultT<string> { Status="Failed", Message= $"Person with this email already exists", Data= person.Email};
 
-                    var existingUser = await _context.Users
-                        .FirstOrDefaultAsync(u => u.UserName == user.UserName);
+                }
 
-                    if (existingUser != null)
-                    {
-                        return OperationResult<string>.Failed($"User with this username already exists", user.UserName);
+                await _context.People.AddAsync(person);
 
-                    }
+                var existingUser = await _context.Users
+                    .FirstOrDefaultAsync(u => u.UserName == user.UserName);
 
-                    await _context.Users.AddAsync(user);
+                if (existingUser != null)
+                {
+                    return OperationResult<string>.Failed($"User with this username already exists", user.UserName);
 
-                    await _context.SaveChangesAsync();
+                    //return new OperationResultT<string> { Status = "Failed", Message = $"User with this username already exists" , Data=  user.UserName };
+                }
 
-                    return OperationResult<string>.Success("Details stored successfully!");
+                await _context.Users.AddAsync(user);
 
+                await _context.SaveChangesAsync();
 
-                //}
-                //catch (Exception ex)
-                //{
-                //    return OperationResult<string>.Failed("An Exception Occured while storing data to database", ex.Message);
+                return OperationResult<string>.Success("Details stored successfully!");
 
-                //    //return new OperationResultT<string> { Status = "Failed", Message = $"An Exception Occured while  storing data to database" , Data =  ex.Message };
+                //$"User with this username already exists" , Data=  user.UserName 
+                //return new OperationResultT<string> { Status = "Success", Message = $"Details stored successfully!" };
 
-                //}
             }
+
         }
 
-        public Task DeleteAsync<T>(Person person)
-        {
-            throw new NotImplementedException();
-        }
+    }
 
-        public Task UpdateAsync<T>(Person person)
-        {
-            throw new NotImplementedException();
-        }
+}
 
         
-    }
-}
+ 

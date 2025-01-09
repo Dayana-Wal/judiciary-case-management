@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace CaseManagement.DataAccess.Entities;
 
@@ -13,11 +14,12 @@ public partial class LookupConstant
 
     public string Type { get; set; } = null!;
 
+    [JsonIgnore]
     public virtual ICollection<Case> CaseCaseStatuses { get; set; } = new List<Case>();
 
     public virtual ICollection<Case> CaseCaseTypes { get; set; } = new List<Case>();
 
-    public virtual ICollection<File> Files { get; set; } = new List<File>();
+    public virtual ICollection<Files> Files { get; set; } = new List<Files>();
 
     public virtual ICollection<Otp> Otps { get; set; } = new List<Otp>();
 

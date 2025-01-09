@@ -61,28 +61,19 @@ namespace CaseManagement.API.Controllers
 
             if (validationResult.IsValid)
             {
-                try
+                var verificationResult = await _otpManager.VerifyOtp(otpCommand.UserId, otpCommand.Otp);
+                if (verificationResult.Status == OperationStatus.Success)
                 {
-                    var verificationResult = await _otpManager.VerifyOtp(otpCommand.UserId, otpCommand.Otp);
-                    if (verificationResult.Status == OperationStatus.Success)
-                    {
-                        result.Status = OperationStatus.Success;
-                        result.Message = "OTP verified successfully.";
-                    }
-                    else
-                    {
-                        result.Status = OperationStatus.Failed;
-                        result.Message = verificationResult.Message;  // Message from VerifyOtpAsync
-                    }
-
-                    return ToResponse(result);
+                    result.Status = OperationStatus.Success;
+                    result.Message = "OTP verified successfully.";
                 }
-                catch (Exception ex)
+                else
                 {
                     result.Status = OperationStatus.Failed;
-                    result.Message = "OTP verification failed due to an exception.";
-                    return StatusCode(500, result);
+                    result.Message = verificationResult.Message;  // Message from VerifyOtpAsync
                 }
+
+                return ToResponse(result);
             }
             else
             {

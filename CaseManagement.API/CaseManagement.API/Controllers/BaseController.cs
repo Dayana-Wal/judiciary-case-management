@@ -12,7 +12,8 @@ namespace CaseManagement.API.Controllers
             if (opresult.Status == OperationStatus.Success) { return Ok(opresult); }
             else { return BadRequest(opresult); }
         }
-        public IActionResult ToResponse(OperationResult<List<string>> opresult)
+
+        public IActionResult ToResponse<T>(OperationResult<T> opresult)
         {
             if (opresult.Status == OperationStatus.Success) { return Ok(opresult); }
             else { return BadRequest(opresult); }

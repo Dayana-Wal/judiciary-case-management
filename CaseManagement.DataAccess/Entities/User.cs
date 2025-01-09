@@ -17,6 +17,8 @@ public partial class User
 
     public string PersonId { get; set; } = null!;
 
+    public virtual ICollection<Files> Files { get; set; } = new List<Files>();
+
     public virtual Person Person { get; set; } = null!;
 
     public virtual LookupConstant Role { get; set; } = null!;

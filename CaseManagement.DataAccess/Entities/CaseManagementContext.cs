@@ -19,7 +19,7 @@ public partial class CaseManagementContext : DbContext
 
     public virtual DbSet<CaseFile> CaseFiles { get; set; }
 
-    public virtual DbSet<File> Files { get; set; }
+    public virtual DbSet<Files> Files { get; set; }
 
     public virtual DbSet<LookupConstant> LookupConstants { get; set; }
 
@@ -34,6 +34,10 @@ public partial class CaseManagementContext : DbContext
     public virtual DbSet<User> Users { get; set; }
 
     public virtual DbSet<VersionInfo> VersionInfos { get; set; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Data Source=WL-MS-719\\SQLEXPRESS;Initial Catalog=CaseManagement;Integrated Security=True;TrustServerCertificate=true;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -92,9 +96,9 @@ public partial class CaseManagementContext : DbContext
                 .HasConstraintName("FK_CaseFiles_FileId_File_Id");
         });
 
-        modelBuilder.Entity<File>(entity =>
+        modelBuilder.Entity<Files>(entity =>
         {
-            entity.ToTable("File");
+            entity.HasKey(e => e.Id).HasName("PK_File");
 
             entity.Property(e => e.Id).HasMaxLength(26);
             entity.Property(e => e.FileName).HasMaxLength(128);
@@ -109,7 +113,7 @@ public partial class CaseManagementContext : DbContext
             entity.HasOne(d => d.UploadedByNavigation).WithMany(p => p.Files)
                 .HasForeignKey(d => d.UploadedBy)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_File_UploadedBy_Person_Id");
+                .HasConstraintName("FK_Files_UploadedBy_User_Id");
         });
 
         modelBuilder.Entity<LookupConstant>(entity =>
