@@ -15,13 +15,15 @@ namespace CaseManagement.API.Controllers
         private readonly HashHelper _passwordService;
         private readonly EmailBackGroundService _bgService;
         private readonly IPersonCommandHandler _personCommandHandler;
+        private readonly EmailService _emailService;
 
-        public SignupController(SignupManager signupManager, HashHelper passwordservice, EmailBackGroundService bgService, IPersonCommandHandler personCommandHandler)
+        public SignupController(SignupManager signupManager, HashHelper passwordservice, EmailBackGroundService bgService, IPersonCommandHandler personCommandHandler, EmailService emailService)
         {
             _passwordService = passwordservice;
             _signupManager = signupManager;
             _bgService = bgService;
             _personCommandHandler = personCommandHandler;
+            _emailService = emailService;
         }
 
 
@@ -42,6 +44,8 @@ namespace CaseManagement.API.Controllers
 
             if (validationResult.IsValid)
             {
+                //_bgService.QueueEmail("anudeepthikolagani.999@gmail.com", "Hello", "Hello email");
+                await _emailService.SendEmail("anudeepthikolagani.999@gmail.com", "Hello", "Hello email");
                 var dataStoreResult = await _signupManager.RegisterUser(signupCommand);
 
                 //signupResult.Status = dataStoreResult.Status;

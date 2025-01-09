@@ -19,7 +19,7 @@ namespace CaseManagement.Business.Service
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            while(!stoppingToken.IsCancellationRequested)
+            if(!stoppingToken.IsCancellationRequested)
             {
                 if (_emailQueue.TryDequeue(out var email))
                 {
@@ -36,7 +36,7 @@ namespace CaseManagement.Business.Service
                     }
                 }
             }
-            await Task.Delay(1000);
+            //await Task.Delay(1000);
         }
     }
 }
