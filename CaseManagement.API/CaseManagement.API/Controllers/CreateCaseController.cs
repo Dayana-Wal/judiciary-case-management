@@ -21,6 +21,7 @@ namespace CaseManagement.API.Controllers
         [HttpPost("createcase")]
         public async Task<IActionResult> CreateCase([FromBody] CreateCaseCommand createCaseCommand)
         {
+            
             if (createCaseCommand == null)
             {
                 return BadRequest("Invalid user data");

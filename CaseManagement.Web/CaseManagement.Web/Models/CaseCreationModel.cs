@@ -19,7 +19,9 @@ namespace CaseManagement.Web.Models
 
         [RegularExpression(@"^\d{10}$", ErrorMessage = "Phone number must be 10 digits.")]
         [Required(ErrorMessage = "{0} is Required")]
-        public long VictimContact { get; set; }
+        //public long VictimContact { get; set; } = 0!;
+
+        public required string VictimContact { get; set; }
 
 
         // public string SelectAdvocate { get; set; } = null!;
@@ -30,11 +32,11 @@ namespace CaseManagement.Web.Models
 
         [Required(ErrorMessage = "{0} is Required")]
         [RegularExpression(@"^\d{10}$", ErrorMessage = "Phone number must be 10 digits.")]
-        public long AccusedContact { get; set; }
+        public required string AccusedContact { get; set; } 
 
 
         [Required(ErrorMessage ="Date of Incident is required")]
-        public DateTime DateOfIncident { get; set; }
+        public DateTime? DateOfIncident { get; set; }
 
 
 

@@ -82,18 +82,12 @@ namespace CaseManagement.Business.Commands
                     //VictimName = newCaseRaised.VictimName,
                     //VictimContact = newCaseRaised.VictimContact, // Update this with appropriate logic if necessary
 
-                    //CaseTypeId = _caseContext.LookupConstants.FirstOrDefault(lc => lc.Text.ToString() == newCaseRaised.CaseType.ToString()).Id,
-                    //CaseTypeId = 11,
-                    //CaseTypeId = _caseContext.LookupConstants
-                    //    .Where(c=>c.Text =="Civil" || c.Text == "Criminal" || c.Text == "Family" || c.Text=="Copyright" || c.Text == "Trade" || c.Text =="Secret" || c.Text =="Traffic")
-                    //    .Select(c=>c.Id)
-                    //    .FirstOrDefault(),
+                    
 
-                    CaseTypeId = _caseContext.LookupConstants
-                   .Where(c => new[] { "Civil", "Criminal", "Family", "Copyright", "Trade", "Secret", "Traffic" }
-                   .Contains(c.Text))
-                   .Select(c => c.Id)
-                   .FirstOrDefault(),
+                    CaseTypeId = newCaseRaised.CaseTypeId,
+
+                   
+
 
 
                     Description = newCaseRaised.Description,
