@@ -43,6 +43,8 @@ namespace CaseManagement.API.Controllers
 
                 if (dataStoreResult.Status == OperationStatus.Success)
                 {
+                    var template = EmailTemplates.WelcomeEmail;
+                    _emailBackgroundService.QueueEmail(signupCommand.Email, template.Subject, template.Body);
                     signupResult = OperationResult.Success(message: dataStoreResult.Message);
                 }
                 else if(dataStoreResult.Status == OperationStatus.Failed)
@@ -62,13 +64,6 @@ namespace CaseManagement.API.Controllers
                 {
                     validationErrors.Add(errors.ErrorMessage);
                 }
-
-                //signupResult.Status = "Failed";
-                //signupResult.Message = "Registration Failed";
-
-                //var returnResponse = OperationResultConverter.ConvertTo(signupResult, validationErrors);
-
-                //signupResult = OperationResultT<List<string>>.ValidationError(validationErrors);
                 
                 var returnResponse = OperationResult<List<string>>.ValidationError(data: validationErrors);
 
