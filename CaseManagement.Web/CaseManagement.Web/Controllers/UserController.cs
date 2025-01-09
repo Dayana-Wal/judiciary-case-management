@@ -4,29 +4,24 @@ using Microsoft.AspNetCore.Mvc;
 namespace CaseManagement.Web.Controllers
 {
     [Route("[controller]")]
-    public class UserController : Controller
+    public class UserController : BaseController
     {
-        private readonly IConfiguration _configuration;
-
-        public UserController(IConfiguration configuration)
+        public UserController(IConfiguration configuration) : base(configuration)
         {
-            _configuration = configuration;
         }
 
         //Display the form
         [HttpGet("signup")]
         public IActionResult Signup()
         {
-            var apiBaseUrl = _configuration["ApiSettings:BaseUrl"];
-            ViewBag.ApiBaseUrl = apiBaseUrl;
+            ViewBag.ApiBaseUrl = GetApiBaseUrl();
             return View();
         }
 
         [HttpGet("login")]
         public IActionResult Login()
         {
-            var apiBaseUrl = _configuration["ApiSettings:BaseUrl"];
-            ViewBag.ApiBaseUrl = apiBaseUrl;
+            ViewBag.ApiBaseUrl = GetApiBaseUrl();
             return View();
         }
     }
