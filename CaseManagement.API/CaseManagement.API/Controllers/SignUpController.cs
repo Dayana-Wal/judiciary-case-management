@@ -13,10 +13,10 @@ namespace CaseManagement.API.Controllers
     {
         private readonly SignupManager _signupManager;
         private readonly HashHelper _passwordService;
-        private readonly BgService _bgService;
+        private readonly EmailBackGroundService _bgService;
         private readonly IPersonCommandHandler _personCommandHandler;
 
-        public SignupController(SignupManager signupManager, HashHelper passwordservice, BgService bgService, IPersonCommandHandler personCommandHandler)
+        public SignupController(SignupManager signupManager, HashHelper passwordservice, EmailBackGroundService bgService, IPersonCommandHandler personCommandHandler)
         {
             _passwordService = passwordservice;
             _signupManager = signupManager;
@@ -61,7 +61,7 @@ namespace CaseManagement.API.Controllers
 
                 //var returnResponse = OperationResultConverter.ConvertTo(signupResult, dataStoreResult.Data);
                 //TODO: Pass to,subject,body
-                _bgService.QueueEmail("To", "Sub", "Body");
+                _bgService.QueueEmail("dayyubiddika@gmail.com", "Hello", "Hello email");
                 return ToResponse(signupResult);
 
 
@@ -84,7 +84,6 @@ namespace CaseManagement.API.Controllers
                 
                 var returnResponse = OperationResult<List<string>>.ValidationError(data: validationErrors);
 
-                //_bgService.QueueEmail("dayyubiddika@gmail.com", "Hello", "Hello email");
                 return ToResponse(returnResponse);
                 
             }
