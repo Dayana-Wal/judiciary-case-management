@@ -21,21 +21,17 @@ namespace CaseManagement.DataAccess.Commands
 
             if (existingPerson != null)
             {
-                return OperationResult<string>.Failed($"Person with this email already exists", person.Email);
-                //return new OperationResultT<string> { Status="Failed", Message= $"Person with this email already exists", Data= person.Email};
-                    
+                return OperationResult<string>.Failed($"Person with this email: {person.Email} already exists");                    
             }
 
             await _context.People.AddAsync(person);
 
             var existingUser = await _context.Users
-                .FirstOrDefaultAsync(u => u.UserName == user.UserName);
+                .FirstOrDefaultAsync(u => u.UserName.ToLower() == user.UserName.ToLower());
 
             if (existingUser != null)
             {
-                return OperationResult<string>.Failed($"User with this username already exists", user.UserName);
-
-                //return new OperationResultT<string> { Status = "Failed", Message = $"User with this username already exists" , Data=  user.UserName };
+                return OperationResult<string>.Failed($"User with this username: {user.UserName} already exists");
             }
 
             await _context.Users.AddAsync(user);
@@ -43,9 +39,6 @@ namespace CaseManagement.DataAccess.Commands
             await _context.SaveChangesAsync();
 
             return OperationResult<string>.Success("Details stored successfully!");
-
-            //$"User with this username already exists" , Data=  user.UserName 
-            //return new OperationResultT<string> { Status = "Success", Message = $"Details stored successfully!" };
 
         }
 

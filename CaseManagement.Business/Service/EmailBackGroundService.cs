@@ -19,24 +19,17 @@ namespace CaseManagement.Business.Service
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            if(!stoppingToken.IsCancellationRequested)
+            while (!stoppingToken.IsCancellationRequested)
             {
                 if (_emailQueue.TryDequeue(out var email))
                 {
-                    //using var scope = _serviceProvider.CreateScope();
-                    //var emailService = scope.ServiceProvider.GetRequiredService<EmailService>();
-
-                    try
-                    {
-                        await _emailService.SendEmail(email.ToEmail, email.Subject, email.Body);
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"Error sending email: {ex.Message}");
-                    }
+                    await _emailService.SendEmail(email.ToEmail, email.Subject, email.Body);
+                }
+                else
+                {
+                    await Task.Delay(1000);
                 }
             }
-            //await Task.Delay(1000);
         }
     }
 }

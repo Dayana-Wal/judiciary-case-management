@@ -1,4 +1,5 @@
-﻿using CaseManagement.Business.Common;
+﻿using CaseManagement.API.Common;
+using CaseManagement.Business.Common;
 using CaseManagement.Business.Features.Signup;
 using CaseManagement.Business.Service;
 using CaseManagement.Business.Services;
@@ -13,17 +14,15 @@ namespace CaseManagement.API.Controllers
     {
         private readonly SignupManager _signupManager;
         private readonly HashHelper _passwordService;
-        private readonly EmailBackGroundService _bgService;
+        private readonly EmailBackGroundService _emailBackgroundService;
         private readonly IPersonCommandHandler _personCommandHandler;
-        private readonly EmailService _emailService;
 
-        public SignupController(SignupManager signupManager, HashHelper passwordservice, EmailBackGroundService bgService, IPersonCommandHandler personCommandHandler, EmailService emailService)
+        public SignupController(SignupManager signupManager, HashHelper passwordservice, EmailBackGroundService emailBackgroundService, IPersonCommandHandler personCommandHandler)
         {
             _passwordService = passwordservice;
             _signupManager = signupManager;
-            _bgService = bgService;
+            _emailBackgroundService = emailBackgroundService;
             _personCommandHandler = personCommandHandler;
-            _emailService = emailService;
         }
 
 
@@ -35,37 +34,22 @@ namespace CaseManagement.API.Controllers
             {
                 return BadRequest("Invalid user data.");
             }
-
             var validationResult = signupCommand.ValidateCommand();
             var signupResult = new OperationResult();
 
-            //var signupResult = new OperationResult();
-
-
             if (validationResult.IsValid)
             {
-                //_bgService.QueueEmail("anudeepthikolagani.999@gmail.com", "Hello", "Hello email");
-                await _emailService.SendEmail("anudeepthikolagani.999@gmail.com", "Hello", "Hello email");
                 var dataStoreResult = await _signupManager.RegisterUser(signupCommand);
-
-                //signupResult.Status = dataStoreResult.Status;
-                //signupResult.Message = dataStoreResult.Message;
 
                 if (dataStoreResult.Status == OperationStatus.Success)
                 {
                     signupResult = OperationResult.Success(message: dataStoreResult.Message);
-                    //return ToResponse(signupResult);
                 }
                 else if(dataStoreResult.Status == OperationStatus.Failed)
                 {
                     signupResult = OperationResult.Failed(message: dataStoreResult.Message);
 
                 }
-                //signupResult = OperationResultConverter.ConvertTo(signupResult, dataStoreResult.Data);
-
-                //var returnResponse = OperationResultConverter.ConvertTo(signupResult, dataStoreResult.Data);
-                //TODO: Pass to,subject,body
-                _bgService.QueueEmail("dayyubiddika@gmail.com", "Hello", "Hello email");
                 return ToResponse(signupResult);
 
 
