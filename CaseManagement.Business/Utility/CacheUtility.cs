@@ -70,7 +70,7 @@ namespace CaseManagement.Business.Utility
 
                 CacheItemPolicy policy = new CacheItemPolicy
                 {
-                    AbsoluteExpiration = DateTimeOffset.UtcNow.AddMinutes(30) 
+                    AbsoluteExpiration = DateTimeOffset.UtcNow.AddMinutes(30)
                 };
 
                 _cache.Add(cacheKey, caseTypes, policy);
