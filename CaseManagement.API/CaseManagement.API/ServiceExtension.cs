@@ -39,6 +39,7 @@ namespace CaseManagement.API
             services.AddMemoryCache();
             services.AddScoped<CaseCreationManager>();
             services.AddScoped<ICaseCommandHandler, CaseCommandHandler>();
+            services.AddScoped<ICaseFileCommandHandler, CaseFileCommandHandler>();
 
             services.AddControllers(options =>
             {

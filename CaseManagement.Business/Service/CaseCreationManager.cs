@@ -12,17 +12,18 @@ namespace CaseManagement.Business.Service
     public class CaseCreationManager : BaseManager
     {
         private readonly ICaseCommandHandler _caseHandler;
+        private readonly ICaseFileCommandHandler _caseFileHandler;
 
-        public CaseCreationManager(ICaseCommandHandler caseHandler)
+        public CaseCreationManager(ICaseCommandHandler caseHandler, ICaseFileCommandHandler caseFileCommandHandler)
         {
             _caseHandler = caseHandler;
+            _caseFileHandler = caseFileCommandHandler;
         }
 
         public async Task<OperationResult<List<string>>> RegisterCase(CreateCaseCommand command)
         {
             var dataStoredResult = new OperationResult<List<string>>();
 
-            
                 string caseId = NewUlid();
 
                 var newCase = new Case
@@ -32,30 +33,32 @@ namespace CaseManagement.Business.Service
                     DateOfIncident = (DateTime)command.DateOfIncident,
                     CaseTypeId = await _caseHandler.GetCaseTypeId(command.CaseType),
                     CaseNumber = $"CASE-{DateTime.UtcNow.Ticks}",
-                    //AdvocateId = "A1",
                     CaseStatusId = await _caseHandler.GetCaseStatusId("Open"),
-                    //case = newCase.CaseType
                 };
 
-                //var victim = await _caseHandler.GetPersonAsync(command.VictimName, command.VictimContact);9999000090, 9728939290
                 var victim = await _caseHandler.GetPersonAsync(command.VictimName, command.VictimContact);
                 var accused = await _caseHandler.GetPersonAsync(command.AccusedName, command.AccusedContact);
 
                 if (victim == null || accused == null)
                 {
+                    //TODO: If accused not in db, we need to insert accused details in Person 
                     return OperationResult<List<string>>.Failed(message: "Error creating or fetching victim/accused, registration failed.", data: []);
                 }
 
                 newCase.VictimId = victim.Id;
                 newCase.AccusedId = accused.Id;
 
-                //var dataStoredResult = new OperationResult<List<string>>();
-
-
                 var caseCreateResult = await _caseHandler.CreateCaseAsync(newCase);
 
                 if (caseCreateResult.Status == OperationStatus.Success)
                 {
+                //Store the fileIds and caseId in CaseFiles table
+                    var caseFiles = new List<CaseFile>();
+                    foreach(var fileId in command.FileIds)
+                    {
+                        caseFiles.Add(new CaseFile { Id = NewUlid(), CaseId = caseCreateResult.Data, FileId= fileId });
+                    }
+                    var res = await _caseFileHandler.AddCaseFile(caseFiles);
                     dataStoredResult = OperationResult<List<string>>.Success(data: [], message: "Case registered successfully!");
                 }
                 else
@@ -63,13 +66,6 @@ namespace CaseManagement.Business.Service
                     List<string> tempErrors = new List<string> { caseCreateResult.Data };
                     dataStoredResult = OperationResult<List<string>>.Failed(data: tempErrors, message: caseCreateResult.Message);
                 }
-            //}
-
-            //catch (Exception ex)
-            //{
-            //    List<string> tempErrors = new List<string> { ex.Message };
-            //    dataStoredResult = OperationResult<List<string>>.Failed(data: tempErrors, message: $"An error occurred while registering the case.{ex.Message}");
-            //}
             return dataStoredResult;
         }
     }

@@ -17,6 +17,25 @@ namespace CaseManagement.Business.Commands
         {
             _caseContext = context;
         }
+
+        public async Task<OperationResult<string>> CreateCaseAsync(Case newCaseRaised)
+        {
+            var existingCase = await _caseContext.Cases
+                .FirstOrDefaultAsync(c => c.Description == newCaseRaised.Description);
+
+            if (existingCase != null)
+            {
+                return OperationResult<string>.Failed(message: "A case with similar details already exists.", data: existingCase.CaseNumber);
+            }
+
+            await _caseContext.Cases.AddAsync(newCaseRaised);
+            await _caseContext.SaveChangesAsync();
+
+            return OperationResult<string>.Success(data: newCaseRaised.Id, message: "Case created successfully!");
+
+        }
+
+
         public async Task<int> GetCaseTypeId(string caseType)
         {
             var caseTypeEntity = await _caseContext.LookupConstants
@@ -58,65 +77,6 @@ namespace CaseManagement.Business.Commands
             return caseStatusEntity.Id;
         }
 
-        
-       
-
-        public async Task<OperationResult<string>> CreateCaseAsync(Case newCaseRaised)
-        {
-            
-                 //&& c.DateOfIncident == newCaseRaised.DateOfIncident
-
-                var existingCase = await _caseContext.Cases
-                    .FirstOrDefaultAsync(c => c.Description == newCaseRaised.Description);
-
-                if (existingCase != null)
-                {
-                    return OperationResult<string>.Failed(message: "A case with similar details already exists.", data: existingCase.CaseNumber);
-                }
-
-
-                var newCase = new Case
-                {
-                    Id = newCaseRaised.Id,
-
-                    //VictimName = newCaseRaised.VictimName,
-                    //VictimContact = newCaseRaised.VictimContact, // Update this with appropriate logic if necessary
-
-                    
-
-                    CaseTypeId = newCaseRaised.CaseTypeId,
-
-                   
-
-
-
-                    Description = newCaseRaised.Description,
-                    //todo - change case number format
-                    CaseNumber = $"CASE-{DateTime.UtcNow.Ticks}",
-                    DateOfIncident = newCaseRaised.DateOfIncident,
-
-                    AccusedId = newCaseRaised.AccusedId,
-                    VictimId = newCaseRaised.VictimId,
-                    AdvocateId = "01JF7QPT5MQHTYKBDH92FEJ336",
-
-
-                    //CaseStatusId = _caseContext.LookupConstants.FirstOrDefault(lc => lc.Text.ToString() == "Open")?.Id ?? 0
-                    CaseStatusId = _caseContext.LookupConstants
-                        .Where(c => c.Text == "Open")
-                        .Select(c => c.Id)
-                        .FirstOrDefault()
-                };
-
-                await _caseContext.Cases.AddAsync(newCase);
-                await _caseContext.SaveChangesAsync();
-
-                return OperationResult<string>.Success("Case created successfully!");
-            
-            //catch (Exception ex)
-            //{
-            //    return OperationResult<string>.Failed(message: $"An error occurred while creating the case. {ex.Message}", data: ex.Message);
-            //}
-        }
 
         public async Task<OperationResult<Case>> GetCaseByIdAsync(string caseNumber)
         {
