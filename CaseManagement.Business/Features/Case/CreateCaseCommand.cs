@@ -3,23 +3,18 @@ using FluentValidation.Results;
 
 namespace CaseManagement.Business.Features.Case
 {
-    public class CreateCaseCommand
+    public class CreateCaseCommand: AbstractCommand
     {
         public string CaseType { get; set; } = null!;
         public string VictimName { get; set; } = null!;
-       public long VictimContact { get; set; } = 0!;
-
-        public long AccusedContact {  get; set; } = 0!;
+        public long VictimContact { get; set; } = 0!;
         public string AccusedName { get; set; } = null!;
+        public long AccusedContact {  get; set; } = 0!;
         public DateTime? DateOfIncident { get; set; }
-
-        //public List<IFormFile> CaseFiles { get; set; } = new List<IFormFile>();
         public string Description { get; set; } = null!;
+        public List<string> FileIds { get; set; }         
 
-        //public List<string> CaseTypes { get; set; } = new List<string>();
-        
-
-        public ValidationResult ValidationCommand()
+        public override ValidationResult Validate()
         {
             CreateCaseCommandValidator validator = new CreateCaseCommandValidator();
             return validator.Validate(this);
@@ -41,14 +36,8 @@ namespace CaseManagement.Business.Features.Case
 
             RuleFor(model => model.AccusedContact).NotEmpty().WithMessage("Accused Contact is required.");
 
-
-            //RuleFor(model => model.CaseFiles).NotEmpty().WithMessage("Case File(s) are required");
-
             RuleFor(model => model.Description).NotEmpty().WithMessage("Description field is required")
                 .MinimumLength(10).WithMessage("Description should be at least 50 characters.");
-
-
-
         }
     }
 }

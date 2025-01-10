@@ -7,18 +7,18 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CaseManagement.API.Controllers
 {
-    public class CreateCaseController : BaseController
+    public class CaseController : BaseController
     {
         private readonly CaseCreationManager _caseCreationManager;
         private readonly ICaseCommandHandler _caseCommandHandler;
 
-        public CreateCaseController(CaseCreationManager caseCreationManager, ICaseCommandHandler caseCommandHandler)
+        public CaseController(CaseCreationManager caseCreationManager, ICaseCommandHandler caseCommandHandler)
         {
             _caseCreationManager = caseCreationManager;
             _caseCommandHandler = caseCommandHandler;
         }
 
-        [HttpPost("createcase")]
+        [HttpPost("create")]
         public async Task<IActionResult> CreateCase([FromBody] CreateCaseCommand createCaseCommand)
         {
             
@@ -27,7 +27,7 @@ namespace CaseManagement.API.Controllers
                 return BadRequest("Invalid user data");
             }
 
-            var validationResult = createCaseCommand.ValidationCommand();
+            var validationResult = createCaseCommand.Validate();
             var caseCreationResult = new OperationResult();
 
             if (validationResult.IsValid)
