@@ -10,13 +10,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+app.UseCors("AllowAnyOrigin");
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseCustomMiddleware();
 // Enable CORS globally
-app.UseCors("AllowAnyOrigin");
+
 app.MapControllers();
 
 //Run migrations

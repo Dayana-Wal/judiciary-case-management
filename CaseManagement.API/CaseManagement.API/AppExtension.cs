@@ -13,7 +13,8 @@ namespace CaseManagement.API
                                   !context.Request.Path.Value.ToLower().Trim().Contains("/signup") &&
                                   !context.Request.Path.Value.ToLower().Trim().Contains("/generate") &&
                                   !context.Request.Path.Value.ToLower().Trim().Contains("/verify")&&
-                                  !context.Request.Path.Value.ToLower().Trim().Contains("/search"),
+                                  !context.Request.Path.Value.ToLower().Trim().Contains("/search")&&
+                                  !context.Request.Path.Value.ToLower().Trim().Contains("/createcase"),
                        applicationBuilder => applicationBuilder.UseMiddleware<JwtAuthMiddleware>());
 
             return app;
