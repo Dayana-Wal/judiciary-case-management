@@ -40,6 +40,7 @@ namespace CaseManagement.API
             services.AddScoped<CaseCreationManager>();
             services.AddScoped<ICaseCommandHandler, CaseCommandHandler>();
             services.AddScoped<ICaseFileCommandHandler, CaseFileCommandHandler>();
+            services.AddScoped<ILookUpConstantsQuery, LookUpConstantsQuery>();
 
             services.AddControllers(options =>
             {

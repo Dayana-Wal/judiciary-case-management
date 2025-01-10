@@ -10,12 +10,7 @@ namespace CaseManagement.API
             app.UseMiddleware<ExceptionHandlingMiddleware>();
 
             app.UseWhen(context => !context.Request.Path.Value.ToLower().Trim().Contains("/login") &&
-                                  !context.Request.Path.Value.ToLower().Trim().Contains("/signup") &&
-                                  !context.Request.Path.Value.ToLower().Trim().Contains("/generate") &&
-                                  !context.Request.Path.Value.ToLower().Trim().Contains("/verify")&&
-                                  !context.Request.Path.Value.ToLower().Trim().Contains("/search")&&
-                                  !context.Request.Path.Value.ToLower().Trim().Contains("/create")&&
-                                  !context.Request.Path.Value.ToLower().Trim().Contains("/file"),
+                                  !context.Request.Path.Value.ToLower().Trim().Contains("/signup"),
                        applicationBuilder => applicationBuilder.UseMiddleware<JwtAuthMiddleware>());
 
             return app;

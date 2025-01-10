@@ -17,6 +17,9 @@ function renderNavLinks() {
     if (authToken && user) {
         navLinks.innerHTML = `
             <li class="nav-item">
+                <a class="nav-link text-dark" href="/CaseCreation/createCase">Add Case</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link text-dark" href="/CaseSearch/Search">Search</a>
             </li>
             <li class="nav-item ms-auto">
