@@ -25,13 +25,12 @@
                         }
                     },
                     handleErrorResponse,
-                    true,
                     "application/json"
                 );
             } else {
                 handleErrorResponse(response);
             }
-        }, handleErrorResponse, false, false);
+        }, handleErrorResponse);
     });
 
     function buildJsonData(form, fileIds) {
@@ -52,19 +51,20 @@
         }
 
         //TODO: Add additional fields --> uploadedBy-userName and fileTypeId 
-        formData.append('uploadedBy', "anudeepthi");
+        formData.append('uploadedBy', "anu@123");
         formData.append('fileTypeId', 18);
         return formData;
     }
 
     // Reusable AJAX request function
-    function sendAjaxRequest(url, data, successCallback, errorCallback, processData = true, contentType = "application/x-www-form-urlencoded") {
+    function sendAjaxRequest(url, data, successCallback, errorCallback, contentType = false) {
+        const isFormData = data instanceof FormData;
         $.ajax({
             url: url,
             type: "POST",
             data: data,
-            processData: processData,
-            contentType: contentType,
+            processData: !isFormData,
+            contentType: isFormData ? false : contentType,
             success: successCallback,
             error: errorCallback
         });
