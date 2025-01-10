@@ -6,7 +6,7 @@ namespace CaseManagement.Business.Features.Files
 {
     public class FilesCommand: AbstractCommand
     {
-        public int FileTypeId { get; set; } 
+        public string fileTypeCode { get; set; } = null!;
         public string UploadedBy { get; set; } = null!;
         public List<IFormFile> Files { get; set; } = null!;
 
@@ -21,7 +21,7 @@ namespace CaseManagement.Business.Features.Files
         public FileValidator()
         {
             RuleFor(model => model.UploadedBy).NotEmpty().WithMessage("Uploaded should not be empty");
-            RuleFor(model => model.FileTypeId).NotEmpty().WithMessage("FileTypeId is required");
+            RuleFor(model => model.fileTypeCode).NotEmpty().WithMessage("FileTypeId is required");
             RuleFor(model => model.Files)
                 .NotEmpty()
                 .WithMessage("Files should not be empty")

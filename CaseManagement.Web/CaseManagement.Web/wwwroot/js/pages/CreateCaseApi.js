@@ -6,16 +6,19 @@
             console.warn("Form validation failed.");
             return;
         }
+        const token = getToken();
+        const user = getUser();
+        const currentUser = JSON.parse(user);
 
         const form = this;
-        const formData = buildFormData(form);
+        const formData = buildFormData(form, currentUser);
 
-        sendAjaxRequest(`${apiBaseUrl}/file/upload`, formData, (response) => {
+        sendAjaxRequest(`${apiBaseUrl}/file/upload`, formData,token, (response) => {
             if (response.status?.toUpperCase() === 'SUCCESS') {
                 const fileIds = response.data;
                 const jsonData = buildJsonData(form, fileIds);
 
-                sendAjaxRequest(`${apiBaseUrl}/case/create`, JSON.stringify(jsonData),
+                sendAjaxRequest(`${apiBaseUrl}/case/create`, JSON.stringify(jsonData),token,
                     (response) => {
                         if (response.status?.toUpperCase() === 'SUCCESS') {
                             alert(response.message || "Case created successfully!");
@@ -42,7 +45,7 @@
         return jsonData;
     }
 
-    function buildFormData(form) {
+    function buildFormData(form,currentUser) {
         const formData = new FormData();
         const files = $(form).find('input[name="CaseFiles"]')[0].files;
 
@@ -51,17 +54,20 @@
         }
 
         //TODO: Add additional fields --> uploadedBy-userName and fileTypeId 
-        formData.append('uploadedBy', "anu@123");
-        formData.append('fileTypeId', 18);
+        formData.append('uploadedBy', currentUser.userName);
+        formData.append('fileTypeCode', 'CSD');
         return formData;
     }
 
     // Reusable AJAX request function
-    function sendAjaxRequest(url, data, successCallback, errorCallback, contentType = false) {
+    function sendAjaxRequest(url, data, token, successCallback, errorCallback, contentType = false) {
         const isFormData = data instanceof FormData;
         $.ajax({
             url: url,
             type: "POST",
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
             data: data,
             processData: !isFormData,
             contentType: isFormData ? false : contentType,
