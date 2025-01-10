@@ -26,11 +26,11 @@
             else {
                 handleErrorResponse(response)
             }
-        }, handleErrorResponse(response), false, false);
+        }, handleErrorResponse, false, false);
     });
 
-    function buildJsonData() {
-        constjsonData = {};
+    function buildJsonData(form, fileIds) {
+        const jsonData = {};
         $(form).serializeArray().forEach(item => {
             jsonData[item.name] = item.value || null; // Handle empty fields
         });
