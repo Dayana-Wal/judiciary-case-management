@@ -2,6 +2,14 @@
     $('#searchForm').submit(function (event) {
         event.preventDefault(); // Prevent default form submission
 
+        const token = getToken();
+        console.log("token", token)
+        if (!token) {
+            alert("You need to log in to perform a search.");
+            window.location.href = "/User/Login"; // Redirect to the login page
+            return;
+        }
+
         // Serialize form data
         const formData = $(this).serialize();
         const searchCategory = $('#searchCategory').val();
@@ -15,6 +23,9 @@
         $.ajax({
             url: `${apiBaseUrl}/CaseSearch/search?${formData}`, // API endpoint with query params
             type: "GET",
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
             success: function (response) {
                 if (response.status.toUpperCase() === 'SUCCESS') {
                     if (response.data && response.data.length > 0) {
