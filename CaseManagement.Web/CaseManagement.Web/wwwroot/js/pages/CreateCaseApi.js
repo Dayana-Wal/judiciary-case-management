@@ -1,6 +1,6 @@
 ﻿$(document).ready(function () {
     $('#caseCreationForm').on('submit', function (event) {
-        event.preventDefault(); // Prevention of default form submission
+        event.preventDefault(); // Prevent default form submission
 
         if (!$(this).valid()) {
             console.warn("Form validation failed.");
@@ -14,17 +14,22 @@
             if (response.status?.toUpperCase() === 'SUCCESS') {
                 const fileIds = response.data;
                 const jsonData = buildJsonData(form, fileIds);
-                sendAjaxRequest(`${apiBaseUrl}/case/create`, JSON.stringify(jsonData), (response) => {
-                    if (response.status?.toUpperCase() === 'SUCCESS') {
-                        alert(response.message || "Case created successfully!");
-                        $('#caseCreationForm')[0].reset(); // Clear form fields
-                    } else {
-                        handleErrorResponse(response);
-                    }
-                }, handleErrorResponse(response), "application/json");
-            }
-            else {
-                handleErrorResponse(response)
+
+                sendAjaxRequest(`${apiBaseUrl}/case/create`, JSON.stringify(jsonData),
+                    (response) => {
+                        if (response.status?.toUpperCase() === 'SUCCESS') {
+                            alert(response.message || "Case created successfully!");
+                            $('#caseCreationForm')[0].reset(); // Clear form fields
+                        } else {
+                            handleErrorResponse(response);
+                        }
+                    },
+                    handleErrorResponse,
+                    true,
+                    "application/json"
+                );
+            } else {
+                handleErrorResponse(response);
             }
         }, handleErrorResponse, false, false);
     });
@@ -43,17 +48,17 @@
         const files = $(form).find('input[name="CaseFiles"]')[0].files;
 
         for (let i = 0; i < files.length; i++) {
-            formData.append('Files', files[i])
+            formData.append('Files', files[i]);
         }
 
-        //TODO: Pass the uploadedBy and fileTypeId
+        // Add additional fields
         formData.append('uploadedBy', "anudeepthi");
         formData.append('fileTypeId', 18);
         return formData;
     }
 
-    //Reusable AJAX request function
-    function sendAjaxRequest(url, data, successCallback, errorCallback, processData = true, contentType = "application/www-formData") {
+    // Reusable AJAX request function
+    function sendAjaxRequest(url, data, successCallback, errorCallback, processData = true, contentType = "application/x-www-form-urlencoded") {
         $.ajax({
             url: url,
             type: "POST",
@@ -64,6 +69,7 @@
             error: errorCallback
         });
     }
+
     // Common error handler
     function handleErrorResponse(xhr) {
         console.error("AJAX request failed:", xhr);
