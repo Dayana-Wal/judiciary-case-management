@@ -51,28 +51,17 @@ namespace CaseManagement.Business.Services
             };
 
 
-            //OperationResultT<List<string>> dataStoredresult = new OperationResultT<List<string>>();
             var dataStoredResult = new OperationResult<List<string>>();
 
             var addPersonAndUserResult = await _dataHandler.CreateUserAsync(person, user);
 
             if (addPersonAndUserResult.Status == OperationStatus.Success)
             {
-                //dataStoredresult.Status = addPersonAndUserResult.Status; //for success
-                //dataStoredresult.Message = "Details stored successfully!";
-
                 dataStoredResult = OperationResult<List<string>>.Success(data: [], message: "Details stored successfully!");
             }
             else
             {
-                //dataStoredresult.Status = addPersonAndUserResult.Status; //if failed
-                //dataStoredresult.Message = addPersonAndUserResult.Message;
-
-                List<string> tempErrors = new List<string>() { addPersonAndUserResult.Data};
-
-                //dataStoredresult.Data = tempErrors;
-
-                dataStoredResult = OperationResult<List<string>>.Failed(data: tempErrors, message: addPersonAndUserResult.Message);
+                dataStoredResult = OperationResult<List<string>>.Failed(data: [], message: addPersonAndUserResult.Data);
 
             }
 
