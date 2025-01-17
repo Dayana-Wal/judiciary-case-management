@@ -14,7 +14,7 @@ public partial class Case
 
     public string CaseNumber { get; set; } = null!;
 
-    public DateTime DateOfIncident;
+    public DateTime DateOfIncident { get; set; }
 
     public string AccusedId { get; set; } = null!;
 

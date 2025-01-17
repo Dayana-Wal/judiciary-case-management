@@ -36,46 +36,46 @@ namespace CaseManagement.Business.Commands
         }
 
 
-        public async Task<int> GetCaseTypeId(string caseType)
-        {
-            var caseTypeEntity = await _caseContext.LookupConstants
-                .FirstOrDefaultAsync(lc => lc.Text.ToString() == caseType); 
+        //public async Task<int> GetCaseTypeId(string caseType)
+        //{
+        //    var caseTypeEntity = await _caseContext.LookupConstants
+        //        .FirstOrDefaultAsync(lc => lc.Text.ToString() == caseType); 
 
-            if (caseTypeEntity == null)
-            {
-                throw new InvalidOperationException("Case type not found.");
-            }
+        //    if (caseTypeEntity == null)
+        //    {
+        //        throw new InvalidOperationException("Case type not found.");
+        //    }
 
-            return caseTypeEntity.Id; 
-        }
+        //    return caseTypeEntity.Id; 
+        //}
 
-        public async Task<Person> GetPersonAsync(string name, long contact)
-        {
-            var person = await _caseContext.People
-                .FirstOrDefaultAsync(p => p.Name == name && p.Contact == contact);
+        //public async Task<Person> GetPersonAsync(string name, long contact)
+        //{
+        //    var person = await _caseContext.People
+        //        .FirstOrDefaultAsync(p => p.Name == name && p.Contact == contact);
 
-            if (person != null)
-            {
-                return person; 
-            }
-            return null;
+        //    if (person != null)
+        //    {
+        //        return person; 
+        //    }
+        //    return null;
 
-        }
+        //}
 
 
      
-        public async Task<int> GetCaseStatusId(string caseStatus)
-        {
-            var caseStatusEntity = await _caseContext.LookupConstants
-                .FirstOrDefaultAsync(lc => lc.Text.ToString() == caseStatus);
+        //public async Task<int> GetCaseStatusId(string caseStatus)
+        //{
+        //    var caseStatusEntity = await _caseContext.LookupConstants
+        //        .FirstOrDefaultAsync(lc => lc.Text.ToString() == caseStatus);
 
-            if (caseStatusEntity == null)
-            {
-                throw new InvalidOperationException("Case status not found.");
-            }
+        //    if (caseStatusEntity == null)
+        //    {
+        //        throw new InvalidOperationException("Case status not found.");
+        //    }
 
-            return caseStatusEntity.Id;
-        }
+        //    return caseStatusEntity.Id;
+        //}
 
 
         public async Task<OperationResult<Case>> GetCaseByIdAsync(string caseNumber)

@@ -1,6 +1,7 @@
 ﻿using CaseManagement.Business.Commands;
 using CaseManagement.Business.Common;
 using CaseManagement.Business.Features.Case;
+using CaseManagement.Business.Queries;
 using CaseManagement.DataAccess.Entities;
 using System;
 using System.Collections.Generic;
@@ -11,13 +12,16 @@ namespace CaseManagement.Business.Service
 {
     public class CaseCreationManager : BaseManager
     {
-        private readonly ICaseCommandHandler _caseHandler;
+        private readonly ICaseCommandHandler _caseCommandHandler;
         private readonly ICaseFileCommandHandler _caseFileHandler;
+        private readonly ICaseQueryHandler _caseQueryHandler;
 
-        public CaseCreationManager(ICaseCommandHandler caseHandler, ICaseFileCommandHandler caseFileCommandHandler)
+
+        public CaseCreationManager(ICaseCommandHandler caseHandler, ICaseFileCommandHandler caseFileCommandHandler, ICaseQueryHandler caseQueryHandler)
         {
-            _caseHandler = caseHandler;
+            _caseCommandHandler = caseHandler;
             _caseFileHandler = caseFileCommandHandler;
+            _caseQueryHandler = caseQueryHandler;
         }
 
         public async Task<OperationResult<List<string>>> RegisterCase(CreateCaseCommand command)
@@ -30,14 +34,14 @@ namespace CaseManagement.Business.Service
                 {
                     Id = caseId,
                     Description = command.Description,
-                    DateOfIncident = (DateTime)command.DateOfIncident,
-                    CaseTypeId = await _caseHandler.GetCaseTypeId(command.CaseType),
+                    DateOfIncident = Convert.ToDateTime(command.DateOfIncident),
+                    CaseTypeId = await _caseQueryHandler.GetCaseTypeId(command.CaseType),
                     CaseNumber = $"CASE-{DateTime.UtcNow.Ticks}",
-                    CaseStatusId = await _caseHandler.GetCaseStatusId("Open"),
+                    CaseStatusId = await _caseQueryHandler.GetCaseStatusId("Open"),
                 };
 
-                var victim = await _caseHandler.GetPersonAsync(command.VictimName, command.VictimContact);
-                var accused = await _caseHandler.GetPersonAsync(command.AccusedName, command.AccusedContact);
+                var victim = await _caseQueryHandler.GetPersonAsync(command.VictimName, command.VictimContact);
+                var accused = await _caseQueryHandler.GetPersonAsync(command.AccusedName, command.AccusedContact);
 
                 if (victim == null || accused == null)
                 {
@@ -48,7 +52,7 @@ namespace CaseManagement.Business.Service
                 newCase.VictimId = victim.Id;
                 newCase.AccusedId = accused.Id;
 
-                var caseCreateResult = await _caseHandler.CreateCaseAsync(newCase);
+                var caseCreateResult = await _caseCommandHandler.CreateCaseAsync(newCase);
 
                 if (caseCreateResult.Status == OperationStatus.Success)
                 {
