@@ -34,50 +34,6 @@ namespace CaseManagement.Business.Commands
             return OperationResult<string>.Success(data: newCaseRaised.Id, message: "Case created successfully!");
 
         }
-
-
-        //public async Task<int> GetCaseTypeId(string caseType)
-        //{
-        //    var caseTypeEntity = await _caseContext.LookupConstants
-        //        .FirstOrDefaultAsync(lc => lc.Text.ToString() == caseType); 
-
-        //    if (caseTypeEntity == null)
-        //    {
-        //        throw new InvalidOperationException("Case type not found.");
-        //    }
-
-        //    return caseTypeEntity.Id; 
-        //}
-
-        //public async Task<Person> GetPersonAsync(string name, long contact)
-        //{
-        //    var person = await _caseContext.People
-        //        .FirstOrDefaultAsync(p => p.Name == name && p.Contact == contact);
-
-        //    if (person != null)
-        //    {
-        //        return person; 
-        //    }
-        //    return null;
-
-        //}
-
-
-     
-        //public async Task<int> GetCaseStatusId(string caseStatus)
-        //{
-        //    var caseStatusEntity = await _caseContext.LookupConstants
-        //        .FirstOrDefaultAsync(lc => lc.Text.ToString() == caseStatus);
-
-        //    if (caseStatusEntity == null)
-        //    {
-        //        throw new InvalidOperationException("Case status not found.");
-        //    }
-
-        //    return caseStatusEntity.Id;
-        //}
-
-
         public async Task<OperationResult<Case>> GetCaseByIdAsync(string caseNumber)
         {
             
