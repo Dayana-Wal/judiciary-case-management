@@ -20,16 +20,14 @@ namespace CaseManagement.Web.Models
     {
         public SearchModelValidator()
         {
-            // Validate SearchCategory if provided, otherwise it's optional
             RuleFor(model => model.SearchCategory)
                 .Must(category => string.IsNullOrEmpty(category) || new[] {
                 "CaseNumber", "VictimName", "AccusedName", "AdvocateName", "EmailAddress", "PhoneNumber"
                 }.Contains(category))
                 .WithMessage("Invalid search category.");
 
-            // Validate SearchValue if provided, otherwise it's optional
             RuleFor(model => model.SearchValue)
-                .Must(value => string.IsNullOrEmpty(value) || !string.IsNullOrEmpty(value))
+                .Must(value => string.IsNullOrEmpty(value) || !string.IsNullOrWhiteSpace(value))
                 .WithMessage("Search value is required.");
         }
     }
