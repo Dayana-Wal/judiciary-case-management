@@ -19,6 +19,7 @@ namespace CaseManagement.API
         {
             services.Configure<TwilioSettings>(configuration.GetSection("Twilio"));
             services.Configure<JwtSettings>(configuration.GetSection("Jwt"));
+            services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
 
             services.AddScoped<IPersonCommandHandler, PersonCommandHandler>();
             services.AddScoped<SignupManager>();
@@ -36,6 +37,9 @@ namespace CaseManagement.API
             services.AddScoped<CaseSearchManager>();
             services.AddScoped<IFileCommandHandler, FileCommandHandler>();
             services.AddScoped<FileManager>();
+            services.AddSingleton<EmailService>();
+            services.AddSingleton<EmailBackGroundService>();
+            services.AddHostedService(provider => provider.GetRequiredService<EmailBackGroundService>());
             services.AddMemoryCache();
             services.AddScoped<CaseCreationManager>();
             services.AddScoped<ICaseCommandHandler, CaseCommandHandler>();

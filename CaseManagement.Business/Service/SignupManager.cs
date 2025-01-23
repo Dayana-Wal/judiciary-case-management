@@ -49,6 +49,7 @@ namespace CaseManagement.Business.Services
 
             };
 
+
             var dataStoredResult = new OperationResult<List<string>>();
 
             var addPersonAndUserResult = await _dataHandler.CreateUserAsync(person, user);
@@ -59,8 +60,8 @@ namespace CaseManagement.Business.Services
             }
             else
             {
-                List<string> tempErrors = new List<string>() { addPersonAndUserResult.Data};
-                dataStoredResult = OperationResult<List<string>>.Failed(data: tempErrors, message: addPersonAndUserResult.Message);
+                dataStoredResult = OperationResult<List<string>>.Failed(data: [], message: addPersonAndUserResult.Data);
+
             }
 
             return dataStoredResult;

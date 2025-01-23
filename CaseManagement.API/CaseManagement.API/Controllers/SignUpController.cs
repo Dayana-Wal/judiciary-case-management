@@ -1,5 +1,7 @@
-﻿using CaseManagement.Business.Common;
+﻿using CaseManagement.API.Common;
+using CaseManagement.Business.Common;
 using CaseManagement.Business.Features.Signup;
+using CaseManagement.Business.Service;
 using CaseManagement.Business.Services;
 using CaseManagement.Business.Utility;
 using CaseManagement.DataAccess.Commands;
@@ -12,12 +14,14 @@ namespace CaseManagement.API.Controllers
     {
         private readonly SignupManager _signupManager;
         private readonly HashHelper _passwordService;
+        private readonly EmailBackGroundService _emailBackgroundService;
         private readonly IPersonCommandHandler _personCommandHandler;
 
-        public SignupController(SignupManager signupManager, HashHelper passwordservice,  IPersonCommandHandler personCommandHandler)
+        public SignupController(SignupManager signupManager, HashHelper passwordservice, EmailBackGroundService emailBackgroundService, IPersonCommandHandler personCommandHandler)
         {
             _passwordService = passwordservice;
             _signupManager = signupManager;
+            _emailBackgroundService = emailBackgroundService;
             _personCommandHandler = personCommandHandler;
         }
 
@@ -30,48 +34,36 @@ namespace CaseManagement.API.Controllers
             {
                 return BadRequest("Invalid user data.");
             }
-
             var validationResult = signupCommand.ValidateCommand();
             var signupResult = new OperationResult();
-
-            //var signupResult = new OperationResult();
-
 
             if (validationResult.IsValid)
             {
                 var dataStoreResult = await _signupManager.RegisterUser(signupCommand);
 
-                //signupResult.Status = dataStoreResult.Status;
-                //signupResult.Message = dataStoreResult.Message;
-
                 if (dataStoreResult.Status == OperationStatus.Success)
                 {
+                    var template = EmailTemplates.WelcomeEmail;
+                    _emailBackgroundService.QueueEmail(signupCommand.Email, template.Subject, template.Body);
                     signupResult = OperationResult.Success(message: dataStoreResult.Message);
-                    //return ToResponse(signupResult);
                 }
                 else if(dataStoreResult.Status == OperationStatus.Failed)
                 {
                     signupResult = OperationResult.Failed(message: dataStoreResult.Message);
 
                 }
-                //signupResult = OperationResultConverter.ConvertTo(signupResult, dataStoreResult.Data);
-
-                //var returnResponse = OperationResultConverter.ConvertTo(signupResult, dataStoreResult.Data);
-
                 return ToResponse(signupResult);
 
 
             }
             else
             {
-                var validationErrors = Extension.GetErrors(validationResult);
+                var validationErrors = new List<string>();
 
-                //signupResult.Status = "Failed";
-                //signupResult.Message = "Registration Failed";
-
-                //var returnResponse = OperationResultConverter.ConvertTo(signupResult, validationErrors);
-
-                //signupResult = OperationResultT<List<string>>.ValidationError(validationErrors);
+                foreach(var errors in validationResult.Errors)
+                {
+                    validationErrors.Add(errors.ErrorMessage);
+                }
                 
                 var returnResponse = OperationResult<List<string>>.ValidationError(data: validationErrors);
 
