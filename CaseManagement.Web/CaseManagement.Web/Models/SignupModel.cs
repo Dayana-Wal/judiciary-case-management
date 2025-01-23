@@ -41,7 +41,6 @@ namespace CaseManagement.Web.Models
         [Required(ErrorMessage = "Enter your {0} here to confirm")]
         [DisplayName("password")]
         [Compare("Password", ErrorMessage = "Password doesn't match")]
-        public string ConfirmPassword { get; set; }
-       
+        public string ConfirmPassword { get; set; }  
     }
 }

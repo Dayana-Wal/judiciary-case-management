@@ -36,7 +36,7 @@ namespace CaseManagement.Business.Service
                     Description = command.Description,
                     DateOfIncident = Convert.ToDateTime(command.DateOfIncident),
                     CaseTypeId = await _caseQueryHandler.GetCaseTypeId(command.CaseType),
-                    CaseNumber = $"CASE-{DateTime.UtcNow.Ticks}",
+                    CaseNumber = string.Concat(["CASE", "-", command.VictimName.Substring(0, 3), "-", command.DateOfIncident?.ToString("yyyyMMddHHmm")]),
                     CaseStatusId = await _caseQueryHandler.GetCaseStatusId("Open"),
                 };
 
