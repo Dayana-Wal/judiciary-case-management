@@ -89,29 +89,24 @@ namespace CaseManagement.Business.Commands
                 return OperationResult<string>.Failed("User ID and OTP cannot be null or empty.", null);
             }
 
-            //Get existed otp from db based on hash value and userId
             var otpExisted = await _dbContext.Otps
                 .FirstOrDefaultAsync(o => o.RequestedBy == userId && o.OtpHash == OtpProvider.HashOtp(otp));
 
-            //If otp is not existed
             if(otpExisted == null)
             {
                 return OperationResult<string>.Failed("OTP not found or invalid User ID.", null);
             }
 
-            //Compare OtpHash and otp
             if (otpExisted.OtpHash != OtpProvider.HashOtp(otp))
             {
                 return OperationResult<string>.Failed("Invalid OTP. Verification failed.", null);
             }
 
-            //Check the is otp expired or not
             if (otpExisted.ExpiresAt.HasValue && otpExisted.ExpiresAt.Value < DateTime.UtcNow)
             {
                 return OperationResult<string>.Failed("OTP has expired.", null);
             }
 
-            //Update in db
             otpExisted.IsVerified = true;
             _dbContext.Otps.Update(otpExisted);
             await _dbContext.SaveChangesAsync();

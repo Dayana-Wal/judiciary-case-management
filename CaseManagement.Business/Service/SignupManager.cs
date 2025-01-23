@@ -32,7 +32,6 @@ namespace CaseManagement.Business.Services
             {
                 Id = personId,
                 Name = command.Name,
-
                 Email = command.Email,
                 Contact = Convert.ToInt64(command.Contact),
                 DateOfBirth = Convert.ToDateTime(command.DateOfBirth),

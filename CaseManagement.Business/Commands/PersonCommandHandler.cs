@@ -16,15 +16,17 @@ namespace CaseManagement.DataAccess.Commands
 
         public async Task<OperationResult<string>> CreateUserAsync(Person person, User user)
         {
-            var existingPerson = await _context.People
-                .FirstOrDefaultAsync(p => p.Email == person.Email);
+            {
+
+                var existingPerson = await _context.People
+                    .FirstOrDefaultAsync(p => p.Email == person.Email);
 
             if (existingPerson != null)
             {
                 return OperationResult<string>.Failed($"Person with this email: {person.Email} already exists");                    
             }
 
-            await _context.People.AddAsync(person);
+                await _context.People.AddAsync(person);
 
             var existingUser = await _context.Users
                 .FirstOrDefaultAsync(u => u.UserName.ToLower() == user.UserName.ToLower());
@@ -34,24 +36,19 @@ namespace CaseManagement.DataAccess.Commands
                 return OperationResult<string>.Failed($"User with this username: {user.UserName} already exists");
             }
 
-            await _context.Users.AddAsync(user);
+                await _context.Users.AddAsync(user);
 
-            await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
 
-            return OperationResult<string>.Success("Details stored successfully!");
+                return OperationResult<string>.Success("Details stored successfully!");
 
         }
 
-        public Task DeleteAsync<T>(Person person)
-        {
-            throw new NotImplementedException();
         }
 
-        public Task UpdateAsync<T>(Person person)
-        {
-            throw new NotImplementedException();
-        }
+    }
+
+}
 
         
-    }
-}
+ 

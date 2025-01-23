@@ -2,7 +2,9 @@
 function getToken() {
     return localStorage.getItem('authToken');
 }
-
+function getUser() {
+    return localStorage.getItem('user');
+}
 //function to set the token and user data in localStorage after login
 function storeUserSession(token, user) {
     localStorage.setItem('authToken', token);

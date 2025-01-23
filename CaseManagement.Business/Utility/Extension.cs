@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FluentValidation.Results;
+using System;
 using System.Collections.Generic;
 using FluentValidation;
 using System.Linq;
@@ -13,10 +14,12 @@ namespace CaseManagement.Business.Utility
         public static List<String> GetErrors(this ValidationResult validationResult)
         {
             var validationErrors = new List<string>();
+
             foreach (var errors in validationResult.Errors)
             {
                 validationErrors.Add(errors.ErrorMessage);
             }
+
             return validationErrors;
         }
     }

@@ -12,10 +12,14 @@ namespace CaseManagement.DataAccess.Migrations
                 .WithColumn("CaseTypeId").AsInt32().NotNullable().ForeignKey("LookupConstant", "Id")
                 .WithColumn("Description").AsString(1000).NotNullable()
                 .WithColumn("CaseNumber").AsString(50).NotNullable().Unique()
+
+                //.WithColumn("DateOfIncident").AsDateTime().NotNullable()
+
                 .WithColumn("AccusedId").AsString(26).NotNullable().ForeignKey("Person", "Id")
                 .WithColumn("VictimId").AsString(26).NotNullable().ForeignKey("Person", "Id")
                 .WithColumn("AdvocateId").AsString(26).Nullable().ForeignKey("Person", "Id")
                 .WithColumn("CaseStatusId").AsInt32().NotNullable().ForeignKey("LookupConstant", "Id");
+                
 
             Create.Table("File")
                 .WithColumn("Id").AsString(26).PrimaryKey()
