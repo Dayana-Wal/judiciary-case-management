@@ -64,7 +64,7 @@
         const tbody = $('<tbody></tbody>');
 
         // Define columns
-        const columns = ['Case Number', 'Victim Name', 'Accused Name', 'Advocate Name', 'Case Status'];
+        const columns = ['Case Number', 'Victim Name', 'Accused Name', 'Advocate Name', 'Case Status', 'DateOfIncident'];
         const headerRow = $('<tr></tr>');
         columns.forEach(col => headerRow.append(`<th>${col}</th>`));
         thead.append(headerRow);
@@ -76,6 +76,11 @@
             columns.forEach(col => {
                 row.append(`<td>${getValueForColumn(col, result)}</td>`);
             });
+            // Add "View" icon in the last column
+            const viewCell = $('<td></td>');
+            const viewIcon = $('<i class="fas fa-eye" style="cursor: pointer;"></i>');
+            viewCell.append(viewIcon);
+            row.append(viewCell);
             tbody.append(row);
         });
 
@@ -97,10 +102,12 @@
             case 'Accused Name': return result.accused?.name || 'N/A';
             case 'Advocate Name': return result.advocate?.name || 'N/A';
             case 'Case Status': return result.caseStatus?.text || 'N/A';
+            case 'DateOfIncident':
+                return result.dateOfIncident
+                    ? new Date(result.dateOfIncident).toLocaleDateString()
+                    : 'N/A';
             default: return 'N/A';
         }
     }
-
-    // Fetch all cases when the page loads
-    fetchCases();  // This will fetch all cases on page load
+    fetchCases();
 });
