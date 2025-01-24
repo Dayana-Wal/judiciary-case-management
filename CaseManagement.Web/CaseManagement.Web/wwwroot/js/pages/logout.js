@@ -20,7 +20,7 @@ function renderNavLinks() {
                 <a class="nav-link text-dark" href="/CaseCreation/createCase">Add Case</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-dark" href="/CaseSearch/Search">Search</a>
+                <a class="nav-link text-dark" href="/CaseSearch/Search">Cases</a>
             </li>
             <li class="nav-item ms-auto">
                 <a class="nav-link text-dark" href="#" onclick="logout()">Logout</a>
