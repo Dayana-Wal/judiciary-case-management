@@ -6,6 +6,13 @@
             console.warn("Form validation failed.");
             return;
         }
+        const doi = new Date($('#DateOfIncident').val())
+        const today = new Date()
+        if (doi > today) {
+            $('#DateOfIncident').addClass('is-invalid'); // Add error class
+            return alert("Date of incident should not be in future");
+        }
+        $('#DateOfIncident').removeClass('is-invalid');
         const token = getToken();
         const user = getUser();
         const currentUser = JSON.parse(user);
