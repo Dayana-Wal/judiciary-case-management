@@ -41,7 +41,7 @@ namespace CaseManagement.API
             services.AddSingleton<EmailBackGroundService>();
             services.AddHostedService(provider => provider.GetRequiredService<EmailBackGroundService>());
             services.AddMemoryCache();
-            services.AddScoped<CaseCreationManager>();
+            services.AddScoped<CaseManager>();
             services.AddScoped<ICaseCommandHandler, CaseCommandHandler>();
             services.AddScoped<ICaseQueryHandler, CaseQueryHandler>();
             services.AddScoped<ICaseFileCommandHandler, CaseFileCommandHandler>();

@@ -1,4 +1,5 @@
 ﻿using CaseManagement.Business.Common;
+using CaseManagement.Business.Features.Case;
 using CaseManagement.DataAccess.Entities;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,7 @@ namespace CaseManagement.Business.Commands
         //Task<int> GetCaseStatusId(string caseStatus);
 
         Task<OperationResult<string>> CreateCaseAsync(Case newCase);
+        Task<OperationResult<string>> AssignAdvocate(AssignAdvocateCommand assignAdvocateCommand);
         Task<OperationResult<Case>> GetCaseByIdAsync(string caseNumber);
         Task<OperationResult<IEnumerable<Case>>> GetAllCasesAsync();
         //Task<OperationResult<Case>> UpdateCaseAsync(Case updatedCase);

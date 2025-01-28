@@ -9,12 +9,12 @@ namespace CaseManagement.API.Controllers
 {
     public class CaseController : BaseController
     {
-        private readonly CaseCreationManager _caseCreationManager;
+        private readonly CaseManager _caseManager;
         private readonly ICaseCommandHandler _caseCommandHandler;
 
-        public CaseController(CaseCreationManager caseCreationManager, ICaseCommandHandler caseCommandHandler)
+        public CaseController(CaseManager caseManager, ICaseCommandHandler caseCommandHandler)
         {
-            _caseCreationManager = caseCreationManager;
+            _caseManager = caseManager;
             _caseCommandHandler = caseCommandHandler;
         }
 
@@ -32,7 +32,7 @@ namespace CaseManagement.API.Controllers
 
             if (validationResult.IsValid)
             {
-                var dataStoreResult = await _caseCreationManager.RegisterCase(createCaseCommand);
+                var dataStoreResult = await _caseManager.RegisterCase(createCaseCommand);
                 if (dataStoreResult.Status == OperationStatus.Success)
                 {
                     caseCreationResult = OperationResult.Success(message: dataStoreResult.Message);
@@ -56,6 +56,26 @@ namespace CaseManagement.API.Controllers
                 return ToResponse(returnResponse);
 
             }
+        }
+
+        [HttpPost("assign-advocate")]
+        public async Task<IActionResult> AssignAdvocate([FromBody] AssignAdvocateCommand assignAdvocateCommand)
+        {
+            if(assignAdvocateCommand is null)
+            {
+                return BadRequest("Invalid Data");
+            }
+
+            var validationResult = assignAdvocateCommand.Validate();
+            if (!validationResult.IsValid)
+            {
+                var validationErrors = Extension.GetErrors(validationResult);
+                var res = OperationResult<List<string>>.ValidationError(data: validationErrors);
+                return ToResponse(res);
+            }
+
+            var response = await _caseManager.AssignAdvocate(assignAdvocateCommand);
+            return ToResponse(response);
         }
     }
             

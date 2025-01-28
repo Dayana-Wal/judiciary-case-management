@@ -10,18 +10,23 @@ using System.Threading.Tasks;
 
 namespace CaseManagement.Business.Service
 {
-    public class CaseCreationManager : BaseManager
+    public class CaseManager : BaseManager
     {
         private readonly ICaseCommandHandler _caseCommandHandler;
         private readonly ICaseFileCommandHandler _caseFileHandler;
         private readonly ICaseQueryHandler _caseQueryHandler;
 
 
-        public CaseCreationManager(ICaseCommandHandler caseHandler, ICaseFileCommandHandler caseFileCommandHandler, ICaseQueryHandler caseQueryHandler)
+        public CaseManager(ICaseCommandHandler caseHandler, ICaseFileCommandHandler caseFileCommandHandler, ICaseQueryHandler caseQueryHandler)
         {
             _caseCommandHandler = caseHandler;
             _caseFileHandler = caseFileCommandHandler;
             _caseQueryHandler = caseQueryHandler;
+        }
+
+        public async Task<OperationResult<string>> AssignAdvocate(AssignAdvocateCommand assignAdvocateCommand)
+        {
+            return await _caseCommandHandler.AssignAdvocate(assignAdvocateCommand);
         }
 
         public async Task<OperationResult<List<string>>> RegisterCase(CreateCaseCommand command)
