@@ -21,6 +21,8 @@ namespace CaseManagement.API
             services.Configure<JwtSettings>(configuration.GetSection("Jwt"));
             services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
 
+            services.AddHttpContextAccessor();
+
             services.AddScoped<IPersonCommandHandler, PersonCommandHandler>();
             services.AddScoped<SignupManager>();
             services.AddScoped<HashHelper>();
@@ -37,6 +39,7 @@ namespace CaseManagement.API
             services.AddScoped<CaseSearchManager>();
             services.AddScoped<IFileCommandHandler, FileCommandHandler>();
             services.AddScoped<FileManager>();
+            services.AddScoped<AdminManager>();
             services.AddSingleton<EmailService>();
             services.AddSingleton<EmailBackGroundService>();
             services.AddHostedService(provider => provider.GetRequiredService<EmailBackGroundService>());
@@ -46,6 +49,8 @@ namespace CaseManagement.API
             services.AddScoped<ICaseQueryHandler, CaseQueryHandler>();
             services.AddScoped<ICaseFileCommandHandler, CaseFileCommandHandler>();
             services.AddScoped<ILookUpConstantsQuery, LookUpConstantsQuery>();
+            services.AddScoped<IRoleUpdateCommandHandler, RoleUpdateCommandHandler>();
+
             services.AddScoped<IAdvocateQueryHandler, AdvocateQueryHandler>();
             services.AddScoped<AdvocateManager>();
             services.AddControllers(options =>

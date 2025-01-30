@@ -4,6 +4,13 @@
 
     const token = getToken();
 
+    const roleMapping = {
+        'GEN': 'General',
+        'ADM': 'Admin',
+        'JUG': 'Judge',
+        'ADV': 'Advocate',
+        'JDO': 'Judicial Officer'
+    };
     loadUsers(currentPage, pageSize);
     function loadUsers(page, pageSize) {
         $.ajax({
@@ -32,6 +39,7 @@
     </tr></thead><tbody>`;
 
         users.forEach(user => {
+            const roleText = roleMapping[user.role] || user.role;
             html += `<tr data-user-id="${user.id}" data-role="${user.role}">
             <td>${user.userName}</td>
             <td>${user.name}</td>
@@ -104,16 +112,19 @@
         });
     }
 
-    function openEditPopup(userId, currentRole) {
+    function openEditPopup(userId, currentRoleCode) {
+        const currentRoleText = roleMapping[currentRoleCode] || currentRoleCode;
         const popupHtml = `
             <div id="edit-popup" class="popup-overlay">
                 <div class="popup-content">
                     <button class="popup-close">&times;</button>
                     <h5>Edit User Role</h5>
                     <select id="edit-role" class="form-control">
-                        <option value="admin" ${currentRole === 'admin' ? 'selected' : ''}>Admin</option>
-                        <option value="general" ${currentRole === 'general' ? 'selected' : ''}>General</option>
-                        <option value="hold" ${currentRole === 'hold' ? 'selected' : ''}>Hold</option>
+                        <option value="GEN" ${currentRoleCode === 'GEN' ? 'selected' : ''}>General</option>
+                        <option value="ADM" ${currentRoleCode === 'ADM' ? 'selected' : ''}>Admin</option>
+                        <option value="JUG" ${currentRoleCode === 'JUG' ? 'selected' : ''}>Judge</option>
+                        <option value="ADV" ${currentRoleCode === 'ADV' ? 'selected' : ''}>Advocate</option>
+                        <option value="JDO" ${currentRoleCode === 'JDO' ? 'selected' : ''}>Judicial Officer</option>
                     </select>
                     <button id="update-btn" class="btn btn-success mt-3">Update</button>
                 </div>
@@ -123,26 +134,24 @@
         $('#edit-popup').fadeIn();
 
         $('#update-btn').click(function () {
-            const newRole = $('#edit-role').val();
+            const newRoleCode = $('#edit-role').val();
             $.ajax({
-                url: `https://localhost:7123/api/admin/users/${userId}`,
-                type: 'PATCH',
+                url: `https://localhost:7123/api/Admin/UpdateUserRole?UserId=${userId}&RoleName=${newRoleCode}`,
+                type: 'PUT',
                 headers: {
-                    'Authorization': 'Bearer <your-token-here>',
-                    'Content-Type': 'application/json'
+                    'Authorization': `Bearer ${token}`,
                 },
-                data: JSON.stringify({ role: newRole }),
                 success: function () {
                     alert('User role updated successfully.');
                     $('#edit-popup').fadeOut(() => $('#edit-popup').remove());
                     loadUsers(currentPage, pageSize);
                 },
-                error: function () {
-                    alert('Error updating user role.');
-                }
+                error: function (xhr) {
+                    alert('Error updating user role: ' + (xhr.responseJSON?.message || 'Please try again.'));
+                },
+                data: null,
             });
         });
-
         $('.popup-close').click(function () {
             $('#edit-popup').fadeOut(() => $('#edit-popup').remove());
         });
