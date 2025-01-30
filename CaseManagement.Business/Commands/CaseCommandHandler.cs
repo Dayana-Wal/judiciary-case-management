@@ -18,6 +18,13 @@ namespace CaseManagement.Business.Commands
             _caseContext = context;
         }
 
+        public async Task<OperationResult<string>> AssignAdvocate(AssignAdvocateCommand assignAdvocateCommand, Case existingCase)
+        {
+            existingCase.AdvocateId = assignAdvocateCommand.AdvocateId;
+            _caseContext.SaveChanges();
+            return OperationResult<string>.Success("Successfully assigned the advocate to the given case");
+        }
+
         public async Task<OperationResult<string>> CreateCaseAsync(Case newCaseRaised)
         {
             var existingCase = await _caseContext.Cases

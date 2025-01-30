@@ -44,13 +44,15 @@ namespace CaseManagement.API
             services.AddSingleton<EmailBackGroundService>();
             services.AddHostedService(provider => provider.GetRequiredService<EmailBackGroundService>());
             services.AddMemoryCache();
-            services.AddScoped<CaseCreationManager>();
+            services.AddScoped<CaseManager>();
             services.AddScoped<ICaseCommandHandler, CaseCommandHandler>();
             services.AddScoped<ICaseQueryHandler, CaseQueryHandler>();
             services.AddScoped<ICaseFileCommandHandler, CaseFileCommandHandler>();
             services.AddScoped<ILookUpConstantsQuery, LookUpConstantsQuery>();
             services.AddScoped<IRoleUpdateCommandHandler, RoleUpdateCommandHandler>();
 
+            services.AddScoped<IAdvocateQueryHandler, AdvocateQueryHandler>();
+            services.AddScoped<AdvocateManager>();
             services.AddControllers(options =>
             {
                 options.Filters.Add<GlobalExceptionFilter>();
