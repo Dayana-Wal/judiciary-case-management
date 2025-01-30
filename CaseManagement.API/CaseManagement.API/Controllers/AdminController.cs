@@ -30,5 +30,19 @@ namespace CaseManagement.API.Controllers
             OperationResult<PagedList<UsersDto>> response = await _adminManager.GetUsers(usersQuery);
             return ToResponse(response);
         }
+
+        [HttpPut("UpdateUserRole")]
+        public async Task<IActionResult> UpdateUserRole([FromQuery] string userId, [FromQuery] string roleName)
+        {
+            if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(roleName))
+            {
+                var validationErrors = new List<string> { "UserId and RoleName are required." };
+                var returnResponse = OperationResult<List<string>>.ValidationError(data: validationErrors);
+                return ToResponse(returnResponse);
+            }
+
+            var result = await _adminManager.UpdateUserRoleAsync(userId, roleName);
+                return ToResponse(result);
+        }
     }
 }
