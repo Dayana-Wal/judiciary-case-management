@@ -1,4 +1,5 @@
-﻿using CaseManagement.DataAccess.Entities;
+﻿using CaseManagement.Business.Features.Case;
+using CaseManagement.DataAccess.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace CaseManagement.Business.Queries
@@ -48,6 +49,12 @@ namespace CaseManagement.Business.Queries
             }
 
             return caseStatusEntity.Id;
+        }
+
+        public async Task<Case?> GetExistingCase(string caseId)
+        {
+            var existingCase = await _caseContext.Cases.FirstOrDefaultAsync(c => c.Id == caseId);
+            return existingCase;
         }
     }
 }

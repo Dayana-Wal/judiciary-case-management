@@ -16,7 +16,7 @@ namespace CaseManagement.Business.Commands
         //Task<int> GetCaseStatusId(string caseStatus);
 
         Task<OperationResult<string>> CreateCaseAsync(Case newCase);
-        Task<OperationResult<string>> AssignAdvocate(AssignAdvocateCommand assignAdvocateCommand);
+        Task<OperationResult<string>> AssignAdvocate(AssignAdvocateCommand assignAdvocateCommand, Case existingCase);
         Task<OperationResult<Case>> GetCaseByIdAsync(string caseNumber);
         Task<OperationResult<IEnumerable<Case>>> GetAllCasesAsync();
         //Task<OperationResult<Case>> UpdateCaseAsync(Case updatedCase);

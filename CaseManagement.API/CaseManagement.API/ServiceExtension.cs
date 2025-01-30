@@ -46,7 +46,8 @@ namespace CaseManagement.API
             services.AddScoped<ICaseQueryHandler, CaseQueryHandler>();
             services.AddScoped<ICaseFileCommandHandler, CaseFileCommandHandler>();
             services.AddScoped<ILookUpConstantsQuery, LookUpConstantsQuery>();
-
+            services.AddScoped<IAdvocateQueryHandler, AdvocateQueryHandler>();
+            services.AddScoped<AdvocateManager>();
             services.AddControllers(options =>
             {
                 options.Filters.Add<GlobalExceptionFilter>();

@@ -22,5 +22,13 @@ namespace CaseManagement.Business.Queries
 
         }
 
+        public async Task<User?> GetUserRole(string personId)
+        {
+            var user = await _context.Users
+                .Include(u => u.Role)
+                .Include(u=> u.Person)
+                .FirstOrDefaultAsync(user => user.PersonId == personId);
+            return user;
+        }
     }
 }

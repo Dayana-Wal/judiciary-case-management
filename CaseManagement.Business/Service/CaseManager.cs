@@ -15,18 +15,32 @@ namespace CaseManagement.Business.Service
         private readonly ICaseCommandHandler _caseCommandHandler;
         private readonly ICaseFileCommandHandler _caseFileHandler;
         private readonly ICaseQueryHandler _caseQueryHandler;
+        private readonly IPersonQueryHandler _personQueryHandler;
 
 
-        public CaseManager(ICaseCommandHandler caseHandler, ICaseFileCommandHandler caseFileCommandHandler, ICaseQueryHandler caseQueryHandler)
+        public CaseManager(ICaseCommandHandler caseHandler, ICaseFileCommandHandler caseFileCommandHandler, ICaseQueryHandler caseQueryHandler, IPersonQueryHandler personQueryHandler)
         {
             _caseCommandHandler = caseHandler;
             _caseFileHandler = caseFileCommandHandler;
             _caseQueryHandler = caseQueryHandler;
+            _personQueryHandler = personQueryHandler;
         }
 
         public async Task<OperationResult<string>> AssignAdvocate(AssignAdvocateCommand assignAdvocateCommand)
         {
-            return await _caseCommandHandler.AssignAdvocate(assignAdvocateCommand);
+            var existingCase = await _caseQueryHandler.GetExistingCase(assignAdvocateCommand.CaseId);
+            var existingUser = await _personQueryHandler.GetUserRole(assignAdvocateCommand.AdvocateId);
+            if (existingCase == null || existingUser == null)
+            {
+                return OperationResult<string>.Failed("Given case id or advocate not found in the db");
+            }
+            if(existingUser.Role.Code.ToUpper() != "ADV"){
+                return OperationResult<string>.Failed("Given person is not an advocate");
+            }
+            var res = await _caseCommandHandler.AssignAdvocate(assignAdvocateCommand,existingCase);
+            return res;
+
+
         }
 
         public async Task<OperationResult<List<string>>> RegisterCase(CreateCaseCommand command)
