@@ -21,6 +21,7 @@ namespace CaseManagement.Business.Queries
                 .Include(c => c.Victim)
                 .Include(c => c.Accused)
                 .Include(c => c.Advocate)
+                .Include(c => c.CaseStatus)
                 .FirstOrDefaultAsync(c => c.Id == caseId);
 
             if (caseEntity == null)
