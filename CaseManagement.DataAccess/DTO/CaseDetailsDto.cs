@@ -10,9 +10,16 @@ namespace CaseManagement.DataAccess.DTO
     {
         public string CaseNumber { get; set; }
         public string CaseStatus { get; set; }
+
+        public string CaseType { get; set; }
+        public string Description {  get; set; }
+
+        public DateTime DateOfIncident { get; set; }
         public PersonDto Victim { get; set; }
         public PersonDto Accused { get; set; }
         public PersonDto? Advocate { get; set; }
+
+        
     }
 
     public class PersonDto

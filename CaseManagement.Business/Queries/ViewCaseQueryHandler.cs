@@ -22,6 +22,7 @@ namespace CaseManagement.Business.Queries
                 .Include(c => c.Accused)
                 .Include(c => c.Advocate)
                 .Include(c => c.CaseStatus)
+                .Include(c=> c.CaseType)
                 .FirstOrDefaultAsync(c => c.Id == caseId);
 
             if (caseEntity == null)
@@ -31,6 +32,9 @@ namespace CaseManagement.Business.Queries
             {
                 CaseNumber = caseEntity.CaseNumber,
                 CaseStatus = caseEntity.CaseStatus?.Text ?? "",
+                CaseType = caseEntity.CaseType?.Text ?? "",
+                Description = caseEntity.Description,
+                DateOfIncident = caseEntity.DateOfIncident,
                 Victim = new PersonDto
                 {
                     Name = caseEntity.Victim?.Name ?? "",
