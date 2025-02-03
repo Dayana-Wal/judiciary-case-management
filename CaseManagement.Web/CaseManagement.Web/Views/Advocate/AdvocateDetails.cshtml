@@ -1,0 +1,22 @@
+﻿@{
+    var apiBaseUrl = ViewBag.ApiBaseUrl;
+}
+<h2>Advocate Details</h2>
+<table class="table">
+    <thead>
+        <th>Name</th>
+        <th>Contact</th>
+        <th>Email</th>
+        <th>Active cases</th>
+        <th>Hire Advocates</th>
+    </thead>
+    <tbody id="advocatesBody">
+
+    </tbody>
+</table>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    // Set the API base URL in a global JavaScript variable
+    var apiBaseUrl = "@apiBaseUrl"; // This will be replaced by the value from ViewData
+</script>
+<script src="~/js/pages/advocate.js"></script>

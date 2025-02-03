@@ -22,6 +22,9 @@ function renderNavLinks() {
             <li class="nav-item">
                 <a class="nav-link text-dark" href="/CaseSearch/Search">Cases</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" href="/Advocate/details">Advocates</a>
+            </li>
             <li class="nav-item ms-auto">
                 <a class="nav-link text-dark" href="#" onclick="logout()">Logout</a>
             </li>

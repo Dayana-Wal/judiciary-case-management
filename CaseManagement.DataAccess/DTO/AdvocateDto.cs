@@ -12,5 +12,6 @@ namespace CaseManagement.DataAccess.DTO
         public string Name { get; set; } = null!;
         public string Email { get; set; } = null!;
         public long Contact { get; set; } 
+        public int ActiveCases { get; set; }
     }
 }

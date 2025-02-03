@@ -16,29 +16,25 @@ namespace CaseManagement.Business.Queries
         }
         public async Task<List<AdvocateDto>> GetAdvocates()
         {
-            var advocates = await _context.People.FromSqlInterpolated($@"SELECT
-                                p.Id, p.Name, p.Contact, p.Email, lc.Code
-                                FROM Person p
-                                INNER JOIN[User] u ON p.Id = u.PersonId
-                                INNER JOIN LookupConstant lc ON lc.Id = u.RoleId
-                                LEFT JOIN[Case] c ON c.AdvocateId = p.Id
-                                LEFT JOIN LookupConstant clc ON clc.Id = c.CaseStatusId
-                                WHERE
-                                    lc.Type = {AdvocateRoleConstant.UserRoleType}
-                                    AND lc.Code = {AdvocateRoleConstant.AdvocateRoleCode}
-                                    AND(c.Id IS NULL OR clc.Code NOT IN('CLS', 'REJ'))
-                                GROUP BY
-                                    p.Id, p.Name, p.Contact, p.Email, lc.Code
-                                HAVING
-                                    COUNT(c.Id) <= {AdvocateRoleConstant.ActiveCaseCount} ")
-                        .Select(p => new AdvocateDto
-                        {
-                            Id = p.Id,
-                            Name = p.Name,
-                            Contact = p.Contact,
-                            Email = p.Email,
-                        })
-                        .ToListAsync();
+            string sqlQuery = string.Format(@"
+                SELECT p.Id, p.Name, p.Contact, p.Email, lc.Code, COUNT(c.Id) AS ActiveCases
+                FROM Person p
+                INNER JOIN [User] AS u ON p.Id = u.PersonId
+                INNER JOIN LookupConstant lc ON lc.Id = u.RoleId
+                LEFT JOIN [Case] AS c ON c.AdvocateId = p.Id
+                LEFT JOIN LookupConstant clc ON clc.Id = c.CaseStatusId
+                WHERE lc.Type = '{0}'
+                    AND lc.Code = '{1}'
+                    AND (c.Id IS NULL OR clc.Code NOT IN ('CLS', 'REJ'))
+                GROUP BY p.Id, p.Name, p.Contact, p.Email, lc.Code
+                HAVING COUNT(c.Id) < {2}",
+                AdvocateRoleConstant.UserRoleType,
+                AdvocateRoleConstant.AdvocateRoleCode,
+                AdvocateRoleConstant.ActiveCaseCount);
+
+            var advocates = await _context.Database.SqlQueryRaw<AdvocateDto>(sqlQuery).ToListAsync();
+
+
             return advocates;
         }
     }
