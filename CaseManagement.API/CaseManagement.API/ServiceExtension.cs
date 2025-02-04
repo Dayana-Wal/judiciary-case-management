@@ -52,6 +52,8 @@ namespace CaseManagement.API
             services.AddScoped<IRoleUpdateCommandHandler, RoleUpdateCommandHandler>();
 
             services.AddScoped<IAdvocateQueryHandler, AdvocateQueryHandler>();
+            services.AddScoped<IViewCaseQueryHandler, ViewCaseQueryHandler>();
+            services.AddScoped<ViewCaseManager>();
             services.AddScoped<AdvocateManager>();
             services.AddControllers(options =>
             {

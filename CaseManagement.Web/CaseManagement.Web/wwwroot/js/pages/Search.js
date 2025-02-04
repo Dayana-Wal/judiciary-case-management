@@ -72,6 +72,8 @@
 
         // Append rows based on response data
         results.forEach(result => {
+            //console.log(result)
+            console.log(result.id);
             const row = $('<tr></tr>');
             columns.forEach(col => {
                 row.append(`<td>${getValueForColumn(col, result)}</td>`);
@@ -79,6 +81,10 @@
             // Add "View" icon in the last column
             const viewCell = $('<td></td>');
             const viewIcon = $('<i class="fas fa-eye" style="cursor: pointer;"></i>');
+            viewIcon.on('click', function () {
+                const caseId = result.id;
+                window.location.href = `/ViewCase/CaseDetails?caseId=${caseId}`;
+            });
             viewCell.append(viewIcon);
             row.append(viewCell);
             tbody.append(row);

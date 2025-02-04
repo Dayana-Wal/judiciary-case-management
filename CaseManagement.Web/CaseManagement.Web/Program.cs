@@ -25,7 +25,13 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapControllerRoute(
+    name: "ViewCase",
+    pattern: "ViewCase/CaseDetails/{caseId}",
+    defaults: new { controller = "ViewCase", action = "CaseView" });
+
+app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
 
 app.Run();

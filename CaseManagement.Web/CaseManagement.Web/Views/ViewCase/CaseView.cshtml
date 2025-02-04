@@ -1,0 +1,101 @@
+﻿@model ViewCaseModel
+@{
+    var apiBaseUrl = ViewBag.ApiBaseUrl;
+}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Case Details</h2>
+
+    <div class="accordion" id="caseDetailsAccordion">
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingCase">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCase" aria-expanded="true" aria-controls="collapseCase">
+                    Case Details
+                </button>
+            </h2>
+            <div id="collapseCase" class="accordion-collapse collapse show" aria-labelledby="headingCase" data-bs-parent="#caseDetailsAccordion">
+                <div class="accordion-body">
+                    <!-- First row: Case Number and Case Status -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Case Number:</strong> <span id="caseNumber">@Model.CaseNumber</span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Case Status:</strong> <span id="caseStatus">@Model.CaseStatus</span></p>
+                        </div>
+                    </div>
+
+                    <!-- Second row: Case Type and Date of Incident -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Case Type:</strong> <span id="caseType">@Model.CaseType</span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Date of Incident:</strong> <span id="dateOfIncident">@Model.DateOfIncident</span></p>
+                        </div>
+                    </div>
+
+                    <!-- Third row: Description -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p><strong>Description:</strong> <span id="description">@Model.Description</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingVictim">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseVictim" aria-expanded="false" aria-controls="collapseVictim">
+                    Victim Details
+                </button>
+            </h2>
+            <div id="collapseVictim" class="accordion-collapse collapse" aria-labelledby="headingVictim" data-bs-parent="#caseDetailsAccordion">
+                <div class="accordion-body">
+                    <p><strong>Name:</strong> <span id="victimName">@Model.Victim?.Name</span></p>
+                    <p><strong>Email:</strong> <span id="victimEmail">@Model.Victim?.Email</span></p>
+                    <p><strong>Phone Number:</strong> <span id="victimContact">@Model.Victim?.Contact</span></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingAccused">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAccused" aria-expanded="false" aria-controls="collapseAccused">
+                    Accused Details
+                </button>
+            </h2>
+            <div id="collapseAccused" class="accordion-collapse collapse" aria-labelledby="headingAccused" data-bs-parent="#caseDetailsAccordion">
+                <div class="accordion-body">
+                    <p><strong>Name:</strong> <span id="accusedName">@Model.Accused?.Name</span></p>
+                    <p><strong>Email:</strong> <span id="accusedEmail">@Model.Accused?.Email</span></p>
+                    <p><strong>Phone Number:</strong> <span id="accusedContact">@Model.Accused?.Contact</span></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="headingAdvocate">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAdvocate" aria-expanded="false" aria-controls="collapseAdvocate">
+                    Advocate Details
+                </button>
+            </h2>
+            <div id="collapseAdvocate" class="accordion-collapse collapse" aria-labelledby="headingAdvocate" data-bs-parent="#caseDetailsAccordion">
+                <div class="accordion-body" style="position: relative;">
+                    <p><strong>Name:</strong> <span id="advocateName">@Model.Advocate?.Name</span></p>
+                    <p><strong>Email:</strong> <span id="advocateEmail">@Model.Advocate?.Email</span></p>
+                    <p><strong>Phone Number:</strong> <span id="advocateContact">@Model.Advocate?.Contact</span></p>
+                    <button id="hireAdvocateBtn" class="btn btn-primary" style="display: none; position: absolute; top: 10px; right: 10px;">Hire Advocate</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var apiBaseUrl = "@apiBaseUrl";
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="~/js/pages/ViewCase.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
