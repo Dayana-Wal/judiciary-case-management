@@ -54,6 +54,7 @@
                 if (!data.advocate) {
                     $('#hireAdvocateBtn').show();
                 }
+
             }
             
         },
@@ -61,5 +62,10 @@
             alert('Error fetching case details.');
             window.location.href = '/CaseSearch/search';
         }
+    });
+
+    $('#hireAdvocateBtn').on('click', function () {
+        const advocateUrl = '/Advocate/Details';
+        window.location.href = advocateUrl;
     });
 });
