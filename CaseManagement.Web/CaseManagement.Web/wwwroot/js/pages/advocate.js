@@ -15,11 +15,25 @@
                     <td>${advocate.contact}</td>
                     <td>${advocate.email}</td>
                     <td>${advocate.activeCases} </td>
-                    <td><button class="btn btn-primary">Hire</button></td>
+                    <td><button class="btn btn-primary hire-btn" data-id ="${advocate.id}">Hire</button></td>
                 </tr>
                 `);
         });
     }
     apiRequest(url, type, null, headers, null, handleSuccess, handleError)
 
+    const hireSuccess = (response) => {
+        alert(response.Data || "Advocate hired successfully!");
+    }
+    $(document).on("click", ".hire-btn", function () {
+        const advocateId = $(this).data("id");
+        //TODO: Change caseId
+        const data = JSON.stringify({
+            advocateId: advocateId,
+            caseId: "01JJB9YHYW2P6SCN5T6DM66QE7"
+        });
+
+
+        apiRequest(apiBaseUrl + "/Case/assign-advocate", "POST", "application/json", headers, data, hireSuccess, handleError)
+    })
 }) 
