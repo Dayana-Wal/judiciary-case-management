@@ -60,7 +60,6 @@
             formData.append('Files', files[i]);
         }
 
-        //TODO: Add additional fields --> uploadedBy-userName and fileTypeId 
         formData.append('uploadedBy', currentUser.userName);
         formData.append('fileTypeCode', 'CSD');
         return formData;

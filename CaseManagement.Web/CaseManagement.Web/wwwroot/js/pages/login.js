@@ -12,62 +12,28 @@
                 formData.DateOfBirth = null;
             }
             console.log("formData --", formData)
-            $.ajax({
-                url: apiBaseUrl + "/Login/user",
-                type: "POST",
-                contentType: "application/json",
-                data: JSON.stringify(formData),
-                success: function (response) {
-                    console.log("Response:", response)
-                    if (response.status.toUpperCase() == 'SUCCESS') {
-                        alert(response.message)
+            const url = apiBaseUrl + "/Login/user";
+            const type = "POST";
+            const contentType = "application/json"; 
+            const data = JSON.stringify(formData);
+            const onLoginSuccess = (response) => {
+                if (response.status.toUpperCase() == 'SUCCESS') {
+                    alert(response.message)
 
-                        //store token and user details in localstorage
-                        const token = response.data.token;
-                        const user = response.data.user;
+                    //store token and user details in localstorage
+                    const token = response.data.token;
+                    const user = response.data.user;
 
-                        storeUserSession(token, user);
-                        // Redirect based on the role
-                        if (user.role.toLowerCase() === 'admin') {
-                            window.location.href = '/Admin';
-                        } else {
-                            window.location.href = '/';
-                        }
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.log("AJAX Request Failed");
-                    console.log(xhr)
-                    let alertMessage
-                    if (xhr.responseJSON && xhr.responseJSON.message) {
-
-                        alertMessage = xhr.responseJSON.message + "\n"
-
-                    }
-                    // Check if responseJSON exists
-                    if (xhr.responseJSON && xhr.responseJSON.errors) {
-                        const errors = xhr.responseJSON.errors;
-                        const errorMessages = [];
-                        for (const field in errors) {
-                            if (errors[field] && errors[field].length > 0) {
-                                errorMessages.push(`${field}: ${errors[field].join(", ")}`);
-                            }
-                        }
-
-                        // Combine errors into a single alert message
-                        if (errorMessages.length > 0) {
-                            alertMessage = errorMessages.join("\n");
-                        }
-                    }
-                    if (xhr.responseJSON && xhr.responseJSON.data) {
-                        alertMessage += xhr.responseJSON.data.join("\n")
-                    }
-                    // Display the alert message
-                    if (alertMessage) {
-                        alert(alertMessage);
+                    storeUserSession(token, user);
+                    // Redirect based on the role
+                    if (user.role.toLowerCase() === 'admin') {
+                        window.location.href = '/Admin';
+                    } else {
+                        window.location.href = '/';
                     }
                 }
-            });
+            } 
+            apiRequest(url, type, contentType, null, data, onLoginSuccess, handleError)
         }
     });
 });

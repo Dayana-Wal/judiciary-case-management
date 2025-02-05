@@ -14,34 +14,23 @@
 
         // If no search category or value, fetch all cases (no filter)
         const queryString = (searchCategory && searchValue) ? `?SearchCategory=${searchCategory}&SearchValue=${searchValue}` : `?SearchCategory=&SearchValue=`;
-
-        // Perform AJAX GET request for cases
-        $.ajax({
-            url: `${apiBaseUrl}/CaseSearch/search${queryString}`,
-            type: "GET",
-            headers: {
-                Authorization: `Bearer ${token}`
-            },
-            success: function (response) {
-                if (response.status.toUpperCase() === 'SUCCESS') {
-                    if (response.data && response.data.length > 0) {
-                        displayResults(response.data); // Display results in a table
-                    } else {
-                        displayNoResults(); // No results found
-                    }
+        const url = `${apiBaseUrl}/CaseSearch/search${queryString}`;
+        const type = "GET";
+        const headers = {
+            Authorization: `Bearer ${token}`
+        }
+        const onSearchSuccess = (response) => {
+            if (response.status.toUpperCase() === 'SUCCESS') {
+                if (response.data && response.data.length > 0) {
+                    displayResults(response.data); // Display results in a table
                 } else {
-                    alert(response.message || 'An error occurred while fetching the data.');
+                    displayNoResults(); // No results found
                 }
-            },
-            error: function (xhr) {
-                console.error('AJAX Request Failed:', xhr);
-                let alertMessage = 'An error occurred while fetching the data.';
-                if (xhr.responseJSON && xhr.responseJSON.message) {
-                    alertMessage = xhr.responseJSON.message;
-                }
-                alert(alertMessage);
+            } else {
+                alert(response.message || 'An error occurred while fetching the data.');
             }
-        });
+        }
+        apiRequest(url, type, null, headers, null, onSearchSuccess, handleError)
     }
 
     // Handle form submission for filtered search
