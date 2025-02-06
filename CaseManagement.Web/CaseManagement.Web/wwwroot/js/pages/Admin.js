@@ -11,25 +11,26 @@
         'ADV': 'Advocate',
         'JDO': 'Judicial Officer'
     };
-    const url = `https://localhost:7123/api/admin/users?PageNumber=${currentPage}&PageSize=${pageSize}`;
-    const type = "GET";
-    const headers = {
-        'Authorization': `Bearer ${token}`
-    };
-
-    const handleSuccess = (response) => {
-        if (response.status === 'Success') {
-            renderUsers(response.data.items, response.data.totalCount, response.data.currentPage);
-        } else {
-            alert(response.message || 'An error occurred while fetching users.');
-        }
+    loadUsers(currentPage, pageSize);
+    function loadUsers(page, pageSize) {
+        $.ajax({
+            url: `https://localhost:7123/api/admin/users?PageNumber=${page}&PageSize=${pageSize}`,
+            type: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+            success: function (response) {
+                if (response.status === 'Success') {
+                    renderUsers(response.data.items, response.data.totalCount, response.data.currentPage);
+                } else {
+                    alert(response.message || 'An error occurred while fetching users.');
+                }
+            },
+            error: function (xhr) {
+                alert('Error fetching users: ' + xhr.responseJSON?.message || 'Please try again.');
+            }
+        });
     }
-
-    function loadUsers() {
-        apiRequest(url, type, contentType, headers, null, handleSuccess, handleError)
-    }
-
-    loadUsers();
 
     function renderUsers(users, totalCount, currentPage) {
         let html = '<table class="table table-bordered table-striped">';
