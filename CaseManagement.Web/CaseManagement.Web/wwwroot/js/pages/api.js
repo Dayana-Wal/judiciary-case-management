@@ -11,6 +11,12 @@
             }
         },
         error: function (xhr, status, error) {
+            if (xhr.responseJSON &&
+                xhr.responseJSON.status === "Failed" &&
+                xhr.responseJSON.message.includes("token is expired")) {
+                handleTokenExpiration();
+                return;
+            }
             if (errorCallBack) {
                 errorCallBack(xhr,status,error)
             }
@@ -51,3 +57,9 @@ const handleError = (xhr, status, error) => {
         alert(alertMessage);
     }
 }
+
+const handleTokenExpiration = () => {
+    alert("Your session has expired. Please log in again.");
+    removeToken();
+    window.location.href = "/User/Login";
+};
