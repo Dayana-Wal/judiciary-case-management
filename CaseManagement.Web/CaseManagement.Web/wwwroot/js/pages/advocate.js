@@ -24,13 +24,14 @@
 
     const hireSuccess = (response) => {
         alert(response.Data || "Advocate hired successfully!");
+        window.location.href = `/ViewCase/CaseDetails?caseId=${caseId}`;
     }
     $(document).on("click", ".hire-btn", function () {
         const advocateId = $(this).data("id");
         //TODO: Change caseId
         const data = JSON.stringify({
             advocateId: advocateId,
-            caseId: "01JJB9YHYW2P6SCN5T6DM66QE7"
+            caseId: caseId
         });
 
 

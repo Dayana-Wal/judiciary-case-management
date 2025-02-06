@@ -59,7 +59,7 @@
     apiRequest(url, type, null, headers, null, handleSuccess, handleError)
 
     $('#hireAdvocateBtn').on('click', function () {
-        const advocateUrl = '/Advocate/Details';
+        const advocateUrl = `/Advocate/Details?caseId=${caseId}`;
         window.location.href = advocateUrl;
     });
 });

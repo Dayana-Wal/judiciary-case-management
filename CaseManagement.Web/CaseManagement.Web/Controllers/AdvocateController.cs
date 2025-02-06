@@ -10,9 +10,10 @@ namespace CaseManagement.Web.Controllers
         }
 
         [HttpGet("details")]
-        public IActionResult AdvocateDetails()
+        public IActionResult AdvocateDetails(string caseId)
         {
             ViewBag.ApiBaseUrl = GetApiBaseUrl();
+            ViewBag.CaseId = caseId;
             return View();
         }
     }

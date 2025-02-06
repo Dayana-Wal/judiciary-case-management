@@ -1,5 +1,6 @@
 ﻿@{
     var apiBaseUrl = ViewBag.ApiBaseUrl;
+    var caseId = ViewBag.CaseId;
 }
 <h2>Advocate Details</h2>
 <table class="table">
@@ -17,7 +18,8 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     // Set the API base URL in a global JavaScript variable
-    var apiBaseUrl = "@apiBaseUrl"; // This will be replaced by the value from ViewData
+    var apiBaseUrl = "@apiBaseUrl"; 
+    var caseId = "@caseId";
 </script>
 <script src="~/js/pages/api.js"></script>
 <script src="~/js/pages/advocate.js"></script>
