@@ -7,6 +7,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CaseManagement.Business.Service;
+using CaseManagement.Business;
 
 namespace CaseManagement.API.Controllers
 {
@@ -50,6 +51,22 @@ namespace CaseManagement.API.Controllers
             }
 
             var successResponse = OperationResult<List<Case>>.Success(data: searchResult, message: "Cases retrieved successfully.");
+            return ToResponse(successResponse);
+        }
+
+        [HttpGet("open-cases")]
+        public async Task<IActionResult> GetOpenCases()
+        {
+            // Retrieve open cases from the CaseManager
+            var openCases = await _caseSearchManager.GetOpenCasesAsync();
+
+            if (openCases == null)
+            {
+                var notFoundResponse = OperationResult<List<Case>>.Failed(data: null, message: "No open cases found.");
+                return ToResponse(notFoundResponse);
+            }
+
+            var successResponse = OperationResult<List<Case>>.Success(data: openCases, message: "Open cases retrieved successfully.");
             return ToResponse(successResponse);
         }
     }
