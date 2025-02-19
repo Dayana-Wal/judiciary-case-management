@@ -29,6 +29,18 @@ namespace CaseManagement.Business.Queries
             return await casesQuery.ToListAsync();
         }
 
+        public async Task<List<Case>> GetOpenCasesAsync()
+        {
+            IQueryable<Case> casesQuery = _context.Cases
+                .Include(c => c.Accused)
+                .Include(c => c.Victim)
+                .Include(c => c.Advocate)
+                .Include(c => c.CaseStatus)
+                .Where(c => c.CaseStatus != null && c.CaseStatus.Text == "Open");
+
+            return await casesQuery.ToListAsync();
+        }
+
         private IQueryable<Case> FilterCasesBySearchCriteria(IQueryable<Case> query, string category, string value)
         {
             return category switch

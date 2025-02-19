@@ -8,6 +8,7 @@ namespace CaseManagement.Business.Queries
     public interface ISearchCasesQueryHandler
     {
         Task<List<Case>> SearchCasesAsync(CaseSearchQuery query);
+        Task<List<Case>> GetOpenCasesAsync();
     }
 }
 

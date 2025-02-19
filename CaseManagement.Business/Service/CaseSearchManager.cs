@@ -21,6 +21,12 @@ namespace CaseManagement.Business.Service
             var cases = await _searchCasesQueryHandler.SearchCasesAsync(searchQuery);
             return cases;
         }
+
+        public async Task<List<Case>> GetOpenCasesAsync()
+        {
+            var openCases = await _searchCasesQueryHandler.GetOpenCasesAsync();
+            return openCases;
+        }
     }
 }
 

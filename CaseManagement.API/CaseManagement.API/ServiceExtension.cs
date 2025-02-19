@@ -55,6 +55,8 @@ namespace CaseManagement.API
             services.AddScoped<IViewCaseQueryHandler, ViewCaseQueryHandler>();
             services.AddScoped<ViewCaseManager>();
             services.AddScoped<AdvocateManager>();
+            services.AddScoped<JudicialOfficialManager>();
+            services.AddScoped<ICaseAcceptRejectCommandHandler, CaseAcceptRejectCommandHandler>();
             services.AddControllers(options =>
             {
                 options.Filters.Add<GlobalExceptionFilter>();
